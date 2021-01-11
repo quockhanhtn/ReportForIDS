@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:viewmodel="clr-namespace:ReportForIDS.ViewModel">
+
+   <BitmapImage UriSource="/Resources/icon.ico" x:Key="AppIcon"/>
+
+   <viewmodel:MainWindowViewModel x:Key="MainWindowVM"/>
+   <viewmodel:StepByStepWindowViewModel x:Key="StepByStepWindowVM"/>
+   <viewmodel:ReportFromQueryWindowViewModel x:Key="ReportFromQueryWindowVM"/>
+   <viewmodel:ListTemplateWindowViewModel x:Key="ListTemplateWindowVM"/>
+</ResourceDictionary>

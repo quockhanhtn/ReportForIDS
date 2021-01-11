@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="ReportForIDS.UC.UCQueryItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ReportForIDS.UC" mc:Ignorable="d"
+
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+
+             x:Name="ucQueryItem"
+             d:DesignHeight="130" d:DesignWidth="600" Background="#fafafa">
+
+   <i:Interaction.Triggers>
+      <i:EventTrigger EventName="Loaded">
+         <i:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=ucQueryItem}" />
+      </i:EventTrigger>
+   </i:Interaction.Triggers>
+
+   <Grid Background="Transparent" Margin="5" Height="120">
+      <Grid.Resources>
+         <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+            <Setter Property="Width" Value="auto" />
+            <Setter Property="Height" Value="40" />
+         </Style>
+      </Grid.Resources>
+
+      <Grid.ContextMenu>
+         <ContextMenu>
+            <MenuItem Header="Move to top" Command="{Binding MoveTopCommand}" CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=MenuItem}}" />
+            <MenuItem Header="Move up" Command="{Binding MoveUpCommand}" CommandParameter="{Binding ElementName=ucQueryItem}" />
+            <MenuItem Header="Move down" Command="{Binding MoveDownCommand}" CommandParameter="{Binding ElementName=ucQueryItem}" />
+            <MenuItem Header="Move to bottom" Command="{Binding MoveBotCommand}" CommandParameter="{Binding ElementName=ucQueryItem}" />
+            <Separator />
+            <MenuItem Header="Edit query" Command="{Binding EditQueryCommand}" />
+            <MenuItem Header="Remove query" Command="{Binding RemoveQueryCommand}" CommandParameter="{Binding ElementName=ucQueryItem}" />
+         </ContextMenu>
+      </Grid.ContextMenu>
+
+      <Grid Background="#f3f3f3" Margin="5">
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="250" />
+         </Grid.ColumnDefinitions>
+
+         <Grid Grid.Column="0">
+            <!--<Grid.RowDefinitions>
+               <RowDefinition />
+               <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>-->
+
+            <TextBlock Grid.Row="0" Style="{StaticResource TitleTextBlock}" ToolTip="Order" FontSize="20"
+                       Text="{Binding QueryItem.DisplayOrder, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+
+            <!--<RadioButton Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 5"
+                         ToolTip="Set primary query" Foreground="#001e51" x:Name="rbtnIsPrimary"
+                         Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
+                         IsChecked="{Binding IsPrimaryQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+            </RadioButton>-->
+         </Grid>
+
+         <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+               <RowDefinition />
+               <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0" Margin="15 15 20 5" materialDesign:HintAssist.Hint="Query" FontSize="15" IsReadOnly="True"
+                     VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Padding="0" VerticalAlignment="Stretch" AcceptsReturn="True"
+                     Text="{Binding QueryItem.SQLQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     ToolTip="{Binding QueryItem.SQLQuery, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                     Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" />
+
+            <TextBlock Grid.Row="1" Margin="32 0 0 5" HorizontalAlignment="Left" Foreground="#000"
+                       Text="{Binding QueryItem.ExecResult, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+            </TextBlock>
+         </Grid>
+
+         <Grid Grid.Column="2" Margin="0 0 0 10">
+            <Grid.RowDefinitions>
+               <RowDefinition />
+               <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <!--Combobox list field from query-->
+            <ComboBox Grid.Row="0" Margin="0 0 20 0" materialDesign:HintAssist.Hint="Compare field"
+                   DisplayMemberPath="FieldName"
+                   ToolTip="{Binding QueryItem.CompareField.FieldName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                   ItemsSource="{Binding QueryItem.ListFeilds, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                   SelectedItem="{Binding QueryItem.CompareField, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                   Style="{StaticResource MyComboBox}">
+
+               <!--<i:Interaction.Triggers>
+                  <i:EventTrigger EventName="DropDownOpened">
+                     <i:InvokeCommandAction Command="{Binding LoadListFieldCommand}" />
+                  </i:EventTrigger>
+               </i:Interaction.Triggers>-->
+            </ComboBox>
+
+            <Grid Grid.Row="1" Margin="0 0 20 0">
+               <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition />
+               </Grid.ColumnDefinitions>
+
+               <Button Grid.Column="0" Width="auto" Command="{Binding EditQueryCommand}" Margin="0 5 5 0">
+                  <Grid Width="80">
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto" />
+                     </Grid.ColumnDefinitions>
+                     <TextBlock Grid.Column="0" Text="Edit" VerticalAlignment="Center"></TextBlock>
+                     <materialDesign:PackIcon Grid.Column="1" Kind="Edit" Width="25" Height="25" />
+                  </Grid>
+               </Button>
+               <Button Grid.Column="1" Width="auto" Command="{Binding RemoveQueryCommand}" Margin="0 5 5 0">
+                  <Grid Width="80">
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto" />
+                     </Grid.ColumnDefinitions>
+                     <TextBlock Grid.Column="0" Text="Remove" VerticalAlignment="Center"></TextBlock>
+                     <materialDesign:PackIcon Grid.Column="1" Kind="Delete" Width="25" Height="25" />
+                  </Grid>
+               </Button>
+            </Grid>
+         </Grid>
+      </Grid>
+
+      <Border CornerRadius="5" BorderThickness="8" BorderBrush="#f3f3f3" Padding="4">
+         <!-- ...set your desired border brush color here... -->
+      </Border>
+   </Grid>
+</UserControl>
