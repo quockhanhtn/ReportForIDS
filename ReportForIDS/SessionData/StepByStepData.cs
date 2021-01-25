@@ -5,6 +5,8 @@ namespace ReportForIDS.SessionData
 {
    public class StepByStepData
    {
+      public static bool GroupToMultiColumn { get; set; }
+
       public static int Step;
 
       public static List<MyTable> ListTable = new List<MyTable>();

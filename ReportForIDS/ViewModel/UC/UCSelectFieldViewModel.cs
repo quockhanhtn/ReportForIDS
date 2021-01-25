@@ -11,6 +11,7 @@ namespace ReportForIDS.ViewModel
 {
    public class UCSelectFieldViewModel : UCViewModel
    {
+      public ICommand SelectedFieldChangedCommand { get; set; }
       public ICommand SelectAllFieldCommand { get; set; }
       public ICommand PrevCommand { get; set; }
       public ICommand NextCommand { get; set; }
@@ -83,11 +84,12 @@ namespace ReportForIDS.ViewModel
 
          #endregion SelectAllFieldCommand
 
+         SelectedFieldChangedCommand = new RelayCommand<object>((p) => true, (p) => SelectedFieldChanged());
+
          PrevCommand = new RelayCommand<object>((p) => { return true; }, (p) => prevAction());
 
          NextCommand = new RelayCommand<object>((p) =>
          {
-            OnPropertyChanged(nameof(NoOfSelectedField));
             return !(this is UCSelectFieldToDisplayVM) || listFieldsWithoutFilter.Count(f => f.IsSelected) > 0;
          }, (p) =>
          {
@@ -164,6 +166,11 @@ namespace ReportForIDS.ViewModel
 
          listFieldsWithoutFilter = ListFields;
          OnPropertyChanged(nameof(NoOfAllField));
+      }
+
+      public virtual void SelectedFieldChanged()
+      {
+         OnPropertyChanged(nameof(NoOfSelectedField));
       }
 
       public virtual void LoadListField()
@@ -279,16 +286,21 @@ namespace ReportForIDS.ViewModel
 
       public override void LoadListField()
       {
-         ListFields = new ObservableCollection<MyField>();
-         ReportFromQueryData.ListQueries.ForEach(q => ListFields.AddRange(q.ListFeilds));
+         ListFields = new ObservableCollection<MyField>() 
+         {
+            ReportFromQueryData.ListQueries[0].CompareField
+         };
+
+         ReportFromQueryData.ListQueries.ForEach(q =>
+         {
+            ListFields.AddRange(q.ListFeilds);
+            ListFields.Remove(q.CompareField);
+         });
+
          //ListFields = ReportFromQueryData.ExecuteDataTableOnlyHeader.GetListColumnName();
       }
 
-      public override void SaveSelectedFeild()
-      {
-         ReportFromQueryData.ListFieldToGroup.Clear();
-         ReportFromQueryData.ListFieldToGroup.AddRange(ListFields.Where(f => f.IsSelected));
-      }
+      public override void SaveSelectedFeild() => ReportFromQueryData.SetListFieldToGroup(ListFields.Where(f => f.IsSelected));
    }
 
    public class UCSelectFieldToHideVM : UCSelectFieldViewModel

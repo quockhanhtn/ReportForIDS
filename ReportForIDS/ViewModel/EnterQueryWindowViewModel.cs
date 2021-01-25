@@ -35,31 +35,7 @@ namespace ReportForIDS.ViewModel
 
          LoadListFieldCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
-            Thread thread = new Thread(() =>
-            {
-               try
-               {
-                  var rowCount = Convert.ToInt32(DatabaseUtils.ExecuteScalar("select count(*) from " + SqlQueryStatement.AliasSQL("DT")));
-                  Application.Current.Dispatcher.Invoke(new Action(delegate ()
-                  {
-                     QueryItem.ExecResult = rowCount.ToString() + " row(s) return";
-                     OnPropertyChanged(nameof(QueryItem));
-                  }));
-               }
-               catch (Exception)
-               {
-                  Application.Current.Dispatcher.Invoke(new Action(delegate ()
-                  {
-                     QueryItem.ExecResult = "Error while executing query";
-                     QueryItem.ListFeilds.Clear();
-                     QueryItem.CompareField = null;
-                     OnPropertyChanged(nameof(QueryItem));
-                  }));
-               }
-            })
-            { IsBackground = true };
-            thread.Start();
-
+            GetExecuteResult();
             QueryItem.ListFeilds = DatabaseUtils.GetListField(SqlQueryStatement, updateQueryItem?.AliasTableName ?? "");
             OnPropertyChanged(nameof(QueryItem));
             isChangedQuery = false;
@@ -93,6 +69,7 @@ namespace ReportForIDS.ViewModel
                QueryItem.ListFeilds.Move(QueryItem.ListFeilds.IndexOf(QueryItem.CompareField), 0);
             }
 
+            QueryItem.ExecuteQuery();
             p.DialogResult = true;
             p.Close();
          });
@@ -104,6 +81,34 @@ namespace ReportForIDS.ViewModel
             p.DialogResult = false;
             p.Close();
          });
+      }
+
+      void GetExecuteResult()
+      {
+         Thread thread = new Thread(() =>
+         {
+            try
+            {
+               var rowCount = Convert.ToInt32(DatabaseUtils.ExecuteScalar("select count(*) from " + SqlQueryStatement.AliasSQL("DT")));
+               Application.Current.Dispatcher.Invoke(new Action(delegate ()
+               {
+                  QueryItem.ExecResult = rowCount.ToString() + " row(s) return";
+                  OnPropertyChanged(nameof(QueryItem));
+               }));
+            }
+            catch (Exception)
+            {
+               Application.Current.Dispatcher.Invoke(new Action(delegate ()
+               {
+                  QueryItem.ExecResult = "Error while executing query";
+                  QueryItem.ListFeilds.Clear();
+                  QueryItem.CompareField = null;
+                  OnPropertyChanged(nameof(QueryItem));
+               }));
+            }
+         })
+         { IsBackground = true };
+         thread.Start();
       }
 
       private MyQuery queryItem;

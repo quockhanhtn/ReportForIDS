@@ -18,8 +18,9 @@ namespace ReportForIDS.Model
          this.CanSelected = true;
       }
 
-      public MyField() { }
-
+      public MyField()
+      {
+      }
 
       public MyField Clone() => new MyField(this.FieldName, this.TableName);
 

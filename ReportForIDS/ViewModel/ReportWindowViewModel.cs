@@ -179,6 +179,7 @@ namespace ReportForIDS.ViewModel
             new UCSelectField() { DataContext = new UCSelectFieldToDisplayVM(PrevStep, NextStep) },
             new UCSetCondition() { DataContext = new UCSetConditionViewModel(PrevStep, NextStep) },
             new UCSelectField() { DataContext = new UCSelectFieldToGroupVM(PrevStep, NextStep) },
+            new UCGroupOption() { DataContext = new UCGroupOptionViewModel(PrevStep, NextStep, false) },
             new UCSaveReport() { DataContext = new UCSaveReportStepByStepVM(PrevStep) }
          };
       }
@@ -201,6 +202,7 @@ namespace ReportForIDS.ViewModel
          ListUC.Add(new UCInsertSqlQuery() { DataContext = insertQueryDtContxt });
          ListUC.Add(new UCSelectField() { DataContext = new UCSelectFieldToGroupFromQueryVM(PrevStep, NextStep) });
          //ListUC.Add(new UCSelectField() { DataContext = new UCSelectFieldViewModel(SelectFieldType.TO_HIDE, PrevStep, NextStep) });
+         ListUC.Add(new UCGroupOption() { DataContext = new UCGroupOptionViewModel(PrevStep, NextStep, true) });
          ListUC.Add(new UCSaveReport() { DataContext = new UCSaveReportFromQueryVM(PrevStep) });
 
          if (!string.IsNullOrEmpty(TemplateFilePath))

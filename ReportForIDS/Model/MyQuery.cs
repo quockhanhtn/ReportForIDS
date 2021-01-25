@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace ReportForIDS.Model
@@ -15,6 +16,13 @@ namespace ReportForIDS.Model
       public string DisplayOrder { get => Order.ToString().PadLeft(2, '0'); }
 
       public string AliasTableName { get => "Query_" + DisplayOrder; }
+
+      public string SQLQuery { get; set; }
+
+      public MyField CompareField { get; set; }
+
+      [XmlIgnore]
+      public ObservableCollection<MyField> ListFeilds { get; set; } = new ObservableCollection<MyField>();
 
       [XmlIgnore]
       public int Order
@@ -37,19 +45,77 @@ namespace ReportForIDS.Model
       [XmlIgnore]
       public bool IsPrimary { get; set; }
 
-      public string SQLQuery { get; set; }
-
       [XmlIgnore]
       public string ExecResult { get; set; }
 
-      public MyField CompareField { get; set; }
+      [XmlIgnore]
+      public bool ExecDone { get; set; }
 
       [XmlIgnore]
-      public ObservableCollection<MyField> ListFeilds { get; set; } = new ObservableCollection<MyField>();
+      public int MaxRecordSameId { get; set; }
+
+      [XmlIgnore]
+      public DataTable RawDataTable { get; set; }
+
+      [XmlIgnore]
+      public Thread ExecThread { get; set; }
 
       public MyQuery()
       {
          Order = ++LastOrder;
+      }
+
+      public void ExecuteQuery()
+      {
+         ExecDone = false;
+         ExecThread = new Thread(() =>
+         {
+            if (ListFeilds.IndexOf(CompareField) != 0)
+            {
+               ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
+            }
+
+            string query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
+            query += " from " + SQLQuery.AliasSQL(AliasTableName);
+            query += " order by " + CompareField.GetFullName() + " asc";
+
+            RawDataTable = DatabaseUtils.ExecuteQuery(query.ToUpper());
+
+            if (RawDataTable != null)
+            {
+               MaxRecordSameId = (
+                  from row in RawDataTable.AsEnumerable()
+                  group row by row.Field<Object>(0) into compareField
+                  orderby compareField.Count() descending
+                  select compareField.Count()
+               ).Take(1).FirstOrDefault();
+            }
+
+            ExecDone = true;
+         })
+         { IsBackground = true };
+         ExecThread.Start();
+      }
+
+      public DataTable GetGroupDataTable()
+      {
+         DataTable dt = RawDataTable.Copy();
+
+         string primaryFeild = this.CompareField.FieldName;
+         for (int i = dt.Rows.Count - 1; i > 0; i--)
+         {
+            if (dt.EqualWithBeforeRow(i, new string[] { primaryFeild }))
+            {
+               for (int j = 1; j < dt.Columns.Count; j++)
+               {
+                  DataColumn column = dt.Columns[j];
+                  dt.Rows[i - 1][column] += ", " + dt.Rows[i][column];
+               }
+               dt.Rows.RemoveAt(i);
+            }
+         }
+
+         return dt;
       }
 
       public DataTable GetDataTableNotGroup()
@@ -129,7 +195,15 @@ namespace ReportForIDS.Model
       public void Reload()
       {
          ListFeilds = DatabaseUtils.GetListField(this.SQLQuery, AliasTableName);
-         CompareField = ListFeilds.First(f => f.FieldName.Equals(CompareField.FieldName));
+         if (ListFeilds.Count == 0)
+         {
+            CompareField = null;
+         }
+         else
+         {
+            CompareField = ListFeilds.First(f => f.FieldName.Equals(CompareField.FieldName));
+         }
+         ExecuteQuery();
       }
 
       private int order;

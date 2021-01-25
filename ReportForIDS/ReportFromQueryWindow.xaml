@@ -172,6 +172,16 @@
                            <TextBlock Text=" Field to hide" FontWeight="SemiBold" />
                         </StackPanel>
                      </ListViewItem>-->
+
+                     <!---Group option-->
+                     <ListViewItem x:Name="GroupOption" Height="60" ToolTip="Group option">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="ViewColumnOutline" />
+                           <TextBlock Text="Group " />
+                           <TextBlock Text=" option" FontWeight="SemiBold" />
+                        </StackPanel>
+                     </ListViewItem>
+
                      <!---Review and save report-->
                      <ListViewItem x:Name="ReviewAndSave" Height="60" ToolTip="Review data and Sace report">
                         <StackPanel Orientation="Horizontal">

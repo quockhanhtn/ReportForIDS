@@ -382,110 +382,6 @@ namespace ReportForIDS.ViewModel
    {
       public UCSaveReportStepByStepVM(Action prevAction) : base(prevAction) { }
 
-      #region Old SaveReport
-
-      //public override void SaveReport()
-      //{
-      //   try
-      //   {
-      //      using (var excelPackage = ExcelUtils.CreateExcelPackage(new List<string>() { "Sheet1" }))
-      //      {
-      //         ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[0];
-
-      //         var lastGroup = new List<string>();
-      //         int maxRecordOnRow = 0, recordsOnRow = 0;
-      //         int colIndex = 1, rowIndex = 1;
-
-      //         // wait thread execute done
-      //         while (DataThread.IsAlive)
-      //         {
-      //         }
-
-      //         foreach (DataRow item in ResultDatatable.Rows)
-      //         {
-      //            Application.Current.Dispatcher.Invoke(new Action(delegate ()
-      //            {
-      //               PbStatus.Value++;
-      //            }));
-
-      //            if (IsDifferrentGroup(lastGroup, item))
-      //            {
-      //               if (recordsOnRow > maxRecordOnRow) { maxRecordOnRow = recordsOnRow; }
-      //               recordsOnRow = 1;
-
-      //               rowIndex++;
-      //               colIndex = 1;
-
-      //               lastGroup.Clear();
-      //               for (int i = 0; i < NumFieldToGroup; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, item[i]);
-      //                  lastGroup.Add(item[i].ToString());
-      //               }
-      //               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, item[i]);
-      //               }
-      //            }
-      //            else
-      //            {
-      //               recordsOnRow += 1;
-      //               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, item[i]);
-      //               }
-      //            }
-      //         }
-
-      //         if (recordsOnRow > maxRecordOnRow) { maxRecordOnRow = recordsOnRow; }
-
-      //         #region Create header
-
-      //         colIndex = 1;
-      //         rowIndex = 1;
-
-      //         if (NumFieldToGroup > 0)
-      //         {
-      //            for (int i = 0; i < NumFieldToGroup; i++)
-      //            {
-      //               AssignCellValue(worksheet, rowIndex, colIndex++, ResultDatatable.Columns[i].ColumnName);
-      //            }
-      //            for (int k = 1; k <= maxRecordOnRow; k++)
-      //            {
-      //               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, ResultDatatable.Columns[i].ColumnName + "_" + k.ToString());
-      //               }
-      //            }
-      //         }
-      //         else
-      //         {
-      //            for (int i = 0; i < ResultDatatable.Columns.Count; i++)
-      //            {
-      //               AssignCellValue(worksheet, rowIndex, colIndex++, ResultDatatable.Columns[i].ColumnName);
-      //            }
-      //         }
-
-      //         #endregion Create header
-
-      //         ExcelUtils.SaveExcelPackage(excelPackage, FilePath);
-      //      }
-      //      MyReport.Update.Add(ReportName, FilePath, ReportDesc);
-
-      //      var messageBoxResult = CustomMessageBox.Show("Do you want to open report file ?", Cons.ToolName, MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes);
-      //      if (messageBoxResult == MessageBoxResult.Yes)
-      //      {
-      //         ExcelUtils.OpenFile(FilePath);
-      //      }
-      //   }
-      //   catch (Exception e)
-      //   {
-      //      CustomMessageBox.Show("Error :\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
-      //   }
-      //}
-
-      #endregion Old SaveReport
-
       public override void ExecuteQuery()
       {
          string query = GenerateQuery();
@@ -529,49 +425,84 @@ namespace ReportForIDS.ViewModel
             return false;
          }
 
-         GroupResultDatatable = new DataTable(ResultDatatable.TableName);
-         foreach (DataColumn dtColumn in ResultDatatable.Columns)
-         {
-            GroupResultDatatable.Columns.Add(dtColumn.ColumnName);
-         }
-
+         GroupResultDatatable = ResultDatatable.Clone();
          var lastGroup = new List<string>();
          int recordsOnRow = 0, colIndex = 0;
 
          DataRow newDataRow = GroupResultDatatable.NewRow();
 
-         foreach (DataRow item in ResultDatatable.Rows)
+         if (StepByStepData.GroupToMultiColumn)
          {
-            if (IsDifferrentGroup(lastGroup, item))
+            foreach (DataRow item in ResultDatatable.Rows)
             {
-               recordsOnRow = 1;
-
-               colIndex = 0;
-               GroupResultDatatable.Rows.Add(newDataRow);
-               newDataRow = GroupResultDatatable.NewRow();
-
-               lastGroup.Clear();
-               for (int i = 0; i < NumFieldToGroup; i++)
+               if (IsDifferrentGroup(lastGroup, item))
                {
-                  newDataRow[colIndex++] = item[i];
-                  lastGroup.Add(item[i].ToString());
+                  recordsOnRow = 1;
+
+                  colIndex = 0;
+                  GroupResultDatatable.Rows.Add(newDataRow);
+                  newDataRow = GroupResultDatatable.NewRow();
+
+                  lastGroup.Clear();
+                  for (int i = 0; i < NumFieldToGroup; i++)
+                  {
+                     newDataRow[colIndex++] = item[i];
+                     lastGroup.Add(item[i].ToString());
+                  }
+                  for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count; i++)
+                  {
+                     newDataRow[colIndex++] = item[i];
+                  }
                }
-               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count; i++)
+               else
                {
-                  newDataRow[colIndex++] = item[i];
+                  recordsOnRow += 1;
+                  for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count; i++)
+                  {
+                     if (colIndex >= GroupResultDatatable.Columns.Count)
+                     {
+                        string newColumnName = ResultDatatable.Columns[i].ColumnName + "_" + recordsOnRow.ToString();
+                        GroupResultDatatable.Columns.Add(newColumnName);
+                     }
+                     newDataRow[colIndex++] = item[i];
+                  }
                }
             }
-            else
+         }
+         else
+         {
+            foreach (DataRow item in ResultDatatable.Rows)
             {
-               recordsOnRow += 1;
-               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count; i++)
+               if (IsDifferrentGroup(lastGroup, item))
                {
-                  if (colIndex >= GroupResultDatatable.Columns.Count)
+                  colIndex = 0;
+                  GroupResultDatatable.Rows.Add(newDataRow);
+                  newDataRow = GroupResultDatatable.NewRow();
+
+                  lastGroup.Clear();
+                  for (int i = 0; i < NumFieldToGroup; i++)
                   {
-                     string newColumnName = ResultDatatable.Columns[i].ColumnName + "_" + recordsOnRow.ToString();
-                     GroupResultDatatable.Columns.Add(newColumnName);
+                     newDataRow[colIndex++] = item[i];
+                     lastGroup.Add(item[i].ToString());
                   }
-                  newDataRow[colIndex++] = item[i];
+                  for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count; i++)
+                  {
+                     newDataRow[colIndex++] = item[i];
+                  }
+               }
+               else
+               {
+                  for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count; i++)
+                  {
+                     if (!string.IsNullOrEmpty(newDataRow[ResultDatatable.Columns[i].ColumnName].ToString().Trim()))
+                     {
+                        newDataRow[ResultDatatable.Columns[i].ColumnName] += ", " + item[i];
+                     }
+                     else
+                     {
+                        newDataRow[ResultDatatable.Columns[i].ColumnName] = item[i];
+                     }
+                  }
                }
             }
          }
@@ -632,102 +563,11 @@ namespace ReportForIDS.ViewModel
       
       public UCSaveReportFromQueryVM(Action prevAction) : base(prevAction) { }
 
-      #region Old SaveReport
-
-      //public override void SaveReport()
-      //{
-      //   try
-      //   {
-      //      using (var excelPackage = ExcelUtils.CreateExcelPackage(new List<string>() { "Sheet1" }))
-      //      {
-      //         ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[0];
-
-      //         var lastGroup = new List<string>();
-      //         int maxRecordOnRow = 0, recordsOnRow = 0;
-      //         int colIndex = 1, rowIndex = 1;
-
-      //         foreach (DataRowView item in ResultDatatable.DefaultView)
-      //         {
-      //            Application.Current.Dispatcher.Invoke(new Action(delegate ()
-      //            {
-      //               PbStatus.Value++;
-      //            }));
-
-      //            if (IsDifferrentGroup(lastGroup, item))
-      //            {
-      //               if (recordsOnRow > maxRecordOnRow) { maxRecordOnRow = recordsOnRow; }
-      //               recordsOnRow = 1;
-
-      //               rowIndex++;
-      //               colIndex = 1;
-
-      //               lastGroup.Clear();
-      //               for (int i = 0; i < NumFieldToGroup; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, item[i]);
-      //                  lastGroup.Add(item[i].ToString());
-      //               }
-      //               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, item[i]);
-      //               }
-      //            }
-      //            else
-      //            {
-      //               recordsOnRow += 1;
-      //               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, item[i]);
-      //               }
-      //            }
-      //         }
-      //         if (recordsOnRow > maxRecordOnRow) { maxRecordOnRow = recordsOnRow; }
-
-      //         #region Create header
-
-      //         colIndex = rowIndex = 1;
-      //         if (NumFieldToGroup > 0)
-      //         {
-      //            for (int i = 0; i < NumFieldToGroup; i++)
-      //            {
-      //               AssignCellValue(worksheet, rowIndex, colIndex++, ResultDatatable.Columns[i].ColumnName);
-      //            }
-      //            for (int k = 1; k <= maxRecordOnRow; k++)
-      //            {
-      //               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, ResultDatatable.Columns[i].ColumnName + "_" + k.ToString());
-      //               }
-      //            }
-      //         }
-      //         else
-      //         {
-      //            for (int i = 0; i < ResultDatatable.Columns.Count; i++)
-      //            {
-      //               AssignCellValue(worksheet, rowIndex, colIndex++, ResultDatatable.Columns[i].ColumnName);
-      //            }
-      //         }
-
-      //         #endregion Create header
-
-      //         ExcelUtils.SaveExcelPackage(excelPackage, FilePath);
-      //      }
-      //      MyReport.Update.Add(ReportName, FilePath, ReportDesc);
-
-      //      var messageBoxResult = CustomMessageBox.Show("Do you want to open report file ?", Cons.ToolName, MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes);
-      //      if (messageBoxResult == MessageBoxResult.Yes) { ExcelUtils.OpenFile(FilePath); }
-      //   }
-      //   catch (Exception e)
-      //   {
-      //      CustomMessageBox.Show("Error :\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
-      //   }
-      //}
-
-      #endregion Old SaveReport
-
       public override void ExecuteQuery()
       {
+         ReportFromQueryData.JoinDatatableInQuery();
          while (ReportFromQueryData.ThreadExcecuteData.IsAlive) { }
+
          ResultDatatable = ReportFromQueryData.ExecuteDataTable;
 
          // order column by group -> not group
@@ -744,8 +584,6 @@ namespace ReportForIDS.ViewModel
       {
          static bool IsDifferrentGroup(List<string> lastGroup, DataRowView dataRow)
          {
-            //ResultDatatable.Rows.Cast<DataRow>().GroupBy(n => new { id = n["kkkk"], k = n["k"]}).To
-
             if (lastGroup.Count == 0) { return true; }
 
             for (int i = 0; i < lastGroup.Count; i++)
@@ -758,49 +596,84 @@ namespace ReportForIDS.ViewModel
             return false;
          }
 
-         GroupResultDatatable = new DataTable(ResultDatatable.TableName);
-         foreach (DataColumn dtColumn in ResultDatatable.Columns)
-         {
-            GroupResultDatatable.Columns.Add(dtColumn.ColumnName);
-         }
-
+         GroupResultDatatable = ResultDatatable.Clone();
          var lastGroup = new List<string>();
          int recordsOnRow = 0, colIndex = 0;
-
          DataRow newDataRow = GroupResultDatatable.NewRow();
 
-         foreach (DataRowView item in ResultDatatable.DefaultView)
+         if (ReportFromQueryData.GroupToMultiColumn)
          {
-            if (IsDifferrentGroup(lastGroup, item))
+            foreach (DataRowView item in ResultDatatable.DefaultView)
             {
-               recordsOnRow = 1;
-               colIndex = 0;
-
-               GroupResultDatatable.Rows.Add(newDataRow);
-               newDataRow = GroupResultDatatable.NewRow();
-
-               lastGroup.Clear();
-               for (int i = 0; i < NumFieldToGroup; i++)
+               if (IsDifferrentGroup(lastGroup, item))
                {
-                  newDataRow[colIndex++] = item[i];
-                  lastGroup.Add(item[i].ToString());
+                  recordsOnRow = 1;
+                  colIndex = 0;
+
+                  GroupResultDatatable.Rows.Add(newDataRow);
+                  newDataRow = GroupResultDatatable.NewRow();
+
+                  lastGroup.Clear();
+                  for (int i = 0; i < NumFieldToGroup; i++)
+                  {
+                     newDataRow[colIndex++] = item[i];
+                     lastGroup.Add(item[i].ToString());
+                  }
+                  for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
+                  {
+                     newDataRow[colIndex++] = item[i];
+                  }
                }
-               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
+               else
                {
-                  newDataRow[colIndex++] = item[i];
+                  recordsOnRow += 1;
+                  for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
+                  {
+                     if (colIndex >= GroupResultDatatable.Columns.Count)
+                     {
+                        string newColumnName = ResultDatatable.Columns[i].ColumnName + "_" + recordsOnRow.ToString();
+                        GroupResultDatatable.Columns.Add(newColumnName);
+                     }
+                     newDataRow[colIndex++] = item[i];
+                  }
                }
             }
-            else
+         }
+         else
+         {
+            foreach (DataRowView item in ResultDatatable.DefaultView)
             {
-               recordsOnRow += 1;
-               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
+               if (IsDifferrentGroup(lastGroup, item))
                {
-                  if (colIndex >= GroupResultDatatable.Columns.Count)
+                  colIndex = 0;
+
+                  GroupResultDatatable.Rows.Add(newDataRow);
+                  newDataRow = GroupResultDatatable.NewRow();
+
+                  lastGroup.Clear();
+                  for (int i = 0; i < NumFieldToGroup; i++)
                   {
-                     string newColumnName = ResultDatatable.Columns[i].ColumnName + "_" + recordsOnRow.ToString();
-                     GroupResultDatatable.Columns.Add(newColumnName);
+                     newDataRow[colIndex++] = item[i];
+                     lastGroup.Add(item[i].ToString());
                   }
-                  newDataRow[colIndex++] = item[i];
+                  for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
+                  {
+                     newDataRow[colIndex++] = item[i];
+                  }
+               }
+               else
+               {
+                  for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
+                  {
+                     if (!string.IsNullOrEmpty(newDataRow[ResultDatatable.Columns[i].ColumnName].ToString().Trim()))
+                     {
+                        newDataRow[ResultDatatable.Columns[i].ColumnName] += ", " + item[i];
+                     }
+                     else
+                     {
+                        newDataRow[ResultDatatable.Columns[i].ColumnName] = item[i];
+                     }
+                  }
                }
             }
          }

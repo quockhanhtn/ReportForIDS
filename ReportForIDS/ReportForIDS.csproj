@@ -149,11 +149,9 @@
     </Compile>
     <Compile Include="Model\MyFeild.cs" />
     <Compile Include="Model\MyQuery.cs" />
-    <Compile Include="Model\MyReport.cs" />
     <Compile Include="Model\MyTable.cs" />
     <Compile Include="Model\MyCondition.cs" />
     <Compile Include="Model\RelatedTable.cs" />
-    <Compile Include="Model\PrevSetting.cs" />
     <Compile Include="Model\ReportTemplate.cs" />
     <Compile Include="PreviewDataTableWindow.xaml.cs">
       <DependentUpon>PreviewDataTableWindow.xaml</DependentUpon>
@@ -165,6 +163,9 @@
     <Compile Include="SessionData\StepByStepData.cs" />
     <Compile Include="UC\UCDatabaseConnection.xaml.cs">
       <DependentUpon>UCDatabaseConnection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UC\UCGroupOption.xaml.cs">
+      <DependentUpon>UCGroupOption.xaml</DependentUpon>
     </Compile>
     <Compile Include="UC\UCInsertSqlQuery.xaml.cs">
       <DependentUpon>UCInsertSqlQuery.xaml</DependentUpon>
@@ -204,6 +205,7 @@
     <Compile Include="ViewModel\ListTemplateWindowViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ReportWindowViewModel.cs" />
+    <Compile Include="ViewModel\UC\UCGroupOptionViewModel.cs" />
     <Compile Include="ViewModel\UC\UCInsertSqlQueryViewModel.cs" />
     <Compile Include="ViewModel\UC\UCQueryItemViewModel.cs" />
     <Compile Include="ViewModel\UC\UCSaveReportViewModel.cs" />
@@ -263,6 +265,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UC\UCDatabaseConnection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UC\UCGroupOption.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -357,6 +363,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\separate-by-comma.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\multi-column.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets')" />
