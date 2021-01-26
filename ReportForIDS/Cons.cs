@@ -7,8 +7,24 @@ namespace ReportForIDS
 {
    public static class Cons
    {
+      public static readonly string TOOL_NAME = "Tool custom report";
+      public static readonly string REPORT_TEMPLATE_EXTENSION = ".rptemp";
+      public static readonly string NULL_VALUE = "none";
+
+      public static readonly List<string> LIST_CONDITION_TYPE = new List<string>()
+      {
+         "Greater than",
+         "Greater than or equal",
+         "Less than",
+         "Less than or equal",
+         "Equal",
+         "Not equal",
+         "Contain",
+         "Not contain",
+      };
+
       /// <summary>
-      /// Danh sách database không hiển thị khi chọn
+      /// List Schema (Database) will not display in select
       /// </summary>
       public static List<string> ListHiddenSchemas
       {
@@ -31,7 +47,7 @@ namespace ReportForIDS
       }
 
       /// <summary>
-      /// Danh sách table không hiển thị khi chọn
+      /// List table will not display in select
       /// </summary>
       public static List<string> ListHiddenTables
       {
@@ -54,7 +70,7 @@ namespace ReportForIDS
       }
 
       /// <summary>
-      /// Danh sách các trường không hiển thị
+      /// List Field will not display in select
       /// </summary>
       public static List<string> ListHiddenFields
       {
@@ -76,35 +92,21 @@ namespace ReportForIDS
          }
       }
 
-      public static List<RelatedTable> ListRelatedTables = new List<RelatedTable>();
-
-      public static List<string> ListConditionType = new List<string>()
+      /// <summary>
+      /// List object describe table relationship
+      /// </summary>
+      public static List<RelatedTable> ListRelatedTables
       {
-         "Greater than",
-         "Greater than or equal",
-         "Less than",
-         "Less than or equal",
-         "Equal",
-         "Not equal",
-         "Contain",
-         "Not contain",
-      };
-
-      static Cons()
-      {
-         //Load list table not report
-
-         //Load file RelatedTable.xml
-         ListRelatedTables = RelatedTable.XMLData.Deserialize(GetDataDirectory + "RelatedTable.xml");
-
-         ToolName = "Report for iDS";
-         NullValue = "none";
-         ReportTemplateExtension = ".rptemp";
+         get
+         {
+            string filePath = GetDataDirectory + "RelatedTable.xml";
+            if (listRelatedTables.Count == 0 && File.Exists(filePath))
+            {
+               listRelatedTables = RelatedTable.XMLData.Deserialize(filePath);
+            }
+            return listRelatedTables;
+         }
       }
-
-      public static string ToolName { get; set; }
-      public static string NullValue { get; set; }
-      public static string ReportTemplateExtension { get; set; }
 
       public static string GetDataDirectory
       {
@@ -116,11 +118,9 @@ namespace ReportForIDS
          }
       }
 
-      public static string GetReportFilePath { get => GetDataDirectory + "RencentReport.xml"; }
-      public static string GetReportTemplateFilePath { get => GetDataDirectory + "ReportTemplateData.xml"; }
-
       private static List<string> listHiddenSchemas = new List<string>();
       private static List<string> listHiddenTables = new List<string>();
       private static List<string> listHiddenFields = new List<string>();
+      private static List<RelatedTable> listRelatedTables = new List<RelatedTable>();
    }
 }

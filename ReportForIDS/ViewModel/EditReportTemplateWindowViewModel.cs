@@ -57,14 +57,14 @@ namespace ReportForIDS.ViewModel
       {
          MoveFileCommand = new RelayCommand<object>((p) => true, (p) =>
          {
-            string filter = $"Custom file (*{Cons.ReportTemplateExtension})|*{Cons.ReportTemplateExtension}|All file |*.*";
+            string filter = $"Custom file (*{Cons.REPORT_TEMPLATE_EXTENSION})|*{Cons.REPORT_TEMPLATE_EXTENSION}|All file |*.*";
             string filePath = DialogUtils.ShowSaveFileDialog("Save report template to file", filter);
             if (string.IsNullOrEmpty(filePath)) { return; }
 
             if (File.Exists(filePath))
             {
                var messageBoxResult = CustomMessageBox.Show($"\"{filePath}\" already exixts.\r\n\r\nDo you want to replace it ?",
-                                                            Cons.ToolName,
+                                                            Cons.TOOL_NAME,
                                                             MessageBoxButton.YesNo,
                                                             MessageBoxImage.Warning,
                                                             MessageBoxResult.No);
@@ -81,7 +81,7 @@ namespace ReportForIDS.ViewModel
                   }
                   catch (Exception e)
                   {
-                     CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+                     CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
                   }
                }
             }
@@ -104,7 +104,7 @@ namespace ReportForIDS.ViewModel
                else
                {
                   CustomMessageBox.Show("Error while moving file\r\n\r\n" + error,
-                                        Cons.ToolName,
+                                        Cons.TOOL_NAME,
                                         MessageBoxButton.OK,
                                         MessageBoxImage.Error);
                   return;

@@ -33,7 +33,7 @@ namespace ReportForIDS.ViewModel
          QueryItem = updateQueryItem ?? new MyQuery();
          SqlQueryStatement = QueryItem.SQLQuery;
 
-         LoadListFieldCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+         LoadListFieldCommand = new RelayCommand<object>((p) => true, (p) =>
          {
             GetExecuteResult();
             QueryItem.ListFeilds = DatabaseUtils.GetListField(SqlQueryStatement, updateQueryItem?.AliasTableName ?? "");
@@ -41,7 +41,7 @@ namespace ReportForIDS.ViewModel
             isChangedQuery = false;
          });
 
-         ExecuteQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+         ExecuteQueryCommand = new RelayCommand<object>((p) => true, (p) =>
          {
          });
 
@@ -60,7 +60,7 @@ namespace ReportForIDS.ViewModel
 
             if (QueryItem.CompareField == null)
             {
-               CustomMessageBox.Show("Please select field to commpare", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Please select field to commpare", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
                return;
             }
 

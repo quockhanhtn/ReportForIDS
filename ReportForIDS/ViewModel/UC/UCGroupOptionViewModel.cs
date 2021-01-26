@@ -4,14 +4,10 @@ using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
 {
-   public class UCGroupOptionViewModel : UCViewModel
+   public class UCGroupOptionViewModel : UCBaseViewModel
    {
       private static readonly string MULTI_COLUMN_IMAGE_SRC = "/Resources/Images/multi-column.png";
       private static readonly string SEPERATE_COMMA_IMAGE_SRC = "/Resources/Images/separate-by-comma.png";
-
-      public ICommand PrevCommand { get; set; }
-      public ICommand NextCommand { get; set; }
-
 
       public bool IsCreateMultiColumn
       {
@@ -27,6 +23,7 @@ namespace ReportForIDS.ViewModel
             OnPropertyChanged();
          }
       }
+
       public bool IsSepareteByComma
       {
          get => isSepareteByComma;
@@ -65,7 +62,6 @@ namespace ReportForIDS.ViewModel
       {
          IsSepareteByComma = true;
       }
-
 
       private bool isCreateMultiColumn = true;
       private bool isSepareteByComma = false;

@@ -46,7 +46,7 @@ namespace ReportForIDS.Model
          [XmlElement(typeof(ReportTemplate))]
          public List<ReportTemplate> ListReportTemplate;
 
-         private static readonly string filePath = Cons.GetReportTemplateFilePath;
+         private static readonly string filePath = Cons.GetDataDirectory + "ReportTemplateData.xml";
 
          public static void Serialize(List<ReportTemplate> list)
          {
@@ -62,7 +62,7 @@ namespace ReportForIDS.Model
             }
             catch (Exception e)
             {
-               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -86,7 +86,7 @@ namespace ReportForIDS.Model
                }
                catch (Exception e)
                {
-                  CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+                  CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
                }
                finally
                {

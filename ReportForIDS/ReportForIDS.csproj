@@ -199,12 +199,17 @@
     <Compile Include="Utils\FrameworkElementExtension.cs" />
     <Compile Include="Utils\IniFile.cs" />
     <Compile Include="Utils\StringExtension.cs" />
-    <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewDatatableWindow.xaml.cs">
+      <DependentUpon>ViewDatatableWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\Base\BaseViewModel.cs" />
+    <Compile Include="ViewModel\Base\ReportWindowBaseViewModel.cs" />
     <Compile Include="ViewModel\EditReportTemplateWindowViewModel.cs" />
     <Compile Include="ViewModel\EnterQueryWindowViewModel.cs" />
     <Compile Include="ViewModel\ListTemplateWindowViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="ViewModel\ReportWindowViewModel.cs" />
+    <Compile Include="ViewModel\ReportFromQueryWindowViewModel.cs" />
+    <Compile Include="ViewModel\StepByStepWindowViewModel.cs" />
     <Compile Include="ViewModel\UC\UCGroupOptionViewModel.cs" />
     <Compile Include="ViewModel\UC\UCInsertSqlQueryViewModel.cs" />
     <Compile Include="ViewModel\UC\UCQueryItemViewModel.cs" />
@@ -212,7 +217,7 @@
     <Compile Include="ViewModel\UC\UCSelectFieldViewModel.cs" />
     <Compile Include="ViewModel\UC\UCSelectTableViewModel.cs" />
     <Compile Include="ViewModel\UC\UCSetConditionViewModel.cs" />
-    <Compile Include="ViewModel\UC\UCViewModel.cs" />
+    <Compile Include="ViewModel\Base\UCBaseViewModel.cs" />
     <Compile Include="WaitWindow.xaml.cs">
       <DependentUpon>WaitWindow.xaml</DependentUpon>
     </Compile>
@@ -297,6 +302,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UC\UCTitleBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ViewDatatableWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

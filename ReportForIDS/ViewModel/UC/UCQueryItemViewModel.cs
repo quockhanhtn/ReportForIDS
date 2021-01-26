@@ -86,7 +86,7 @@ namespace ReportForIDS.ViewModel
             }
          });
 
-         EditQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+         EditQueryCommand = new RelayCommand<object>((p) => true, (p) =>
          {
             var enterQueryWindow = new EnterQueryWindow()
             {
@@ -102,14 +102,14 @@ namespace ReportForIDS.ViewModel
             else { /*nothing */ }
          });
 
-         RemoveQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+         RemoveQueryCommand = new RelayCommand<object>((p) => true, (p) =>
          {
             MoveBotCommand.Execute(null);
             ParentPanel.Children.Remove(UcQueryItem);
             MyQuery.LastOrder--;
          });
 
-         SetPrimaryQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+         SetPrimaryQueryCommand = new RelayCommand<object>((p) => true, (p) =>
          {
          });
       }

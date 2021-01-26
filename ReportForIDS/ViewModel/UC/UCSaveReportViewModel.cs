@@ -14,14 +14,13 @@ using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
 {
-   public class UCSaveReportViewModel : UCViewModel
+   public class UCSaveReportViewModel : UCBaseViewModel
    {
       #region Command
 
       public ICommand LoadedCommand { get; set; }
       public ICommand SelectDirectoryCommand { get; set; }
       public ICommand SelectTemplateFilePathCommand { get; set; }
-      public ICommand PrevCommand { get; set; }
       public ICommand PreviewReportCommand { get; set; }
       public ICommand SaveReportCommand { get; set; }
 
@@ -114,13 +113,15 @@ namespace ReportForIDS.ViewModel
 
          SelectTemplateFilePathCommand = new RelayCommand<object>((p) => true, (p) =>
          {
-            string filter = $"Custom file (*{Cons.ReportTemplateExtension})|*{Cons.ReportTemplateExtension}|All file |*.*";
+            string filter = $"Custom file (*{Cons.REPORT_TEMPLATE_EXTENSION})|*{Cons.REPORT_TEMPLATE_EXTENSION}|All file |*.*";
             string path = DialogUtils.ShowSaveFileDialog("Save report template file", filter);
 
             if (!string.IsNullOrEmpty(path)) { TemplateFilePath = path; }
          });
 
          PrevCommand = new RelayCommand<object>((p) => true, (p) => prevAction());
+
+         NextCommand = new RelayCommand<object>((p) => false, (p) => { });
 
          PreviewReportCommand = new RelayCommand<Grid>((p) => p != null, (p) => PreviewReport(p));
 
@@ -172,7 +173,7 @@ namespace ReportForIDS.ViewModel
          if (string.IsNullOrEmpty(TemplateFilePath))
          {
             CustomMessageBox.Show("Incorrect input\r\n\r\nPlease select path to save report template file!", 
-                                  Cons.ToolName, 
+                                  Cons.TOOL_NAME, 
                                   MessageBoxButton.OK, 
                                   MessageBoxImage.Error);
             return false;
@@ -185,7 +186,7 @@ namespace ReportForIDS.ViewModel
          }
          catch (Exception e)
          {
-            CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+            CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
          }
 
@@ -196,7 +197,7 @@ namespace ReportForIDS.ViewModel
       {
          if (string.IsNullOrEmpty(ReportDirectory))
          {
-            CustomMessageBox.Show("Please select Directory to save report", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+            CustomMessageBox.Show("Please select Directory to save report", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
             SelectDirectoryCommand.Execute(null);
             return false;
          }
@@ -204,7 +205,7 @@ namespace ReportForIDS.ViewModel
          if (string.IsNullOrEmpty(ReportFileName))
          {
             CustomMessageBox.Show("Incorrect input\r\n\r\nReport file name can't empty !",
-                                  Cons.ToolName,
+                                  Cons.TOOL_NAME,
                                   MessageBoxButton.OK,
                                   MessageBoxImage.Error);
             return false;
@@ -222,7 +223,7 @@ namespace ReportForIDS.ViewModel
          if (File.Exists(FilePath))
          {
             var messageBoxResult = CustomMessageBox.Show($"File \"{FilePath}\" already exixts.\r\n\r\nDo you want to replace it ?",
-                                                         Cons.ToolName,
+                                                         Cons.TOOL_NAME,
                                                          MessageBoxButton.YesNo,
                                                          MessageBoxImage.Warning,
                                                          MessageBoxResult.No);
@@ -236,7 +237,7 @@ namespace ReportForIDS.ViewModel
          }
          catch (Exception e)
          {
-            CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+            CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
          }
 
@@ -290,7 +291,7 @@ namespace ReportForIDS.ViewModel
          }
          catch (Exception e)
          {
-            CustomMessageBox.Show("Error :\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+            CustomMessageBox.Show("Error :\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
          }
       }
 
@@ -301,31 +302,33 @@ namespace ReportForIDS.ViewModel
             while (DataThread.IsAlive) { }
          }, () => { return; });
 
-         if ((IsPreviewAllRows && GroupResultDatatable.Rows.Count > 500) || TopRowReview.ToInt32() > 500)
-         {
-            var messBoxResult = CustomMessageBox.Show("Top row to preview too large\r\nTool need more RAM to run and can be crash!\r\n\r\nDo you want to continue ?",
-                                                      Cons.ToolName,
-                                                      MessageBoxButton.YesNo,
-                                                      MessageBoxImage.Warning,
-                                                      MessageBoxResult.No);
-            if (messBoxResult == MessageBoxResult.No)
-            {
-               return;
-            }
-         }
+         ViewDatatableWindow.Show(GroupResultDatatable);
 
-         if (IsPreviewAllRows) { TopRowReview = GroupResultDatatable.Rows.Count.ToString(); }
+         //if ((IsPreviewAllRows && GroupResultDatatable.Rows.Count > 500) || TopRowReview.ToInt32() > 500)
+         //{
+         //   var messBoxResult = CustomMessageBox.Show("Top row to preview too large\r\nTool need more RAM to run and can be crash!\r\n\r\nDo you want to continue ?",
+         //                                             Cons.ToolName,
+         //                                             MessageBoxButton.YesNo,
+         //                                             MessageBoxImage.Warning,
+         //                                             MessageBoxResult.No);
+         //   if (messBoxResult == MessageBoxResult.No)
+         //   {
+         //      return;
+         //   }
+         //}
 
-         p.IsEnabled = false;
-         try
-         {
-            PreviewDataTableWindow.Show(GroupResultDatatable, TopRowReview.ToInt32());
-         }
-         catch (Exception e)
-         {
-            CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
-         }
-         p.IsEnabled = true;
+         //if (IsPreviewAllRows) { TopRowReview = GroupResultDatatable.Rows.Count.ToString(); }
+
+         //p.IsEnabled = false;
+         //try
+         //{
+         //   PreviewDataTableWindow.Show(GroupResultDatatable, TopRowReview.ToInt32());
+         //}
+         //catch (Exception e)
+         //{
+         //   CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+         //}
+         //p.IsEnabled = true;
       }
 
       protected void ReadSaveOptionConfig()
@@ -404,7 +407,7 @@ namespace ReportForIDS.ViewModel
          {
             Application.Current.Dispatcher.Invoke(new Action(delegate ()
             {
-               CustomMessageBox.Show("Error \r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Error \r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
             }));
          }
       }
@@ -426,6 +429,11 @@ namespace ReportForIDS.ViewModel
          }
 
          GroupResultDatatable = ResultDatatable.Clone();
+         foreach (DataColumn dataColumn in GroupResultDatatable.Columns)
+         {
+            dataColumn.DataType = typeof(string);
+         }
+
          var lastGroup = new List<string>();
          int recordsOnRow = 0, colIndex = 0;
 
@@ -597,6 +605,11 @@ namespace ReportForIDS.ViewModel
          }
 
          GroupResultDatatable = ResultDatatable.Clone();
+         foreach (DataColumn dataColumn in GroupResultDatatable.Columns)
+         {
+            dataColumn.DataType = typeof(string);
+         }
+
          var lastGroup = new List<string>();
          int recordsOnRow = 0, colIndex = 0;
          DataRow newDataRow = GroupResultDatatable.NewRow();
@@ -667,7 +680,10 @@ namespace ReportForIDS.ViewModel
                   {
                      if (!string.IsNullOrEmpty(newDataRow[ResultDatatable.Columns[i].ColumnName].ToString().Trim()))
                      {
-                        newDataRow[ResultDatatable.Columns[i].ColumnName] += ", " + item[i];
+                        if (!string.IsNullOrEmpty(item[i].ToString().Trim()))
+                        {
+                           newDataRow[ResultDatatable.Columns[i].ColumnName] += ", " + item[i];
+                        }
                      }
                      else
                      {

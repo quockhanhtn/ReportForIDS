@@ -72,7 +72,7 @@ namespace ReportForIDS
          catch (Exception e)
          {
             CustomMessageBox.Show("Errorr\r\n\r\n" + e.Message,
-                                  Cons.ToolName,
+                                  Cons.TOOL_NAME,
                                   MessageBoxButton.OK,
                                   MessageBoxImage.Error);
          }

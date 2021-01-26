@@ -9,12 +9,10 @@ using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
 {
-   public class UCSelectFieldViewModel : UCViewModel
+   public class UCSelectFieldViewModel : UCBaseViewModel
    {
       public ICommand SelectedFieldChangedCommand { get; set; }
       public ICommand SelectAllFieldCommand { get; set; }
-      public ICommand PrevCommand { get; set; }
-      public ICommand NextCommand { get; set; }
 
       public string Title { get; set; }
       public int NoOfSelectedField { get { return listFieldsWithoutFilter.Count(f => f.IsSelected); } }
@@ -86,7 +84,7 @@ namespace ReportForIDS.ViewModel
 
          SelectedFieldChangedCommand = new RelayCommand<object>((p) => true, (p) => SelectedFieldChanged());
 
-         PrevCommand = new RelayCommand<object>((p) => { return true; }, (p) => prevAction());
+         PrevCommand = new RelayCommand<object>((p) => true, (p) => prevAction());
 
          NextCommand = new RelayCommand<object>((p) =>
          {
