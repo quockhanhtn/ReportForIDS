@@ -81,16 +81,16 @@ namespace ReportForIDS
          e.Handled = true;
       }
 
-      private void cmbRowPerPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+      private void CmbRowPerPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
          => ChangeRowPerPage(Convert.ToInt32((sender as ComboBox).SelectedValue));
 
-      private void btnNextPage_Click(object sender, RoutedEventArgs e)
+      private void BtnNextPage_Click(object sender, RoutedEventArgs e)
          => CurrentPage += CurrentPage < NoOfPage ? 1 : 0;
 
-      private void btnPrevPage_Click(object sender, RoutedEventArgs e)
+      private void BtnPrevPage_Click(object sender, RoutedEventArgs e)
          => CurrentPage -= CurrentPage > 1 ? 1 : 0;
 
-      private void txtCurrentPage_TextChanged(object sender, TextChangedEventArgs e)
+      private void TxtCurrentPage_TextChanged(object sender, TextChangedEventArgs e)
       {
          var textbox = sender as TextBox;
          int.TryParse(textbox.Text, out int displayPage);
@@ -107,7 +107,7 @@ namespace ReportForIDS
          }
       }
 
-      private void btnClose_Click(object sender, RoutedEventArgs e) => this.Close();
+      private void BtnClose_Click(object sender, RoutedEventArgs e) => this.Close();
 
       public static void Show(DataTable dataTable)
       {

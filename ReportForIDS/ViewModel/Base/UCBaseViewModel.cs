@@ -6,13 +6,12 @@ namespace ReportForIDS.ViewModel
 {
    public abstract class UCBaseViewModel : BaseViewModel
    {
-      public ICommand PrevCommand { get; set; }
-      public ICommand NextCommand { get; set; }
+      public ICommand ShowMessageCommand { get => new RelayCommand<object>((p) => p != null, (p) => { ShowSnackbarMessage(p, 5); }); }
+      public ICommand PrevCommand { get; set; } = new RelayCommand<object>((p) => false, (p) => { });
+      public ICommand NextCommand { get; set; } = new RelayCommand<object>((p) => false, (p) => { });
 
       public SnackbarMessageQueue SnackbarMessageQueue { get; set; }
       public bool Done { get; set; } = false;
-
-      
 
       public virtual void ReLoad()
       {

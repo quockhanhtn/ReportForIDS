@@ -141,27 +141,5 @@ namespace ReportForIDS.Utils
          }
          return true;
       }
-
-      public static void ToExcelPackage(this DataTable dataTable, ExcelPackage excelPackage)
-      {
-         ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[0];
-         int colIndex = 1, rowIndex = 1;
-
-         foreach (DataColumn dataColumn in dataTable.Columns)
-         {
-            worksheet.Cells[rowIndex, colIndex++].Value = dataColumn.ColumnName;
-         }
-
-         foreach (DataRow item in dataTable.Rows)
-         {
-            rowIndex++;
-            colIndex = 1;
-
-            for (int i = 0; i < dataTable.Columns.Count; i++)
-            {
-               worksheet.Cells[rowIndex, colIndex++].Value = item[i] ?? "";
-            }
-         }
-      }
    }
 }

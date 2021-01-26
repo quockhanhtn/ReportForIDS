@@ -7,9 +7,9 @@ namespace ReportForIDS.Utils
 {
    public class IniFile
    {
-      private string Section;
-      private string Path;
-      private string EXE = Assembly.GetExecutingAssembly().GetName().Name;
+      private readonly string Section;
+      private readonly string Path;
+      private readonly string EXE = Assembly.GetExecutingAssembly().GetName().Name;
 
       [DllImport("kernel32", CharSet = CharSet.Unicode)]
       private static extern long WritePrivateProfileString(string Section, string Key, string Value, string FilePath);
@@ -30,19 +30,14 @@ namespace ReportForIDS.Utils
          return RetVal.ToString();
       }
 
-      public void Write(string Key, string Value)
+      public void Write(string key, string value)
       {
-         WritePrivateProfileString(Section ?? EXE, Key, Value, Path);
+         WritePrivateProfileString(Section ?? EXE, key, value, Path);
       }
 
-      public void DeleteKey(string Key)
+      public void DeleteKey(string key)
       {
-         Write(Key, null);
-      }
-
-      public void DeleteSection(string Section = null)
-      {
-         Write(null, null);
+         Write(key, null);
       }
 
       public bool KeyExists(string Key)

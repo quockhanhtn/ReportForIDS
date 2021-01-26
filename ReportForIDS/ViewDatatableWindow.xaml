@@ -63,7 +63,7 @@
                <!--Rows per page-->
                <ComboBox materialDesign:HintAssist.Hint="Rows per page"
                          Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
-                         SelectedIndex="1" x:Name="cmbRowPerPage" SelectionChanged="cmbRowPerPage_SelectionChanged">
+                         SelectedIndex="1" x:Name="cmbRowPerPage" SelectionChanged="CmbRowPerPage_SelectionChanged">
                   <ComboBox.ItemsSource>
                      <x:Array Type="sys:Int32">
                         <sys:Int32>10</sys:Int32>
@@ -76,14 +76,14 @@
                </ComboBox>
 
                <!--Prev page-->
-               <Button x:Name="btnPrevPage" Click="btnPrevPage_Click"
+               <Button x:Name="btnPrevPage" Click="BtnPrevPage_Click"
                        Margin="20 0 0 0" Height="25" Width="30" ToolTip="Previous page"
                        Style="{StaticResource MaterialDesignIconButton}" 
                        Content="{materialDesign:PackIcon Kind=ArrowLeftBoldCircle}">
                </Button>
 
                <TextBox x:Name="txtCurrentPage" VerticalAlignment="Center" Margin="5"
-                        TextChanged="txtCurrentPage_TextChanged"
+                        TextChanged="TxtCurrentPage_TextChanged"
                         HorizontalAlignment="Center" TextAlignment="Center" 
                         materialDesign:HintAssist.Hint="Displaying page">
                </TextBox>
@@ -95,7 +95,7 @@
                </TextBlock>
 
                <!--Next page-->
-               <Button x:Name="btnNextPage" Click="btnNextPage_Click" 
+               <Button x:Name="btnNextPage" Click="BtnNextPage_Click" 
                        Margin="0 0 20 0" Width="30" Height="25" ToolTip="Next page"
                        Style="{StaticResource MaterialDesignIconButton}" 
                        Content="{materialDesign:PackIcon Kind=ArrowRightBoldCircle}">
@@ -104,7 +104,7 @@
             </StackPanel>
 
             <!--Button Close-->
-            <Button Grid.Column="1" x:Name="btnClose" Click="btnClose_Click"
+            <Button Grid.Column="1" x:Name="btnClose" Click="BtnClose_Click"
                     HorizontalAlignment="Right" Width="175" ToolTip="Close this Window">
                <Grid Width="140">
                   <Grid.ColumnDefinitions>

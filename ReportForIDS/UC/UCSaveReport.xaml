@@ -39,7 +39,7 @@
          <TextBlock Grid.Row="0" Margin="0 15 0 0" Text="PREVIEW AND SAVE REPORT" Style="{StaticResource TitleTextBlock}" />
 
          <!--Input fields-->
-         <ScrollViewer VerticalAlignment="Center" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+         <ScrollViewer VerticalAlignment="Top" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
                <StackPanel.Resources>
                   <Style TargetType="TextBox" BasedOn="{StaticResource MyTextBox}">
@@ -70,53 +70,8 @@
                   </Style>
                </StackPanel.Resources>
 
-               <Border CornerRadius="500">
-                  <GroupBox Margin="20 30 20 10" Style="{DynamicResource MaterialDesignGroupBox}">
-                     <GroupBox.Header>
-                        <TextBlock Text="PREVIEW OPTION"/>
-                     </GroupBox.Header>
-                     <GroupBox.Content>
-                        <Grid>
-                           <Grid.ColumnDefinitions>
-                              <ColumnDefinition/>
-                              <ColumnDefinition/>
-                           </Grid.ColumnDefinitions>
-
-                           <ComboBox materialDesign:HintAssist.Hint="Top row preview" Margin="10 30 10 10"
-                                     SelectedIndex="3"
-                                     SelectedValue="{Binding TopRowReview, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
-                              <ComboBox.ItemsSource>
-                                 <x:Array Type="sys:String">
-                                    <sys:String>Top 10 rows</sys:String>
-                                    <sys:String>Top 50 rows</sys:String>
-                                    <sys:String>Top 100 rows</sys:String>
-                                    <sys:String>Top 200 rows</sys:String>
-                                    <sys:String>Top 300 rows</sys:String>
-                                    <sys:String>Top 400 rows</sys:String>
-                                    <sys:String>Top 500 rows</sys:String>
-                                    <sys:String>Top 1000 rows</sys:String>
-                                    <!--<sys:String>All rows</sys:String>-->
-                                 </x:Array>
-                              </ComboBox.ItemsSource>
-                           </ComboBox>
-
-                           <StackPanel Grid.Column="1">
-                              <CheckBox  Margin="0 0 0 2" IsChecked="False" x:Name="chkCustomRow">
-                                 Custom
-                              </CheckBox>
-
-                              <TextBox IsEnabled="{Binding ElementName=chkCustomRow, Path=IsChecked}" 
-                                       materialDesign:HintAssist.Hint="No of rows (max 1000)" Margin="10 0 10 10" Style="{StaticResource MyTextBox}"
-                                       Text="{Binding Path=TopRowReview, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
-                              </TextBox>
-                           </StackPanel>
-                        </Grid>
-                     </GroupBox.Content>
-                  </GroupBox>
-               </Border>
-
                <Border>
-                  <GroupBox Margin="20 10" Style="{DynamicResource MaterialDesignGroupBox}">
+                  <GroupBox Margin="20 15 20 10" Style="{DynamicResource MaterialDesignGroupBox}">
                      <GroupBox.Header>
                         <TextBlock>
                            SAVE REPORT OPTION
@@ -252,7 +207,7 @@
                </Grid>
             </Button>
             <Button x:Name="btnReviewReport" Width="175" ToolTip="Preview report"
-                    Command="{Binding PreviewReportCommand}" CommandParameter="{Binding ElementName=mainGrid}">
+                    Command="{Binding PreviewReportCommand}">
                <Grid Width="140">
                   <Grid.ColumnDefinitions>
                      <ColumnDefinition/>

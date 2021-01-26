@@ -210,6 +210,7 @@
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ReportFromQueryWindowViewModel.cs" />
     <Compile Include="ViewModel\StepByStepWindowViewModel.cs" />
+    <Compile Include="ViewModel\UC\SaveReport\UCSaveReportViewModel.cs" />
     <Compile Include="ViewModel\UC\UCGroupOptionViewModel.cs" />
     <Compile Include="ViewModel\UC\UCInsertSqlQueryViewModel.cs" />
     <Compile Include="ViewModel\UC\UCQueryItemViewModel.cs" />

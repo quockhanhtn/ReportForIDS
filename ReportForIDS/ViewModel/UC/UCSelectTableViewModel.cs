@@ -28,15 +28,21 @@ namespace ReportForIDS.ViewModel
             ListTableSelects.Add(TableQueue);
             ListTableQueues.Remove(TableQueue);
          });
+
          RemoveSelectedTableCommand = new RelayCommand<object>((p) => { return TableSelected != null; }, (p) =>
          {
             ListTableQueues.Add(TableSelected);
             ListTableSelects.Remove(TableSelected);
             ListTableSelects_CollectionChanged(ListTableSelects, null);
          });
+
          RemoveAllTableCommand = new RelayCommand<object>((p) => true, (p) =>
          {
-            var messageBoxResult = CustomMessageBox.Show("This action will remove all item in list. Are you sure to continue ?", Cons.TOOL_NAME, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+            var messageBoxResult = CustomMessageBox.Show("This action will remove all item in list. Are you sure to continue ?", 
+                                                         Cons.TOOL_NAME, 
+                                                         MessageBoxButton.YesNo, 
+                                                         MessageBoxImage.Warning, 
+                                                         MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                foreach (var item in ListTableSelects)
@@ -46,7 +52,9 @@ namespace ReportForIDS.ViewModel
                ListTableSelects.Clear();
             }
          });
+
          PrevCommand = new RelayCommand<object>((p) => true, (p) => prevAction());
+
          NextCommand = new RelayCommand<object>((p) => { return ListTableSelects.Count > 0; }, (p) =>
          {
             StepByStepData.ListTable = ListTableSelects.ToList();
@@ -73,17 +81,6 @@ namespace ReportForIDS.ViewModel
             ListTableQueues = DatabaseUtils.GetListTable();
             return;
          }
-
-         //var listTbCanSelect = new List<string>();
-         //foreach (var tb in ListTableSelects)
-         //{
-         //   var listTbRef = Cons.ListTableReferences.FindAll(x => x.MainTable == tb.TableName.ToLower()).ToList();
-
-         //   foreach (var item in listTbRef)
-         //   {
-         //      item.ListReferenceTo.ForEach(refTo => listTbCanSelect.Add(refTo.TableName));
-         //   }
-         //}
 
          ListTableQueues.Clear();
          ListTableQueues = FindRelatitionTable();
