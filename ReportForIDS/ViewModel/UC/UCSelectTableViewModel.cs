@@ -38,10 +38,10 @@ namespace ReportForIDS.ViewModel
 
          RemoveAllTableCommand = new RelayCommand<object>((p) => true, (p) =>
          {
-            var messageBoxResult = CustomMessageBox.Show("This action will remove all item in list. Are you sure to continue ?", 
-                                                         Cons.TOOL_NAME, 
-                                                         MessageBoxButton.YesNo, 
-                                                         MessageBoxImage.Warning, 
+            var messageBoxResult = CustomMessageBox.Show("This action will remove all item in list. Are you sure to continue ?",
+                                                         Cons.TOOL_NAME,
+                                                         MessageBoxButton.YesNo,
+                                                         MessageBoxImage.Warning,
                                                          MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
             {

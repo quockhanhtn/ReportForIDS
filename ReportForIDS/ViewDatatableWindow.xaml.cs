@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -43,46 +44,43 @@ namespace ReportForIDS
 
       void UpdateView()
       {
-         DataTable currentPageDt = DTSource.Clone();
-         int firstRow = (currentPage - 1) * RowsPerPage;
-         for (int i = firstRow; i < firstRow + RowsPerPage && i < DTSource.Rows.Count; i++)
+         WaitWindow.Show(() =>
          {
-            currentPageDt.ImportRow(DTSource.Rows[i]);
-         }
+            Application.Current.Dispatcher.Invoke(new Action(delegate ()
+            {
+               DataTable currentPageDt = DTSource.Clone();
+               int firstRow = (currentPage - 1) * RowsPerPage;
+               for (int i = firstRow; i < firstRow + RowsPerPage && i < DTSource.Rows.Count; i++)
+               {
+                  currentPageDt.ImportRow(DTSource.Rows[i]);
+               }
 
-         MainDataGrid.DataContext = currentPageDt.DefaultView;
-         MainDataGrid.ColumnWidth = 150;
+               MainDataGrid.DataContext = currentPageDt.DefaultView;
+               MainDataGrid.ColumnWidth = 150;
+            }));
+         }, null);
       }
 
       public ViewDatatableWindow(DataTable source)
       {
          InitializeComponent();
-         DTSource = source;
-         ChangeRowPerPage(20);
+         DTSource = source ?? new DataTable();
+         txtTotalRow.Text = DTSource.Rows.Count.ToString();
+         CmbRowPerPage_SelectionChanged(this.cmbRowPerPage, null);
       }
 
-      void ChangeRowPerPage(int value)
+      private int currentPage = 0;
+
+      private void CmbRowPerPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
       {
+         RowsPerPage = Convert.ToInt32((sender as ComboBox).SelectedValue);
          if (DTSource != null)
          {
-            RowsPerPage = value;
             NoOfPage = (int)Math.Ceiling((double)DTSource.Rows.Count / RowsPerPage);
             txtNoOfPage.Text = NoOfPage.ToString();
             CurrentPage = 1;
          }
       }
-
-      private int currentPage = 0;
-
-      private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-      {
-         ScrollViewer scv = (ScrollViewer)sender;
-         scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
-         e.Handled = true;
-      }
-
-      private void CmbRowPerPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
-         => ChangeRowPerPage(Convert.ToInt32((sender as ComboBox).SelectedValue));
 
       private void BtnNextPage_Click(object sender, RoutedEventArgs e)
          => CurrentPage += CurrentPage < NoOfPage ? 1 : 0;
@@ -90,20 +88,20 @@ namespace ReportForIDS
       private void BtnPrevPage_Click(object sender, RoutedEventArgs e)
          => CurrentPage -= CurrentPage > 1 ? 1 : 0;
 
-      private void TxtCurrentPage_TextChanged(object sender, TextChangedEventArgs e)
+      private void TxtCurrentPage_KeyDown(object sender, KeyEventArgs e)
       {
-         var textbox = sender as TextBox;
-         int.TryParse(textbox.Text, out int displayPage);
-         if (displayPage <= 0 || displayPage > NoOfPage)
+         if (e.Key == Key.Enter)
          {
-            textbox.Text = CurrentPage.ToString();
-         }
-         else
-         {
-            CurrentPage = displayPage;
-            textbox.CaretIndex = textbox.Text.Length;
-            textbox.ScrollToEnd();
-            textbox.Focus();
+            var textbox = sender as TextBox;
+            int.TryParse(textbox.Text, out int displayPage);
+            if (displayPage <= 0 || displayPage > NoOfPage)
+            {
+               textbox.Text = CurrentPage.ToString();
+            }
+            else
+            {
+               CurrentPage = displayPage;
+            }
          }
       }
 

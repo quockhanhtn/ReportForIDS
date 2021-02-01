@@ -45,25 +45,36 @@
          <!--Title-->
          <!--<TextBlock Grid.Row="1" Margin="0 15 0 0" Text="PREVIEW REPORT" Style="{StaticResource TitleTextBlock}" />-->
 
+         <!--Row(s) returned-->
+         <TextBlock Grid.Row="1" Margin="10 0" HorizontalAlignment="Left">
+            <Run x:Name="txtTotalRow" Text="5000" FontWeight="SemiBold"></Run>
+            <Run Text="row(s) returned, "></Run>
+         </TextBlock>
+         
          <!--DataGrid-->
          <uc:UCScrollViewer Grid.Row="2" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <DataGrid x:Name="MainDataGrid" ItemsSource="{Binding}" IsHitTestVisible="True" CanUserSortColumns="True" CanUserResizeColumns="True"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True">
             </DataGrid>
          </uc:UCScrollViewer>
-
-         <!--Pagination -->
+         
+         <!--Pagination and close button-->
          <Grid Grid.Row="3" Margin="10 0">
             <Grid.ColumnDefinitions>
                <ColumnDefinition/>
                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" Grid.Column="0">
+            <!-- Pagination -->
+            <StackPanel Orientation="Horizontal">
+               <TextBlock Text="Rows/ page" VerticalAlignment="Center"/>
+
                <!--Rows per page-->
-               <ComboBox materialDesign:HintAssist.Hint="Rows per page"
-                         Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
-                         SelectedIndex="1" x:Name="cmbRowPerPage" SelectionChanged="CmbRowPerPage_SelectionChanged">
+               <ComboBox Margin="10 -10 0 0" Style="{StaticResource MyComboBox}" 
+                         Padding="0" Width="50"
+                         SelectedIndex="1" x:Name="cmbRowPerPage" 
+                         HorizontalAlignment="Center" VerticalAlignment="Center"
+                         SelectionChanged="CmbRowPerPage_SelectionChanged">
                   <ComboBox.ItemsSource>
                      <x:Array Type="sys:Int32">
                         <sys:Int32>10</sys:Int32>
@@ -77,17 +88,21 @@
 
                <!--Prev page-->
                <Button x:Name="btnPrevPage" Click="BtnPrevPage_Click"
-                       Margin="20 0 0 0" Height="25" Width="30" ToolTip="Previous page"
+                       Margin="20 0 0 0" Height="30" Width="30" ToolTip="Previous page"
                        Style="{StaticResource MaterialDesignIconButton}" 
                        Content="{materialDesign:PackIcon Kind=ArrowLeftBoldCircle}">
                </Button>
 
-               <TextBox x:Name="txtCurrentPage" VerticalAlignment="Center" Margin="5"
-                        TextChanged="TxtCurrentPage_TextChanged"
-                        HorizontalAlignment="Center" TextAlignment="Center" 
-                        materialDesign:HintAssist.Hint="Displaying page">
+               <!--Textbox current page-->
+               <TextBox x:Name="txtCurrentPage" Style="{StaticResource MyTextBox}"
+                        Width="50" FontSize="13.5"
+                        Margin="10 -18 0 0"
+                        VerticalAlignment="Center" HorizontalAlignment="Center" 
+                        TextAlignment="Center" 
+                        KeyDown="TxtCurrentPage_KeyDown">
                </TextBox>
 
+               <!--Total page-->
                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
                   <Run Text="of"></Run>
                   <Run x:Name="txtNoOfPage" Text="1000" FontWeight="SemiBold"></Run>
@@ -96,15 +111,14 @@
 
                <!--Next page-->
                <Button x:Name="btnNextPage" Click="BtnNextPage_Click" 
-                       Margin="0 0 20 0" Width="30" Height="25" ToolTip="Next page"
+                       Margin="10 0 10 0" Width="30" Height="30" ToolTip="Next page"
                        Style="{StaticResource MaterialDesignIconButton}" 
                        Content="{materialDesign:PackIcon Kind=ArrowRightBoldCircle}">
                </Button>
-
             </StackPanel>
 
             <!--Button Close-->
-            <Button Grid.Column="1" x:Name="btnClose" Click="BtnClose_Click"
+            <Button Grid.Column="1" x:Name="btnClose" Click="BtnClose_Click" Height="40"
                     HorizontalAlignment="Right" Width="175" ToolTip="Close this Window">
                <Grid Width="140">
                   <Grid.ColumnDefinitions>

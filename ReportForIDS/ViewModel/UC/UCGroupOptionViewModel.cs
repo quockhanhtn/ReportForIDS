@@ -1,6 +1,5 @@
 ﻿using ReportForIDS.SessionData;
 using System;
-using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
 {
@@ -65,6 +64,6 @@ namespace ReportForIDS.ViewModel
 
       private bool isCreateMultiColumn = true;
       private bool isSepareteByComma = false;
-      string exampleImageSrc;
+      private string exampleImageSrc;
    }
 }

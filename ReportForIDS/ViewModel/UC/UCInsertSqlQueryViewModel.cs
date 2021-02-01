@@ -18,8 +18,8 @@ namespace ReportForIDS.ViewModel
       public ICommand LoadQueryCommand { get; set; }
       public ICommand SaveQueryCommand { get; set; }
 
-
       public StackPanel QueriesStackPnl { get; set; }
+
       public List<MyQuery> ListInsertedQuery
       {
          get
@@ -133,7 +133,7 @@ namespace ReportForIDS.ViewModel
          });
       }
 
-      void LoadQueryFromFile(object p)
+      private void LoadQueryFromFile(object p)
       {
          string filePath = p?.ToString() ?? "";
          if (ListInsertedQuery.Count > 0)

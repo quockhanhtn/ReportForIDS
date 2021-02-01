@@ -210,11 +210,12 @@
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ReportFromQueryWindowViewModel.cs" />
     <Compile Include="ViewModel\StepByStepWindowViewModel.cs" />
+    <Compile Include="ViewModel\UC\SaveReport\UCSaveReportFromQueryVM.cs" />
+    <Compile Include="ViewModel\UC\SaveReport\UCSaveReportStepByStepVM.cs" />
     <Compile Include="ViewModel\UC\SaveReport\UCSaveReportViewModel.cs" />
     <Compile Include="ViewModel\UC\UCGroupOptionViewModel.cs" />
     <Compile Include="ViewModel\UC\UCInsertSqlQueryViewModel.cs" />
     <Compile Include="ViewModel\UC\UCQueryItemViewModel.cs" />
-    <Compile Include="ViewModel\UC\UCSaveReportViewModel.cs" />
     <Compile Include="ViewModel\UC\UCSelectFieldViewModel.cs" />
     <Compile Include="ViewModel\UC\UCSelectTableViewModel.cs" />
     <Compile Include="ViewModel\UC\UCSetConditionViewModel.cs" />

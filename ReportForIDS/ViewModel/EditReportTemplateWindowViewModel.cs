@@ -50,7 +50,6 @@ namespace ReportForIDS.ViewModel
             InputName = EditReportTemplate.Name;
             InputDescription = EditReportTemplate.Description;
          }
-
       }
 
       private void InitCommand(List<MyQuery> myQueries, ReportTemplate reportTemplate = null)

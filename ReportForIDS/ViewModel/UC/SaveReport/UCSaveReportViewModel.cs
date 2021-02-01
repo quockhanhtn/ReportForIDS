@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -323,8 +322,13 @@ namespace ReportForIDS.ViewModel
          }, () => PrevCommand.Execute(null));
       }
 
-      public virtual void GroupResultDataTable() { }
-      public virtual void ExecuteQuery() { }
+      public virtual void GroupResultDataTable()
+      {
+      }
+
+      public virtual void ExecuteQuery()
+      {
+      }
 
       #region Class field
 

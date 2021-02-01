@@ -1,6 +1,4 @@
-﻿using ReportForIDS.Model;
-using ReportForIDS.UC;
-using ReportForIDS.Utils;
+﻿using ReportForIDS.Utils;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;

@@ -83,7 +83,7 @@ namespace ReportForIDS.ViewModel
          });
       }
 
-      void GetExecuteResult()
+      private void GetExecuteResult()
       {
          Thread thread = new Thread(() =>
          {
@@ -113,6 +113,6 @@ namespace ReportForIDS.ViewModel
 
       private MyQuery queryItem;
       private string sqlQueryStatement;
-      bool isChangedQuery = false;
+      private bool isChangedQuery = false;
    }
 }

@@ -284,7 +284,7 @@ namespace ReportForIDS.ViewModel
 
       public override void LoadListField()
       {
-         ListFields = new ObservableCollection<MyField>() 
+         ListFields = new ObservableCollection<MyField>()
          {
             ReportFromQueryData.ListQueries[0].CompareField
          };
