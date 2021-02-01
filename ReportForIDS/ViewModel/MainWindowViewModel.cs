@@ -110,18 +110,18 @@ namespace ReportForIDS.ViewModel
             PwbPassword.Password = Password;
          });
 
-         LoadListDatabaseNameCommand = new RelayCommand<object>((p) => true, (p) =>
+         LoadListDatabaseNameCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             ListDatabaseNames = DatabaseUtils.GetListSchema();
          });
 
-         TestConnectionCommand = new RelayCommand<object>((p) => true, (p) =>
+         TestConnectionCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
-            if (DatabaseUtils.TestConnection(out var connectError)) { CustomMessageBox.Show("Test connection succeeded", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Information); }
-            else { CustomMessageBox.Show("Cannot connect to database.\n\r" + connectError, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error); }
+            if (DatabaseUtils.TestConnection(out var connectError)) { CustomMessageBox.Show("Test connection succeeded", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Information); }
+            else { CustomMessageBox.Show("Cannot connect to database.\n\r" + connectError, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error); }
          });
 
-         ViewRecentReportCommand = new RelayCommand<object>((p) => true, (p) =>
+         ViewRecentReportCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             //ListReportWindow listReportWindow = new ListReportWindow();
             //listReportWindow.Show();
@@ -140,7 +140,7 @@ namespace ReportForIDS.ViewModel
             }
             catch (System.Exception e)
             {
-               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
          });
 
@@ -154,7 +154,7 @@ namespace ReportForIDS.ViewModel
             }
             catch (System.Exception e)
             {
-               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
          });
       }

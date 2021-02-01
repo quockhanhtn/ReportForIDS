@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
 {
-   public class UCSetConditionViewModel : UCBaseViewModel
+   public class UCSetConditionViewModel : UCViewModel
    {
       public ICommand AddCommand { get; set; }
       public ICommand SaveCommand { get; set; }
@@ -22,6 +22,8 @@ namespace ReportForIDS.ViewModel
       public ICommand MoveBotCommand { get; set; }
       public ICommand DeleteCommand { get; set; }
       public ICommand DeleteAllCommand { get; set; }
+      public ICommand PrevCommand { get; set; }
+      public ICommand NextCommand { get; set; }
 
       public MyCondition ConditionSelected
       {
@@ -42,7 +44,7 @@ namespace ReportForIDS.ViewModel
          }
       }
 
-      public List<string> ListConditionType { get => Cons.LIST_CONDITION_TYPE; }
+      public List<string> ListConditionType { get => Cons.ListConditionType; }
       public ObservableCollection<MyCondition> ListConditions { get => listConditions; set { listConditions = value; OnPropertyChanged(); } }
       public ObservableCollection<MyField> ListFields { get => listFields; set { listFields = value; OnPropertyChanged(); } }
 
@@ -55,7 +57,7 @@ namespace ReportForIDS.ViewModel
 
       public UCSetConditionViewModel(Action prevAction, Action nextAction)
       {
-         AddCommand = new RelayCommand<object>((p) => true, (p) =>
+         AddCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             if (InputConditionOrder == MyCondition.LastOrder + 1 && p == null)
             {
@@ -73,23 +75,23 @@ namespace ReportForIDS.ViewModel
             }
          });
 
-         SaveCommand = new RelayCommand<object>((p) => true, (p) =>
+         SaveCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             if (InputConditionField == null)
             {
-               CustomMessageBox.Show("Please select \"Field name\"", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Warning);
+               CustomMessageBox.Show("Please select \"Field name\"", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Warning);
                return;
             }
 
             if (string.IsNullOrEmpty(InputConditionType))
             {
-               CustomMessageBox.Show("Please select \"ConditionType\"", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Warning);
+               CustomMessageBox.Show("Please select \"ConditionType\"", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Warning);
                return;
             }
 
             if (string.IsNullOrEmpty(InputConditionValue))
             {
-               CustomMessageBox.Show("Please input \"Value\"", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Warning);
+               CustomMessageBox.Show("Please input \"Value\"", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Warning);
                return;
             }
 
@@ -162,9 +164,9 @@ namespace ReportForIDS.ViewModel
             ReLoad();
          });
 
-         PrevCommand = new RelayCommand<object>((p) => true, (p) => prevAction());
+         PrevCommand = new RelayCommand<object>((p) => { return true; }, (p) => prevAction());
 
-         NextCommand = new RelayCommand<object>((p) => true, (p) =>
+         NextCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             StepByStepData.ListCondition = ListConditions.ToList();
             nextAction();

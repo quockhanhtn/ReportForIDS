@@ -12,7 +12,7 @@
 
         Title="Report for iDS" x:Name="mainWindow" DataContext="{StaticResource MainWindowVM}"
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
-        Height="600" Width="900" MinHeight="500" MinWidth="500" Icon="{StaticResource AppIcon}">
+        Height="600" Width="900" MinHeight="500" MinWidth="500" Icon="/Image/icon.ico">
 
    <i:Interaction.Triggers>
       <i:EventTrigger EventName="Loaded">

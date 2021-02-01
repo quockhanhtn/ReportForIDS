@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -38,14 +39,17 @@ namespace ReportForIDS.Utils
 
       public static void OpenFile(string path)
       {
-         var excelApp = new Microsoft.Office.Interop.Excel.Application { Visible = true };
+         var excelApp = new Microsoft.Office.Interop.Excel.Application
+         {
+            Visible = true
+         };
          Microsoft.Office.Interop.Excel.Workbooks workbooks = excelApp.Workbooks;
          Microsoft.Office.Interop.Excel.Workbook sheet = workbooks.Open(path);
       }
 
       public static void SaveExcelPackage(ExcelPackage excelPackage, string filePath)
       {
-         byte[] bin = excelPackage.GetAsByteArray();
+         Byte[] bin = excelPackage.GetAsByteArray();
          File.WriteAllBytes(filePath, bin);
       }
    }

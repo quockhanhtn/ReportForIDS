@@ -10,7 +10,7 @@ namespace ReportForIDS.Model
    public class ReportTemplate
    {
       public List<MyQuery> ListQuery { get => listQuery; set => listQuery = value; }
-      public string ShortFilePath { get => (FilePath.Length > 50) ? "..." + FilePath.Substring(FilePath.Length - 50) : FilePath; }
+      public string ShortFilePath { get { return (FilePath.Length > 50) ? "..." + FilePath.Substring(FilePath.Length - 50) : FilePath; } }
 
       public string ShortDescription
       {
@@ -46,7 +46,7 @@ namespace ReportForIDS.Model
          [XmlElement(typeof(ReportTemplate))]
          public List<ReportTemplate> ListReportTemplate;
 
-         private static readonly string filePath = Cons.GetDataDirectory + "ReportTemplateData.xml";
+         private static readonly string filePath = Cons.GetReportTemplateFilePath;
 
          public static void Serialize(List<ReportTemplate> list)
          {
@@ -62,7 +62,7 @@ namespace ReportForIDS.Model
             }
             catch (Exception e)
             {
-               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -86,7 +86,7 @@ namespace ReportForIDS.Model
                }
                catch (Exception e)
                {
-                  CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+                  CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
                }
                finally
                {
@@ -113,7 +113,10 @@ namespace ReportForIDS.Model
 
                return true;
             }
-            catch (Exception) { return false; }
+            catch (Exception)
+            {
+               return false;
+            }
          }
 
          public static bool Edit(ReportTemplate ReportTemplate)

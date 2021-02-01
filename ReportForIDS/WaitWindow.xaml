@@ -9,7 +9,7 @@
 
         Title="Waiting" x:Name="waitWindow" ShowInTaskbar="False"
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
-        Height="200" Width="450" Icon="{StaticResource AppIcon}">
+        Height="200" Width="450">
 
    <Border BorderThickness="2" BorderBrush="#001e51">
       <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown">
@@ -37,7 +37,7 @@
             <!--Text-->
             <TextBlock Grid.Row="0" Grid.Column="1" Margin="30 20 0 20" VerticalAlignment="Center" FontSize="20" TextAlignment="Justify"
                        Style="{StaticResource TitleTextBlock}" HorizontalAlignment="Left">
-               Please wait ...
+               Please wait
             </TextBlock>
 
             <TextBlock Grid.Row="1" Grid.Column="1" Margin="30 0 0 0" FontSize="16" TextWrapping="WrapWithOverflow" TextAlignment="Justify">

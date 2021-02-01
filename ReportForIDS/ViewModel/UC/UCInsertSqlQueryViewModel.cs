@@ -11,12 +11,14 @@ using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
 {
-   public class UCInsertSqlQueryViewModel : UCBaseViewModel
+   public class UCInsertSqlQueryViewModel : UCViewModel
    {
       public ICommand LoadedCommand { get; set; }
       public ICommand AddQueryCommand { get; set; }
       public ICommand LoadQueryCommand { get; set; }
       public ICommand SaveQueryCommand { get; set; }
+      public ICommand PrevCommand { get; set; }
+      public ICommand NextCommand { get; set; }
 
       public StackPanel QueriesStackPnl { get; set; }
 
@@ -58,16 +60,16 @@ namespace ReportForIDS.ViewModel
             }
             catch (Exception e)
             {
-               CustomMessageBox.Show("Error while find StackPanel in class UCInsertSqlQueryViewModel\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Error while find StackPanel in class UCInsertSqlQueryViewModel\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             // check null
             if (QueriesStackPnl == null)
             {
-               CustomMessageBox.Show("Error while find StackPanel in class UCInsertSqlQueryViewModel\r\n", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Error while find StackPanel in class UCInsertSqlQueryViewModel\r\n", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
          });
 
-         AddQueryCommand = new RelayCommand<object>((p) => true, (p) =>
+         AddQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             var enterQueryWindow = new EnterQueryWindow()
             {
@@ -86,11 +88,11 @@ namespace ReportForIDS.ViewModel
             }
          });
 
-         LoadQueryCommand = new RelayCommand<object>((p) => true, (p) => LoadQueryFromFile(p));
+         LoadQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) => LoadQueryFromFile(p));
 
          SaveQueryCommand = new RelayCommand<object>((p) => { return ListInsertedQuery.Count > 0; }, (p) =>
          {
-            string filter = $"Custom file (*{Cons.REPORT_TEMPLATE_EXTENSION})|*{Cons.REPORT_TEMPLATE_EXTENSION}|All file |*.*";
+            string filter = $"Custom file (*{Cons.ReportTemplateExtension})|*{Cons.ReportTemplateExtension}|All file |*.*";
             string filePath = DialogUtils.ShowSaveFileDialog("Save report template to file", filter);
             if (string.IsNullOrEmpty(filePath)) { return; }
 
@@ -114,14 +116,14 @@ namespace ReportForIDS.ViewModel
             }
          });
 
-         PrevCommand = new RelayCommand<object>((p) => true, (p) => prevAction());
+         PrevCommand = new RelayCommand<object>((p) => { return true; }, (p) => prevAction());
 
-         NextCommand = new RelayCommand<object>((p) => true, (p) =>
+         NextCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             if (ListInsertedQuery.Count == 0)
             {
                CustomMessageBox.Show("Missing input\r\n\r\nPlease insert at least one query",
-                                     Cons.TOOL_NAME,
+                                     Cons.ToolName,
                                      MessageBoxButton.OK,
                                      MessageBoxImage.Error);
             }
@@ -133,7 +135,7 @@ namespace ReportForIDS.ViewModel
          });
       }
 
-      private void LoadQueryFromFile(object p)
+      void LoadQueryFromFile(object p)
       {
          string filePath = p?.ToString() ?? "";
          if (ListInsertedQuery.Count > 0)
@@ -147,7 +149,7 @@ namespace ReportForIDS.ViewModel
 
          if (string.IsNullOrEmpty(filePath))
          {
-            string filter = $"Custom file (*{Cons.REPORT_TEMPLATE_EXTENSION})|*{Cons.REPORT_TEMPLATE_EXTENSION}|All file |*.*";
+            string filter = $"Custom file (*{Cons.ReportTemplateExtension})|*{Cons.ReportTemplateExtension}|All file |*.*";
             filePath = DialogUtils.ShowOpenFileDialog("Open file to load list query", filter);
          }
 
@@ -157,7 +159,7 @@ namespace ReportForIDS.ViewModel
             if (loadQueries.Count == 0 || !string.IsNullOrEmpty(error))
             {
                error = "Error while loading list query from file\r\n" + error;
-               CustomMessageBox.Show(error, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show(error, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {

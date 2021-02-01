@@ -11,9 +11,9 @@
 
         DataContext="{StaticResource StepByStepWindowVM}"
 
-        Title="Report for iDS" x:Name="stepByStepWindow"
+        Title="Report for iDS" x:Name="stepByStepWindow" Icon="/Image/icon.ico"
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
-        Height="600" Width="900" MinHeight="500" MinWidth="500" Icon="{StaticResource AppIcon}">
+        Height="600" Width="900" MinHeight="500" MinWidth="500">
 
    <Window.Resources>
       <Storyboard x:Key="OpenMenu">
@@ -207,14 +207,6 @@
                            <materialDesign:PackIcon Kind="Group" />
                            <TextBlock Text="Select " />
                            <TextBlock Text=" Field to group" FontWeight="SemiBold" />
-                        </StackPanel>
-                     </ListViewItem>
-                     <!---Group option-->
-                     <ListViewItem x:Name="GroupOption" Height="60" ToolTip="Group option">
-                        <StackPanel Orientation="Horizontal">
-                           <materialDesign:PackIcon Kind="ViewColumnOutline" />
-                           <TextBlock Text="Group " />
-                           <TextBlock Text=" option" FontWeight="SemiBold" />
                         </StackPanel>
                      </ListViewItem>
                      <!--Review and Save Report-->

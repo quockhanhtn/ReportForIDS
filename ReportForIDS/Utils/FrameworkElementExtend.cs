@@ -2,7 +2,7 @@
 
 namespace ReportForIDS.Utils
 {
-   public static class FrameworkElementExtension
+   public static class FrameworkElementExtend
    {
       public static FrameworkElement GetRootParent(this FrameworkElement f)
       {

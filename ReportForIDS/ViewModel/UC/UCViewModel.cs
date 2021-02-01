@@ -1,20 +1,20 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
-using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
 {
-   public abstract class UCBaseViewModel : BaseViewModel
+   public abstract class UCViewModel : BaseViewModel
    {
-      public ICommand ShowMessageCommand { get => new RelayCommand<object>((p) => p != null, (p) => { ShowSnackbarMessage(p, 5); }); }
-      public ICommand PrevCommand { get; set; } = new RelayCommand<object>((p) => false, (p) => { });
-      public ICommand NextCommand { get; set; } = new RelayCommand<object>((p) => false, (p) => { });
-
       public SnackbarMessageQueue SnackbarMessageQueue { get; set; }
       public bool Done { get; set; } = false;
 
       public virtual void ReLoad()
       {
+      }
+
+      public virtual bool LoadPreviosData()
+      {
+         return false;
       }
 
       protected void ShowSnackbarMessage(object message, double durationSecond = 5)

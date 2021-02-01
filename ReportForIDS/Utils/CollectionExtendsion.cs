@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ReportForIDS.Utils
 {
-   public static class CollectionExtension
+   public static class CollectionExtendsion
    {
       public static void AddUnique(this List<MyField> myFields, MyField newField)
       {

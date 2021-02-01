@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Xml.Serialization;
 
 namespace ReportForIDS.Model
@@ -16,13 +15,6 @@ namespace ReportForIDS.Model
       public string DisplayOrder { get => Order.ToString().PadLeft(2, '0'); }
 
       public string AliasTableName { get => "Query_" + DisplayOrder; }
-
-      public string SQLQuery { get; set; }
-
-      public MyField CompareField { get; set; }
-
-      [XmlIgnore]
-      public ObservableCollection<MyField> ListFeilds { get; set; } = new ObservableCollection<MyField>();
 
       [XmlIgnore]
       public int Order
@@ -45,88 +37,32 @@ namespace ReportForIDS.Model
       [XmlIgnore]
       public bool IsPrimary { get; set; }
 
+      public string SQLQuery { get; set; }
+
       [XmlIgnore]
       public string ExecResult { get; set; }
 
-      [XmlIgnore]
-      public bool ExecDone { get; set; }
+      public MyField CompareField { get; set; }
 
       [XmlIgnore]
-      public int MaxRecordSameId { get; set; }
-
-      [XmlIgnore]
-      public DataTable RawDataTable { get; set; }
-
-      [XmlIgnore]
-      public Thread ExecThread { get; set; }
+      public ObservableCollection<MyField> ListFeilds { get; set; } = new ObservableCollection<MyField>();
 
       public MyQuery()
       {
          Order = ++LastOrder;
       }
 
-      public void ExecuteQuery()
-      {
-         ExecDone = false;
-         ExecThread = new Thread(() =>
-         {
-            if (ListFeilds.IndexOf(CompareField) != 0)
-            {
-               ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
-            }
-
-            string query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
-            query += " from " + SQLQuery.AliasSQL(AliasTableName);
-            query += " order by " + CompareField.GetFullName() + " asc";
-
-            RawDataTable = DatabaseUtils.ExecuteQuery(query.ToUpper());
-
-            if (RawDataTable != null)
-            {
-               MaxRecordSameId = (
-                  from row in RawDataTable.AsEnumerable()
-                  group row by row.Field<Object>(0) into compareField
-                  orderby compareField.Count() descending
-                  select compareField.Count()
-               ).Take(1).FirstOrDefault();
-            }
-
-            ExecDone = true;
-         })
-         { IsBackground = true };
-         ExecThread.Start();
-      }
-
-      public DataTable GetGroupDataTable()
-      {
-         DataTable dt = RawDataTable.Copy();
-
-         string primaryFeild = this.CompareField.FieldName;
-         for (int i = dt.Rows.Count - 1; i > 0; i--)
-         {
-            if (dt.EqualWithBeforeRow(i, new string[] { primaryFeild }))
-            {
-               for (int j = 1; j < dt.Columns.Count; j++)
-               {
-                  DataColumn column = dt.Columns[j];
-                  dt.Rows[i - 1][column] += ", " + dt.Rows[i][column];
-               }
-               dt.Rows.RemoveAt(i);
-            }
-         }
-
-         return dt;
-      }
-
       public DataTable GetDataTableNotGroup()
       {
-         if (ListFeilds.IndexOf(CompareField) != 0)
+         string query = "";
+         var listF = new List<MyField>
          {
-            ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
-         }
+            CompareField
+         };
+         listF.AddUniqueRange(ListFeilds);
 
-         string query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
-         query += " from " + SQLQuery.AliasSQL(AliasTableName);
+         query = "select " + string.Join(", ", listF.Select(x => x.GetFullName()).ToArray());
+         query += $" from {SQLQuery.AliasSQL(AliasTableName)}";
          query += " order by " + CompareField.GetFullName() + " asc";
 
          DataTable dataTable = DatabaseUtils.ExecuteQuery(query.ToUpper());
@@ -135,13 +71,15 @@ namespace ReportForIDS.Model
 
       public DataTable GetDatatable()
       {
-         if (ListFeilds.IndexOf(CompareField) != 0)
+         string query = "";
+         var listF = new List<MyField>
          {
-            ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
-         }
+            CompareField
+         };
+         listF.AddUniqueRange(ListFeilds);
 
-         string query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
-         query += " from " + SQLQuery.AliasSQL(AliasTableName);
+         query = "select " + string.Join(", ", listF.Select(x => x.GetFullName()).ToArray());
+         query += $" from {SQLQuery.AliasSQL(AliasTableName)}";
          query += " order by " + CompareField.GetFullName() + " asc";
 
          DataTable dataTable = DatabaseUtils.ExecuteQuery(query.ToUpper());
@@ -180,13 +118,13 @@ namespace ReportForIDS.Model
 
       public DataTable GetHeader()
       {
-         if (ListFeilds.IndexOf(CompareField) != 0)
-         {
-            ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
-         }
+         string query = "";
 
-         string query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
-         query += " from " + SQLQuery.AliasSQL(AliasTableName);
+         ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
+         CompareField = ListFeilds[0];
+
+         query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
+         query += $" from {SQLQuery.AliasSQL(AliasTableName)}";
          query += " order by " + CompareField.GetFullName() + " asc limit 0";
 
          return DatabaseUtils.ExecuteQuery(query.ToUpper());
@@ -195,15 +133,7 @@ namespace ReportForIDS.Model
       public void Reload()
       {
          ListFeilds = DatabaseUtils.GetListField(this.SQLQuery, AliasTableName);
-         if (ListFeilds.Count == 0)
-         {
-            CompareField = null;
-         }
-         else
-         {
-            CompareField = ListFeilds.First(f => f.FieldName.Equals(CompareField.FieldName));
-         }
-         ExecuteQuery();
+         CompareField = ListFeilds.First(f => f.FieldName.Equals(CompareField.FieldName));
       }
 
       private int order;

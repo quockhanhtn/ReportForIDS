@@ -18,7 +18,7 @@
       {
          var query = Field.GetFullName();
 
-         switch (Cons.LIST_CONDITION_TYPE.IndexOf(ConditionType))
+         switch (Cons.ListConditionType.IndexOf(ConditionType))
          {
             case 0:
                query += $" > '{Value}'";

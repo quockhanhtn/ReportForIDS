@@ -87,7 +87,7 @@ namespace ReportForIDS.ViewModel
             ListReportTemplate = ReportTemplate.XMLData.Deserialize().ToObservableCollection();
          });
 
-         ApplyFilterCommand = new RelayCommand<object>((p) => true, (p) =>
+         ApplyFilterCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             ListReportTemplate = ReportTemplate.XMLData.Deserialize().ToObservableCollection();
             ListReportTemplate = ListReportTemplate.Where(r => r.CreateTime >= FromDate && r.CreateTime <= ToDate).ToObservableCollection();
@@ -97,7 +97,7 @@ namespace ReportForIDS.ViewModel
          {
             if (string.IsNullOrEmpty(DatabaseConnection.DatabaseName))
             {
-               CustomMessageBox.Show("Missing input\r\nPlease select 'DatabaseName' first !", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+               CustomMessageBox.Show("Missing input\r\nPlease select 'DatabaseName' first !", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                foreach (Window w in Application.Current.Windows)
                {
                   if (w != Application.Current.MainWindow) { w.Close(); }
@@ -107,7 +107,7 @@ namespace ReportForIDS.ViewModel
 
             string mess = "All window will close and create report in new window!\r\n\r\n";
             mess += "Do you want to continue ?";
-            var messBoxResult = CustomMessageBox.Show(mess, Cons.TOOL_NAME, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+            var messBoxResult = CustomMessageBox.Show(mess, Cons.ToolName, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (messBoxResult == MessageBoxResult.No)
             {
                return;
@@ -129,7 +129,7 @@ namespace ReportForIDS.ViewModel
             }
             catch (Exception e)
             {
-               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
          });
 
@@ -142,7 +142,7 @@ namespace ReportForIDS.ViewModel
             else
             {
                string mess = $"Can't not find file \"{SelectedReportTemplate.FilePath}\"\n\r\n\rDo you want remove this report from list ?";
-               var messageBoxResult = CustomMessageBox.Show(mess, Cons.TOOL_NAME, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.Yes);
+               var messageBoxResult = CustomMessageBox.Show(mess, Cons.ToolName, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.Yes);
                if (messageBoxResult == MessageBoxResult.Yes)
                {
                   RemoveCommand.Execute(SelectedReportTemplate);
@@ -161,7 +161,7 @@ namespace ReportForIDS.ViewModel
             else
             {
                string mess = $"Can't find directory \"{dirPath}\"\n\r\n\rDo you want remove this report from list ?";
-               var messageBoxResult = CustomMessageBox.Show(mess, Cons.TOOL_NAME, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.Yes);
+               var messageBoxResult = CustomMessageBox.Show(mess, Cons.ToolName, MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.Yes);
                if (messageBoxResult == MessageBoxResult.Yes)
                {
                   RemoveCommand.Execute(SelectedReportTemplate);
@@ -179,11 +179,7 @@ namespace ReportForIDS.ViewModel
             updateReportTemplateWindow.ShowDialog();
             if (!updateDataContext.Result)
             {
-               CustomMessageBox.Show("Error while edit info", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            else
-            {
-               ListReportTemplate = ReportTemplate.XMLData.Deserialize().ToObservableCollection();
+               CustomMessageBox.Show("Error while edit info", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
             }
          });
 
@@ -195,7 +191,7 @@ namespace ReportForIDS.ViewModel
 
          RemoveAllCommand = new RelayCommand<object>((p) => { return SelectedReportTemplate != null; }, (p) =>
          {
-            var messageBoxResult = CustomMessageBox.Show("", Cons.TOOL_NAME, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+            var messageBoxResult = CustomMessageBox.Show("", Cons.ToolName, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                ListReportTemplate.Clear();
@@ -203,13 +199,17 @@ namespace ReportForIDS.ViewModel
             }
          });
 
-         CloseWindowCommand = new RelayCommand<Window>((p) => p != null, (p) => p.Close());
+         CloseWindowCommand = new RelayCommand<Window>((p) => { return p != null; }, (p) =>
+         {
+            p.Close();
+         });
       }
 
       private DateTime GetTime(DateTime sour, DateTime time)
       {
          return new DateTime(sour.Year, sour.Month, sour.Day, time.Hour, time.Minute, time.Second, time.Millisecond);
       }
+
 
       private bool isEnableFilter = false;
       private DateTime fromDate = DateTime.Now.AddDays(-10);

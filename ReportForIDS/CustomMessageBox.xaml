@@ -9,7 +9,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:uc="clr-namespace:ReportForIDS.UC"
 
-        Height="220" Width="500" Icon="{StaticResource AppIcon}"
+        Height="220" Width="500"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None" ResizeMode="NoResize">
 

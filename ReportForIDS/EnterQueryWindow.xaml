@@ -11,7 +11,6 @@
         xmlns:uc="clr-namespace:ReportForIDS.UC"
 
         Title="Report for iDS - Enter query" x:Name="editReportInfoWindow"
-        Icon="{StaticResource AppIcon}"
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
         Height="400" Width="600">
 

@@ -2,7 +2,7 @@
 
 namespace ReportForIDS.Utils
 {
-   public static class StringExtension
+   public static class StringExtendsion
    {
       public static bool ToBool(this string str, bool defaultValue = false)
       {
@@ -20,13 +20,15 @@ namespace ReportForIDS.Utils
          return defaultValue;
       }
 
-      public static bool EqualsNotCaseSensitive(this string str1, string str2) =>  str1.ToLower().Equals(str2.ToLower());
+      public static bool EqualsNotCaseSensitive(this string str1, string str2)
+      {
+         return str1.ToLower().Equals(str2.ToLower());
+      }
 
       public static string EscapeSQL(this string sqlQuery)
       {
          if (string.IsNullOrEmpty(sqlQuery)) { return ""; }
          //sqlQuery = sqlQuery.Replace("''", "'").Replace("'", "''").Replace(@"\", @"\\").Trim();
-         
          // replace last char if = ','
          while (sqlQuery[sqlQuery.Length - 1] == ',')
          {
@@ -37,11 +39,13 @@ namespace ReportForIDS.Utils
          {
             sqlQuery = sqlQuery.Substring(0, sqlQuery.Length - 1);
          }
-
          return sqlQuery;
       }
 
-      public static string AliasSQL(this string sqlQuery, string aliasName) => "(" + sqlQuery.EscapeSQL() + ") as " + aliasName;
+      public static string AliasSQL(this string sqlQuery, string aliasName)
+      {
+         return "(" + sqlQuery.EscapeSQL() + ") as " + aliasName;
+      }
 
       public static int Compare(this string str1, string str2)
       {

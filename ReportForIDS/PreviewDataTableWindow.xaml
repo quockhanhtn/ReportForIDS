@@ -9,10 +9,12 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:uc="clr-namespace:ReportForIDS.UC"
-        
+
+        DataContext="{StaticResource ListReportWindowVM}"
+
         Title="Report for iDS - Recent report" x:Name="previewDataTableWindow"
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
-        Height="600" Width="900" MinHeight="500" MinWidth="500" Icon="{StaticResource AppIcon}">
+        Height="600" Width="900" MinHeight="500" MinWidth="500">
 
    <Border BorderThickness="2" BorderBrush="#001e51">
       <Grid>

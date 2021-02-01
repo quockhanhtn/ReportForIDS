@@ -33,15 +33,41 @@ namespace ReportForIDS.ViewModel
          QueryItem = updateQueryItem ?? new MyQuery();
          SqlQueryStatement = QueryItem.SQLQuery;
 
-         LoadListFieldCommand = new RelayCommand<object>((p) => true, (p) =>
+         LoadListFieldCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
-            GetExecuteResult();
+            Thread thread = new Thread(() =>
+            {
+               try
+               {
+                  var rowCount = Convert.ToInt32(DatabaseUtils.ExecuteScalar("select count(*) from " + SqlQueryStatement.AliasSQL("DT")));
+                  Application.Current.Dispatcher.Invoke(new Action(delegate ()
+                  {
+                     QueryItem.ExecResult = rowCount.ToString() + " row(s) return";
+                     OnPropertyChanged(nameof(QueryItem));
+                  }));
+               }
+               catch (Exception)
+               {
+                  Application.Current.Dispatcher.Invoke(new Action(delegate ()
+                  {
+                     QueryItem.ExecResult = "Error while executing query";
+                     QueryItem.ListFeilds.Clear();
+                     QueryItem.CompareField = null;
+                     OnPropertyChanged(nameof(QueryItem));
+                  }));
+               }
+            })
+            {
+               IsBackground = true
+            };
+            thread.Start();
+
             QueryItem.ListFeilds = DatabaseUtils.GetListField(SqlQueryStatement, updateQueryItem?.AliasTableName ?? "");
             OnPropertyChanged(nameof(QueryItem));
             isChangedQuery = false;
          });
 
-         ExecuteQueryCommand = new RelayCommand<object>((p) => true, (p) =>
+         ExecuteQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
          });
 
@@ -60,16 +86,10 @@ namespace ReportForIDS.ViewModel
 
             if (QueryItem.CompareField == null)
             {
-               CustomMessageBox.Show("Please select field to commpare", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+               CustomMessageBox.Show("Please select field to commpare", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
                return;
             }
 
-            if (QueryItem.ListFeilds.IndexOf(QueryItem.CompareField) != 0)
-            {
-               QueryItem.ListFeilds.Move(QueryItem.ListFeilds.IndexOf(QueryItem.CompareField), 0);
-            }
-
-            QueryItem.ExecuteQuery();
             p.DialogResult = true;
             p.Close();
          });
@@ -83,36 +103,8 @@ namespace ReportForIDS.ViewModel
          });
       }
 
-      private void GetExecuteResult()
-      {
-         Thread thread = new Thread(() =>
-         {
-            try
-            {
-               var rowCount = Convert.ToInt32(DatabaseUtils.ExecuteScalar("select count(*) from " + SqlQueryStatement.AliasSQL("DT")));
-               Application.Current.Dispatcher.Invoke(new Action(delegate ()
-               {
-                  QueryItem.ExecResult = rowCount.ToString() + " row(s) return";
-                  OnPropertyChanged(nameof(QueryItem));
-               }));
-            }
-            catch (Exception)
-            {
-               Application.Current.Dispatcher.Invoke(new Action(delegate ()
-               {
-                  QueryItem.ExecResult = "Error while executing query";
-                  QueryItem.ListFeilds.Clear();
-                  QueryItem.CompareField = null;
-                  OnPropertyChanged(nameof(QueryItem));
-               }));
-            }
-         })
-         { IsBackground = true };
-         thread.Start();
-      }
-
       private MyQuery queryItem;
       private string sqlQueryStatement;
-      private bool isChangedQuery = false;
+      bool isChangedQuery = false;
    }
 }

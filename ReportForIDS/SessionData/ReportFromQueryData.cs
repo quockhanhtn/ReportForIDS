@@ -3,7 +3,6 @@ using ReportForIDS.Utils;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
 using System.Threading;
 
 namespace ReportForIDS.SessionData
@@ -16,16 +15,10 @@ namespace ReportForIDS.SessionData
       public static ObservableCollection<MyField> ListFieldToGroup { get => listFieldToGroup; set => listFieldToGroup = value; }
       public static ObservableCollection<MyField> ListFieldToHide { get => listFieldToHide; set => listFieldToHide = value; }
 
-      /// <summary>
-      /// True -> create multicolumn <br/>
-      /// False -> group into one column, seperate by comma
-      /// </summary>
-      public static bool GroupToMultiColumn { get; set; }
-
       public static Thread ThreadExcecuteData { get; set; }
 
       /// <summary>
-      /// DataTable execute save header, datarow = 0
+      /// DataTable execute lưu header, datarow = 0
       /// </summary>
       public static DataTable ExecuteDataTableOnlyHeader { get => headerExecuteDataTable; set => headerExecuteDataTable = value; }
 
@@ -33,61 +26,37 @@ namespace ReportForIDS.SessionData
       {
          ListQueries.Clear();
          ListQueries.AddRange(queries);
-         //ListQueries.ForEach(x => x.ExecuteQuery());
-      }
 
-      public static void SetListFieldToGroup(IEnumerable<MyField> fields)
-      {
-         ListFieldToGroup.Clear();
-         ListFieldToGroup.AddRange(fields);
-      }
+         var primaryQuery = ListQueries[0];
+         primaryQuery.IsPrimary = true;
 
-      public static void JoinDatatableInQuery()
-      {
+         var secondaryQueries = new List<MyQuery>();
+         for (int i = 1; i < ListQueries.Count; i++)
+         {
+            ListQueries[i].IsPrimary = false;
+            secondaryQueries.Add(ListQueries[i]);
+         }
+
+         //Assign value for ListAllFields
+         ListAllFields.Clear();
+         ExecuteDataTableOnlyHeader = primaryQuery.GetHeader();
+         foreach (var item in secondaryQueries)
+         {
+            ExecuteDataTableOnlyHeader.AddDatatable(item.GetHeader());
+         }
+         ListAllFields = ExecuteDataTableOnlyHeader.GetListColumnName();
+
          ThreadExcecuteData = new Thread(() =>
          {
-            #region Update Primary Query
-            ListQueries.ForEach(x => { while (!x.ExecDone) { } });
+            #region Assign value for ExecuteDataTable
 
-            ListQueries.ForEach(q => q.IsPrimary = false);
-            int primaryIndex = 0;
-
-            var listQueryHasSelectedField = ListFieldToGroup.GroupBy(f => f.TableName).Select(x => x.Key).ToList();
-            if (listQueryHasSelectedField.Count > 1)
+            ExecuteDataTable = primaryQuery.GetDataTableNotGroup();
+            foreach (var item in secondaryQueries)
             {
-               for (int i = 1; i < ListQueries.Count; i++)
-               {
-                  if (listQueryHasSelectedField.Contains(listQueries[i].AliasTableName))
-                  {
-                     if (ListQueries[i].MaxRecordSameId > ListQueries[primaryIndex].MaxRecordSameId)
-                     {
-                        primaryIndex = i;
-                     }
-                  }
-               }
-            }
-            else
-            {
-               for (int i = 1; i < ListQueries.Count; i++)
-               {
-                  if (listQueryHasSelectedField.Contains(listQueries[i].AliasTableName))
-                  {
-                     primaryIndex = i;
-                     break;
-                  }
-               }
+               ExecuteDataTable.AddDatatable(item.GetDatatable());
             }
 
-            ListQueries[primaryIndex].IsPrimary = true;
-            #endregion
-
-            if (ListFieldToGroup.IndexOf(ListQueries[0].CompareField) >= 0)
-            {
-               ListFieldToGroup[ListFieldToGroup.IndexOf(ListQueries[0].CompareField)] = ListQueries[primaryIndex].CompareField;
-            }
-
-            ExecuteDataTable = ListQueries[primaryIndex].RawDataTable.Copy();
-            ListQueries.FindAll(x => x.IsPrimary != true).ForEach(x => ExecuteDataTable.AddDatatable(x.GetGroupDataTable()));
+            #endregion Assign value for ExecuteDataTable
          })
          { IsBackground = true };
          ThreadExcecuteData.Start();

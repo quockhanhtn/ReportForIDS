@@ -12,12 +12,8 @@ namespace ReportForIDS.Utils
       /// <summary>
       /// Test connection to database
       /// </summary>
-      /// 
       /// <param name="error">Exception.Message</param>
-      /// 
-      /// <returns>
-      /// true if 'Test connection succeeded'
-      /// </returns>
+      /// <returns>true if 'Test connection succeeded'</returns>
       public static bool TestConnection(out string error)
       {
          bool result;
@@ -41,10 +37,8 @@ namespace ReportForIDS.Utils
       /// <summary>
       /// Get list Field from Sql query
       /// </summary>
-      /// 
       /// <param name="sqlQuery"></param>
       /// <param name="tableName"></param>
-      /// 
       /// <returns></returns>
       public static ObservableCollection<MyField> GetListField(string sqlQuery, string tableName)
       {
@@ -58,13 +52,6 @@ namespace ReportForIDS.Utils
          return result;
       }
 
-      /// <summary>
-      /// Get list field from table
-      /// </summary>
-      /// 
-      /// <param name="tableName">name of table in database</param>
-      /// 
-      /// <returns>List&#60;MyField&#62;</returns>
       public static List<MyField> GetListField(string tableName)
       {
          var result = new List<MyField>();
@@ -197,12 +184,15 @@ namespace ReportForIDS.Utils
 
       public static object ExecuteScalar(string query, List<object> parameters = null)
       {
+         object data = 0;
+
          using MySqlConnection db = DatabaseConnection.GetInstance();
          db.Open();
 
          MySqlCommand cmd = new MySqlCommand(query, db);
          SetCommandParameters(query, cmd, parameters);
-         object data = cmd.ExecuteScalar();
+         data = cmd.ExecuteScalar();
+
          db.Close();
 
          return data;

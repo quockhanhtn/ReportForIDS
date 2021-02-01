@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:viewmodel="clr-namespace:ReportForIDS.ViewModel">
+
+   <viewmodel:MainWindowViewModel x:Key="MainWindowVM" />
+   <viewmodel:StepByStepWindowViewModel x:Key="StepByStepWindowVM" />
+   <viewmodel:ReportFromQueryWindowViewModel x:Key="ReportFromQueryWindowVM" />
+   <viewmodel:ListReportWindowViewModel x:Key="ListReportWindowVM" />
+   <viewmodel:ListTemplateWindowViewModel x:Key="ListTemplateWindowVM" />
+</ResourceDictionary>

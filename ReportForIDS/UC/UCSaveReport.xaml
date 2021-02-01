@@ -1,16 +1,17 @@
 ﻿<UserControl x:Class="ReportForIDS.UC.UCSaveReport"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ReportForIDS.UC"
+
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:uc="clr-namespace:ReportForIDS.UC"
+
              mc:Ignorable="d" x:Name="ucReviewAndSave"
-             d:DesignHeight="{StaticResource UCDesignHeight}"
-             d:DesignWidth="{StaticResource UCDesignWidth}"
-             Background="{StaticResource UCBackgroundColor}">
+             d:DesignHeight="550" d:DesignWidth="800" Background="#fafafa">
 
    <UserControl.Resources>
       <Style TargetType="materialDesign:Card" BasedOn="{StaticResource MaterialDesignPageCard}"></Style>
@@ -21,9 +22,7 @@
 
    <i:Interaction.Triggers>
       <i:EventTrigger EventName="Loaded">
-         <i:InvokeCommandAction Command="{Binding LoadedCommand}"
-                                CommandParameter="{Binding ElementName=ucReviewAndSave}">
-         </i:InvokeCommandAction>
+         <i:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=ucReviewAndSave}" />
       </i:EventTrigger>
    </i:Interaction.Triggers>
 
@@ -40,7 +39,7 @@
          <TextBlock Grid.Row="0" Margin="0 15 0 0" Text="PREVIEW AND SAVE REPORT" Style="{StaticResource TitleTextBlock}" />
 
          <!--Input fields-->
-         <ScrollViewer VerticalAlignment="Top" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+         <ScrollViewer VerticalAlignment="Center" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
                <StackPanel.Resources>
                   <Style TargetType="TextBox" BasedOn="{StaticResource MyTextBox}">
@@ -55,11 +54,11 @@
                      <Setter Property="VerticalAlignment" Value="Center" />
                   </Style>
                   <Style TargetType="Border">
-                     <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}" />
+                     <Setter Property="Background" Value="{DynamicResource MaterialDesignBackground}"/>
                   </Style>
                   <Style TargetType="GroupBox">
-                     <Setter Property="UseLayoutRounding" Value="True" />
-                     <Setter Property="SnapsToDevicePixels" Value="True" />
+                     <Setter Property="UseLayoutRounding" Value="True"/>
+                     <Setter Property="SnapsToDevicePixels" Value="True"/>
                   </Style>
                   <Style TargetType="TextBlock" BasedOn="{StaticResource TitleTextBlock}">
                      <Setter Property="FontSize" Value="14" />
@@ -71,8 +70,53 @@
                   </Style>
                </StackPanel.Resources>
 
+               <Border CornerRadius="500">
+                  <GroupBox Margin="20 30 20 10" Style="{DynamicResource MaterialDesignGroupBox}">
+                     <GroupBox.Header>
+                        <TextBlock Text="PREVIEW OPTION"/>
+                     </GroupBox.Header>
+                     <GroupBox.Content>
+                        <Grid>
+                           <Grid.ColumnDefinitions>
+                              <ColumnDefinition/>
+                              <ColumnDefinition/>
+                           </Grid.ColumnDefinitions>
+
+                           <ComboBox materialDesign:HintAssist.Hint="Top row preview" Margin="10 30 10 10"
+                                     SelectedIndex="3"
+                                     SelectedValue="{Binding TopRowReview, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}">
+                              <ComboBox.ItemsSource>
+                                 <x:Array Type="sys:String">
+                                    <sys:String>Top 10 rows</sys:String>
+                                    <sys:String>Top 50 rows</sys:String>
+                                    <sys:String>Top 100 rows</sys:String>
+                                    <sys:String>Top 200 rows</sys:String>
+                                    <sys:String>Top 300 rows</sys:String>
+                                    <sys:String>Top 400 rows</sys:String>
+                                    <sys:String>Top 500 rows</sys:String>
+                                    <sys:String>Top 1000 rows</sys:String>
+                                    <!--<sys:String>All rows</sys:String>-->
+                                 </x:Array>
+                              </ComboBox.ItemsSource>
+                           </ComboBox>
+
+                           <StackPanel Grid.Column="1">
+                              <CheckBox  Margin="0 0 0 2" IsChecked="False" x:Name="chkCustomRow">
+                                 Custom
+                              </CheckBox>
+
+                              <TextBox IsEnabled="{Binding ElementName=chkCustomRow, Path=IsChecked}" 
+                                       materialDesign:HintAssist.Hint="No of rows (max 1000)" Margin="10 0 10 10" Style="{StaticResource MyTextBox}"
+                                       Text="{Binding Path=TopRowReview, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
+                              </TextBox>
+                           </StackPanel>
+                        </Grid>
+                     </GroupBox.Content>
+                  </GroupBox>
+               </Border>
+
                <Border>
-                  <GroupBox Margin="20 15 20 10" Style="{DynamicResource MaterialDesignGroupBox}">
+                  <GroupBox Margin="20 10" Style="{DynamicResource MaterialDesignGroupBox}">
                      <GroupBox.Header>
                         <TextBlock>
                            SAVE REPORT OPTION
@@ -142,6 +186,7 @@
                   </GroupBox>
                </Border>
 
+
                <Border Visibility="{Binding ElementName=chkSaveReportTemplate, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
                   <GroupBox Margin="20 10" Style="{DynamicResource MaterialDesignGroupBox}" IsEnabled="{Binding ElementName=chkSaveReportTemplate, Path=IsChecked}">
                      <GroupBox.Header>
@@ -156,7 +201,7 @@
                                  <ColumnDefinition />
                                  <ColumnDefinition Width="auto" />
                               </Grid.ColumnDefinitions>
-
+ 
                               <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Template file path" Margin="10 0 5 10" IsReadOnly="True"
                                        Text="{Binding TemplateFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                  <i:Interaction.Triggers>
@@ -189,8 +234,8 @@
          </ScrollViewer>
 
          <!--Snackbar-->
-         <materialDesign:Snackbar Grid.Row="1" VerticalAlignment="Bottom" MessageQueue="{Binding Path=SnackbarMessageQueue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
+         <materialDesign:Snackbar Grid.Row="1" VerticalAlignment="Bottom" MessageQueue="{Binding Path=SnackbarMessageQueue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+         
          <!--ProgressBar-->
          <ProgressBar Height="5" x:Name="pbStatus" Margin="20 0 37 5" Grid.Row="2" Value="200" Foreground="#001e51" Background="#007acc" />
 
@@ -207,10 +252,10 @@
                </Grid>
             </Button>
             <Button x:Name="btnReviewReport" Width="175" ToolTip="Preview report"
-                    Command="{Binding PreviewReportCommand}">
+                    Command="{Binding PreviewReportCommand}" CommandParameter="{Binding ElementName=mainGrid}">
                <Grid Width="140">
                   <Grid.ColumnDefinitions>
-                     <ColumnDefinition />
+                     <ColumnDefinition/>
                      <ColumnDefinition Width="auto" />
                   </Grid.ColumnDefinitions>
                   <TextBlock Grid.Column="0" Text="PREVIEW REPORT" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
@@ -221,7 +266,7 @@
                     Command="{Binding SaveReportCommand}" CommandParameter="{Binding ElementName=mainGrid}">
                <Grid Width="140">
                   <Grid.ColumnDefinitions>
-                     <ColumnDefinition />
+                     <ColumnDefinition/>
                      <ColumnDefinition Width="auto" />
                   </Grid.ColumnDefinitions>
                   <TextBlock Grid.Column="0" Text="SAVE REPORT" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
