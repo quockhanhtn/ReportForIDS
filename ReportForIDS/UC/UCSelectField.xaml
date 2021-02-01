@@ -1,18 +1,18 @@
 ﻿<UserControl x:Class="ReportForIDS.UC.UCSelectField"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ReportForIDS.UC" mc:Ignorable="d"
-
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:uc="clr-namespace:ReportForIDS.UC"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:model="clr-namespace:ReportForIDS.Model"
+             xmlns:uc="clr-namespace:ReportForIDS.UC"
+             mc:Ignorable="d"
 
              x:Name="ucSelectField"
-             d:DesignHeight="550" d:DesignWidth="800" Background="#fafafa">
+             d:DesignHeight="{StaticResource UCDesignHeight}"
+             d:DesignWidth="{StaticResource UCDesignWidth}"
+             Background="{StaticResource  UCBackgroundColor}">
 
    <UserControl.Resources>
       <Style TargetType="materialDesign:Card" BasedOn="{StaticResource MaterialDesignPageCard}"></Style>
@@ -21,11 +21,13 @@
       </Style>
    </UserControl.Resources>
 
-   <!--<i:Interaction.Triggers>
+   <i:Interaction.Triggers>
       <i:EventTrigger EventName="Loaded">
-         <i:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=ucSelectField}" />
+         <i:InvokeCommandAction Command="{Binding LoadedCommand}"
+                                CommandParameter="{Binding ElementName=ucSelectField}">
+         </i:InvokeCommandAction>
       </i:EventTrigger>
-   </i:Interaction.Triggers>-->
+   </i:Interaction.Triggers>
 
    <materialDesign:Card Margin="5">
       <Grid>
@@ -33,7 +35,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition />
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="50" />
          </Grid.RowDefinitions>
@@ -58,7 +60,7 @@
 
          <uc:UCScrollViewer Grid.Row="2" Margin="30 10">
             <!-- and here's another -->
-            <ItemsControl ItemsSource="{Binding ListFields, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+            <ItemsControl ItemsSource="{Binding ListFields, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                           Grid.IsSharedSizeScope="True">
                <ItemsControl.ItemTemplate>
                   <DataTemplate DataType="{x:Type model:MyField}">
@@ -70,7 +72,7 @@
                            </Grid.ColumnDefinitions>
                            <ToggleButton Click="ToggleButton_Click" VerticalAlignment="Center" x:Name="toggleBtn" Background="White"
                                          IsChecked="{Binding IsSelected}" IsEnabled="{Binding CanSelected}"
-                                         Style="{StaticResource MaterialDesignActionToggleButton}" >
+                                         Style="{StaticResource MaterialDesignActionToggleButton}">
                               <ToggleButton.Content>
                                  <materialDesign:PackIcon Foreground="#007acc" Kind="Selection" />
                               </ToggleButton.Content>
@@ -89,8 +91,8 @@
                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource MaterialDesignSelection}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding CanSelected}" Value="False">
-                           <Setter TargetName="toggleBtn" Property="Background" Value="Gray"/>
-                           <Setter TargetName="toggleBtn" Property="IsEnabled" Value="False"/>
+                           <Setter TargetName="toggleBtn" Property="Background" Value="Gray" />
+                           <Setter TargetName="toggleBtn" Property="IsEnabled" Value="False" />
                         </DataTrigger>
                      </DataTemplate.Triggers>
                   </DataTemplate>

@@ -44,21 +44,19 @@ namespace ReportForIDS
 
       void UpdateView()
       {
-         WaitWindow.Show(() =>
-         {
-            Application.Current.Dispatcher.Invoke(new Action(delegate ()
-            {
-               DataTable currentPageDt = DTSource.Clone();
-               int firstRow = (currentPage - 1) * RowsPerPage;
-               for (int i = firstRow; i < firstRow + RowsPerPage && i < DTSource.Rows.Count; i++)
-               {
-                  currentPageDt.ImportRow(DTSource.Rows[i]);
-               }
+         stackPnlPagination.IsEnabled = false;
 
-               MainDataGrid.DataContext = currentPageDt.DefaultView;
-               MainDataGrid.ColumnWidth = 150;
-            }));
-         }, null);
+         DataTable currentPageDt = DTSource.Clone();
+         int firstRow = (currentPage - 1) * RowsPerPage;
+         for (int i = firstRow; i < firstRow + RowsPerPage && i < DTSource.Rows.Count; i++)
+         {
+            currentPageDt.ImportRow(DTSource.Rows[i]);
+         }
+
+         MainDataGrid.DataContext = currentPageDt.DefaultView;
+         MainDataGrid.ColumnWidth = 150;
+
+         stackPnlPagination.IsEnabled = true;
       }
 
       public ViewDatatableWindow(DataTable source)

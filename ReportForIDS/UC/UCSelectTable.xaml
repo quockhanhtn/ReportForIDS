@@ -1,16 +1,16 @@
 ﻿<UserControl x:Class="ReportForIDS.UC.UCSelectTable"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ReportForIDS.UC"
-
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
 
-             mc:Ignorable="d" x:Name="ucSelectTable"
-             d:DesignHeight="550" d:DesignWidth="800" Background="#fafafa">
+             x:Name="ucSelectTable"
+             d:DesignHeight="{StaticResource UCDesignHeight}"
+             d:DesignWidth="{StaticResource UCDesignWidth}"
+             Background="{StaticResource UCBackgroundColor}">
 
    <UserControl.Resources>
       <Style TargetType="materialDesign:Card" BasedOn="{StaticResource MaterialDesignPageCard}"></Style>
@@ -19,11 +19,13 @@
       </Style>
    </UserControl.Resources>
 
-   <!--<i:Interaction.Triggers>
+   <i:Interaction.Triggers>
       <i:EventTrigger EventName="Loaded">
-         <i:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=ucSelectTable}" />
+         <i:InvokeCommandAction Command="{Binding LoadedCommand}"
+                                CommandParameter="{Binding ElementName=ucSelectTable}">
+         </i:InvokeCommandAction>
       </i:EventTrigger>
-   </i:Interaction.Triggers>-->
+   </i:Interaction.Triggers>
 
    <materialDesign:Card Margin="5">
       <Grid>

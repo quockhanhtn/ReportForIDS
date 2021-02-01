@@ -5,6 +5,10 @@
 
    <BitmapImage UriSource="/Resources/icon.ico" x:Key="AppIcon"/>
 
+   <sys:Double x:Key="UCDesignHeight">550</sys:Double>
+   <sys:Double x:Key="UCDesignWidth">800</sys:Double>
+   <SolidColorBrush x:Key="UCBackgroundColor" Color="#fafafa"/>
+
    <viewmodel:MainWindowViewModel x:Key="MainWindowVM"/>
    <viewmodel:StepByStepWindowViewModel x:Key="StepByStepWindowVM"/>
    <viewmodel:ReportFromQueryWindowViewModel x:Key="ReportFromQueryWindowVM"/>
