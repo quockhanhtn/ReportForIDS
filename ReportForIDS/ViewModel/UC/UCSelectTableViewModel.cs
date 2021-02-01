@@ -5,16 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
 {
-   public class UCSelectTableViewModel : UCBaseViewModel
+   public class UCSelectTableViewModel : UCViewModel
    {
       public ICommand AddSelectedTableCommand { get; set; }
       public ICommand RemoveSelectedTableCommand { get; set; }
       public ICommand RemoveAllTableCommand { get; set; }
+      public ICommand PrevCommand { get; set; }
+      public ICommand NextCommand { get; set; }
 
       public ObservableCollection<MyTable> ListTableQueues { get => listTableQueues; set { listTableQueues = value; OnPropertyChanged(); } }
       public MyTable TableQueue { get => tableQueue; set { tableQueue = value; OnPropertyChanged(); } }
@@ -28,21 +32,15 @@ namespace ReportForIDS.ViewModel
             ListTableSelects.Add(TableQueue);
             ListTableQueues.Remove(TableQueue);
          });
-
          RemoveSelectedTableCommand = new RelayCommand<object>((p) => { return TableSelected != null; }, (p) =>
          {
             ListTableQueues.Add(TableSelected);
             ListTableSelects.Remove(TableSelected);
             ListTableSelects_CollectionChanged(ListTableSelects, null);
          });
-
-         RemoveAllTableCommand = new RelayCommand<object>((p) => true, (p) =>
+         RemoveAllTableCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
-            var messageBoxResult = CustomMessageBox.Show("This action will remove all item in list. Are you sure to continue ?",
-                                                         Cons.TOOL_NAME,
-                                                         MessageBoxButton.YesNo,
-                                                         MessageBoxImage.Warning,
-                                                         MessageBoxResult.No);
+            var messageBoxResult = MessageBox.Show("This action will remove all item in list. Are you sure to continue ?", Cons.ToolName, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                foreach (var item in ListTableSelects)
@@ -52,9 +50,7 @@ namespace ReportForIDS.ViewModel
                ListTableSelects.Clear();
             }
          });
-
-         PrevCommand = new RelayCommand<object>((p) => true, (p) => prevAction());
-
+         PrevCommand = new RelayCommand<object>((p) => { return true; }, (p) => prevAction());
          NextCommand = new RelayCommand<object>((p) => { return ListTableSelects.Count > 0; }, (p) =>
          {
             StepByStepData.ListTable = ListTableSelects.ToList();
@@ -66,11 +62,7 @@ namespace ReportForIDS.ViewModel
 
       public override void ReLoad()
       {
-         WaitWindow.Show(() =>
-         {
-            ListTableQueues = DatabaseUtils.GetListTable();
-         }, null);
-
+         ListTableQueues = DatabaseUtils.GetListTable();
          ListTableSelects.Clear();
       }
 
@@ -82,11 +74,22 @@ namespace ReportForIDS.ViewModel
             return;
          }
 
+         //var listTbCanSelect = new List<string>();
+         //foreach (var tb in ListTableSelects)
+         //{
+         //   var listTbRef = Cons.ListTableReferences.FindAll(x => x.MainTable == tb.TableName.ToLower()).ToList();
+
+         //   foreach (var item in listTbRef)
+         //   {
+         //      item.ListReferenceTo.ForEach(refTo => listTbCanSelect.Add(refTo.TableName));
+         //   }
+         //}
+
          ListTableQueues.Clear();
-         ListTableQueues = FindRelatitionTable();
+         ListTableQueues = findRelatitionTable();
       }
 
-      private ObservableCollection<MyTable> FindRelatitionTable()
+      private ObservableCollection<MyTable> findRelatitionTable()
       {
          var allTables = DatabaseUtils.GetListTable();
 

@@ -1,4 +1,6 @@
-﻿namespace ReportForIDS.Model
+﻿using System.ComponentModel;
+
+namespace ReportForIDS.Model
 {
    public class MyCondition
    {
@@ -6,7 +8,7 @@
       public MyField Field { get; set; }
       public string ConditionType { get; set; }
       public string Value { get; set; }
-
+      
       public MyCondition()
       {
          Order = ++LastOrder;
@@ -18,36 +20,29 @@
       {
          var query = Field.GetFullName();
 
-         switch (Cons.LIST_CONDITION_TYPE.IndexOf(ConditionType))
+         switch (Cons.ListConditionType.IndexOf(ConditionType))
          {
             case 0:
                query += $" > '{Value}'";
                break;
-
             case 1:
                query += $" >= '{Value}'";
                break;
-
             case 2:
                query += $" < '{Value}'";
                break;
-
             case 3:
                query += $" <= '{Value}'";
                break;
-
             case 4:
                query += $" = '{Value}'";
                break;
-
             case 5:
                query += $" <> '{Value}'";
                break;
-
             case 6:
                query += $"LIKE'%{Value}%'";
                break;
-
             case 7:
                query += $"NOT LIKE'%{Value}%'";
                break;

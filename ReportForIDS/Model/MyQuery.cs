@@ -1,147 +1,73 @@
-﻿using ReportForIDS.Utils;
+﻿using ReportForIDS.SessionData;
+using ReportForIDS.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.IO;
+using System.Dynamic;
 using System.Linq;
-using System.Threading;
-using System.Xml.Serialization;
 
 namespace ReportForIDS.Model
 {
    public class MyQuery
    {
       public static int LastOrder = 0;
-      public string DisplayOrder { get => Order.ToString().PadLeft(2, '0'); }
-
-      public string AliasTableName { get => "Query_" + DisplayOrder; }
-
-      public string SQLQuery { get; set; }
-
-      public MyField CompareField { get; set; }
-
-      [XmlIgnore]
-      public ObservableCollection<MyField> ListFeilds { get; set; } = new ObservableCollection<MyField>();
-
-      [XmlIgnore]
+      public string DisplayOrder { get { return Order.ToString().PadLeft(2, '0'); } }
       public int Order
       {
-         get => order;
+         get => order; 
          set
          {
             order = value;
             if (CompareField != null)
             {
-               CompareField.TableName = AliasTableName;
+               CompareField.TableName = "DT" + DisplayOrder;
             }
             for (int i = 0; i < ListFeilds.Count; i++)
             {
-               ListFeilds[i].TableName = AliasTableName;
+               ListFeilds[i].TableName = "DT" + DisplayOrder;
             }
          }
       }
-
-      [XmlIgnore]
       public bool IsPrimary { get; set; }
-
-      [XmlIgnore]
+      public string SQLQuery { get; set; }
       public string ExecResult { get; set; }
-
-      [XmlIgnore]
-      public bool ExecDone { get; set; }
-
-      [XmlIgnore]
-      public int MaxRecordSameId { get; set; }
-
-      [XmlIgnore]
-      public DataTable RawDataTable { get; set; }
-
-      [XmlIgnore]
-      public Thread ExecThread { get; set; }
-
+      public MyField CompareField { get; set; }
+      public ObservableCollection<MyField> ListFeilds { get; set; } = new ObservableCollection<MyField>();
       public MyQuery()
       {
          Order = ++LastOrder;
       }
 
-      public void ExecuteQuery()
-      {
-         ExecDone = false;
-         ExecThread = new Thread(() =>
-         {
-            if (ListFeilds.IndexOf(CompareField) != 0)
-            {
-               ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
-            }
-
-            string query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
-            query += " from " + SQLQuery.AliasSQL(AliasTableName);
-            query += " order by " + CompareField.GetFullName() + " asc";
-
-            RawDataTable = DatabaseUtils.ExecuteQuery(query.ToUpper());
-
-            if (RawDataTable != null)
-            {
-               MaxRecordSameId = (
-                  from row in RawDataTable.AsEnumerable()
-                  group row by row.Field<Object>(0) into compareField
-                  orderby compareField.Count() descending
-                  select compareField.Count()
-               ).Take(1).FirstOrDefault();
-            }
-
-            ExecDone = true;
-         })
-         { IsBackground = true };
-         ExecThread.Start();
-      }
-
-      public DataTable GetGroupDataTable()
-      {
-         DataTable dt = RawDataTable.Copy();
-
-         string primaryFeild = this.CompareField.FieldName;
-         for (int i = dt.Rows.Count - 1; i > 0; i--)
-         {
-            if (dt.EqualWithBeforeRow(i, new string[] { primaryFeild }))
-            {
-               for (int j = 1; j < dt.Columns.Count; j++)
-               {
-                  DataColumn column = dt.Columns[j];
-                  dt.Rows[i - 1][column] += ", " + dt.Rows[i][column];
-               }
-               dt.Rows.RemoveAt(i);
-            }
-         }
-
-         return dt;
-      }
-
       public DataTable GetDataTableNotGroup()
       {
-         if (ListFeilds.IndexOf(CompareField) != 0)
-         {
-            ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
-         }
+         string query = "";
+         var listF = new List<MyField>();
+         listF.Add(CompareField);
+         listF.AddUniqueRange(ListFeilds);
 
-         string query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
-         query += " from " + SQLQuery.AliasSQL(AliasTableName);
+         query = "select " + string.Join(", ", listF.Select(x => x.GetFullName()).ToArray());
+         query += $" from {SQLQuery.AliasSQL("DT" + DisplayOrder)}";
          query += " order by " + CompareField.GetFullName() + " asc";
 
          DataTable dataTable = DatabaseUtils.ExecuteQuery(query.ToUpper());
          return dataTable;
       }
 
+      //void passvalue(List<string>, DataTable)
+      //{
+
+      //}
+
       public DataTable GetDatatable()
       {
-         if (ListFeilds.IndexOf(CompareField) != 0)
-         {
-            ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
-         }
+         string query = "";
+         var listF = new List<MyField>();
+         listF.Add(CompareField);
+         listF.AddUniqueRange(ListFeilds);
 
-         string query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
-         query += " from " + SQLQuery.AliasSQL(AliasTableName);
+         query = "select " + string.Join(", ", listF.Select(x => x.GetFullName()).ToArray());
+         query += $" from {SQLQuery.AliasSQL("DT" + DisplayOrder)}";
          query += " order by " + CompareField.GetFullName() + " asc";
 
          DataTable dataTable = DatabaseUtils.ExecuteQuery(query.ToUpper());
@@ -156,10 +82,11 @@ namespace ReportForIDS.Model
          //      listValue.Add(fieldValue);
          //   }
          //}
-
+      
          //var test = [0].
          //dataTable.Rows.Cast<DataRow>().GroupBy(n => new { n["kkkk"] }).Into(dataTable).Sele
          //var a = dataTable.Rows.Cast<DataRow>().GroupBy(n => new { n[0], n[1] }).
+
 
          string primaryFeild = this.CompareField.FieldName;
          for (int i = dataTable.Rows.Count - 1; i > 0; i--)
@@ -178,101 +105,21 @@ namespace ReportForIDS.Model
          return dataTable;
       }
 
+
       public DataTable GetHeader()
       {
-         if (ListFeilds.IndexOf(CompareField) != 0)
-         {
-            ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
-         }
+         string query = "";
 
-         string query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
-         query += " from " + SQLQuery.AliasSQL(AliasTableName);
+         ListFeilds.Move(ListFeilds.IndexOf(CompareField), 0);
+         CompareField = ListFeilds[0];
+
+         query = "select " + string.Join(", ", ListFeilds.Select(x => x.GetFullName()).ToArray());
+         query += $" from {SQLQuery.AliasSQL("DT" + DisplayOrder)}";
          query += " order by " + CompareField.GetFullName() + " asc limit 0";
 
          return DatabaseUtils.ExecuteQuery(query.ToUpper());
       }
 
-      public void Reload()
-      {
-         ListFeilds = DatabaseUtils.GetListField(this.SQLQuery, AliasTableName);
-         if (ListFeilds.Count == 0)
-         {
-            CompareField = null;
-         }
-         else
-         {
-            CompareField = ListFeilds.First(f => f.FieldName.Equals(CompareField.FieldName));
-         }
-         ExecuteQuery();
-      }
-
       private int order;
-
-      #region XML DATA
-
-      public class XMLData
-      {
-         [XmlElement(typeof(MyQuery))]
-         public List<MyQuery> ListQueryData { get; set; }
-
-         public static bool Serialize(List<MyQuery> list, string filePath, out string errorMessage)
-         {
-            errorMessage = "";
-            //delete file if exits
-            if (File.Exists(filePath)) { File.Delete(filePath); }
-
-            using (FileStream fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
-            {
-               try
-               {
-                  var data = new XMLData() { ListQueryData = list };
-                  XmlSerializer xmlSerializer = new XmlSerializer(typeof(XMLData));
-                  xmlSerializer.Serialize(fileStream, data);
-               }
-               catch (Exception e)
-               {
-                  errorMessage = e.Message;
-               }
-               finally
-               {
-                  fileStream.Close();
-               }
-            }
-            return string.IsNullOrEmpty(errorMessage);
-         }
-
-         public static List<MyQuery> Deserialize(string filePath, out string errorMessage)
-         {
-            var list = new List<MyQuery>();
-            errorMessage = "";
-
-            // if file not Exists, return empty list
-            if (!File.Exists(filePath))
-            {
-               errorMessage = "File not found";
-               return list;
-            }
-
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-               try
-               {
-                  XmlSerializer xmlSerializer = new XmlSerializer(typeof(XMLData));
-                  list = (xmlSerializer.Deserialize(fileStream) as XMLData).ListQueryData;
-               }
-               catch (Exception e)
-               {
-                  errorMessage = e.Message;
-               }
-               finally
-               {
-                  fileStream.Close();
-               }
-            }
-            return list;
-         }
-      }
-
-      #endregion XML DATA
    }
 }

@@ -4,29 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReportForIDS" mc:Ignorable="d"
-
+        
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:uc="clr-namespace:ReportForIDS.UC"
-
+        
         Title="Report for iDS - Enter query" x:Name="editReportInfoWindow"
-        Icon="{StaticResource AppIcon}"
-        Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
+        Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen" 
         Height="400" Width="600">
 
-   <!--<i:Interaction.Triggers>
+   <i:Interaction.Triggers>
       <i:EventTrigger EventName="Loaded">
-         <i:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=editReportInfoWindow}" />
+         <i:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=editReportInfoWindow}"/>
       </i:EventTrigger>
-   </i:Interaction.Triggers>-->
+   </i:Interaction.Triggers>
 
    <Border BorderThickness="2" BorderBrush="#001e51">
       <Grid>
          <Grid.Resources>
             <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
                <Setter Property="Margin" Value="5" />
-               <Setter Property="Width" Value="auto" />
+               <Setter Property="Width" Value="auto"/>
             </Style>
             <Style TargetType="DatePicker" BasedOn="{StaticResource MyDatePicker}">
             </Style>
@@ -38,57 +37,37 @@
          </Grid.Resources>
 
          <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="50"/>
          </Grid.RowDefinitions>
 
          <!--Tilter bar-->
-         <uc:UCTitleBar Grid.Row="0" Grid.ColumnSpan="2" x:Name="titleBar" Tag="Enter query" MaximinButtonVisibility="Collapsed"
-                        FontSize="16" Height="24" Background="#007acc">
-         </uc:UCTitleBar>
+         <uc:UCTitleBar Grid.Row="0" Grid.ColumnSpan="2" x:Name="titleBar" Tag="Enter query" Height="auto" Background="#007acc"></uc:UCTitleBar>
 
          <!--Checkbox primary query-->
          <!--<CheckBox Grid.Row="1" Margin="30 25 15 0" Content="Primary query"
                    Style="{StaticResource MaterialDesignCheckBox}" FontSize="16"
-                   IsChecked="{Binding QueryItem.IsPrimary, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />-->
+                   IsChecked="{Binding QueryItem.IsPrimary, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>-->
 
-         <Grid Grid.Row="2" x:Name="girdTxt" Margin="20 15 20 5">
+         <Grid Grid.Row="2" x:Name="girdTxt" Margin="30 15 30 5">
             <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" FontSize="16"
                      AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" materialDesign:HintAssist.Hint="SQL Query"
                      Text="{Binding SqlQueryStatement, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                     Height="{Binding ElementName=girdTxt, Path=ActualHeight}" Name="txtQuery" />
+                     Height="{Binding ElementName=girdTxt, Path=ActualHeight}" Name="txtQuery"/> 
          </Grid>
-
+         
          <!--Sql query textbox-->
-         <TextBlock Grid.Row="4" Margin="20 0 20 10" HorizontalAlignment="Left" Foreground="#000"
-                       Text="{Binding QueryItem.ExecResult, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-
-         <!--<Grid Grid.Row="3" HorizontalAlignment="Right" Margin="10 0">
-            <Grid.ColumnDefinitions>
-               <ColumnDefinition />
-               <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="1" IsCancel="True" Width="175" Command="{Binding ExecuteQueryCommand}">
-               <Grid Width="140">
-                  <Grid.ColumnDefinitions>
-                     <ColumnDefinition Width="auto" />
-                     <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <TextBlock Grid.Column="1" Text="Execute" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
-                  <materialDesign:PackIcon Grid.Column="0" Kind="StarThreePoints" Width="25" Height="25" />
-               </Grid>
-            </Button>
-         </Grid>-->
+         <TextBlock Grid.Row="3" Margin="30 0 0 10" HorizontalAlignment="Left" Foreground="#000"
+                    Text="{Binding QueryItem.ExecResult, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
          <!--Combobox list field from query-->
-         <ComboBox Grid.Row="3" materialDesign:HintAssist.Hint="Compare field"
-                   Margin="20 10 20 20" DisplayMemberPath="FieldName"
+         <ComboBox Grid.Row="4" materialDesign:HintAssist.Hint="Compare field" 
+                   Margin="30 10 30 30" DisplayMemberPath="FieldName"
                    ToolTip="{Binding QueryItem.CompareField.FieldName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                    ItemsSource="{Binding QueryItem.ListFeilds, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                    SelectedItem="{Binding QueryItem.CompareField, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -100,17 +79,13 @@
             </ComboBox.ItemsPanel>
             <i:Interaction.Triggers>
                <i:EventTrigger EventName="DropDownOpened">
-                  <i:InvokeCommandAction Command="{Binding LoadListFieldCommand}" />
+                  <i:InvokeCommandAction Command="{Binding LoadListFieldCommand}"/>
                </i:EventTrigger>
             </i:Interaction.Triggers>
          </ComboBox>
 
-         <!--Snackbar-->
-         <materialDesign:Snackbar Grid.Row="5" VerticalAlignment="Bottom" MessageQueue="{Binding Path=SnackbarMessageQueue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
-
          <!--<TextBox Grid.Row="5" Margin="30 5 30 30"  Style="{StaticResource MyTextBox}" materialDesign:HintAssist.Hint="Empty value"
-                     Text="{Binding QueryItem.EmptyValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />-->
+                     Text="{Binding QueryItem.EmptyValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>-->
 
          <!--Button close-->
          <StackPanel Orientation="Horizontal" Grid.Row="6" HorizontalAlignment="Right" Margin="10 0">
@@ -118,22 +93,22 @@
                     CommandParameter="{Binding ElementName=editReportInfoWindow}">
                <Grid Width="140">
                   <Grid.ColumnDefinitions>
-                     <ColumnDefinition Width="auto" />
-                     <ColumnDefinition />
+                     <ColumnDefinition Width="auto"/>
+                     <ColumnDefinition/>
                   </Grid.ColumnDefinitions>
                   <TextBlock Grid.Column="1" Text="Cancel" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
-                  <materialDesign:PackIcon Grid.Column="0" Kind="Close" Width="25" Height="25" />
+                  <materialDesign:PackIcon Grid.Column="0" Kind="Close" Width="25" Height="25"/>
                </Grid>
             </Button>
             <Button IsDefault="True" Width="175" Command="{Binding OKCommand}"
                     CommandParameter="{Binding ElementName=editReportInfoWindow}">
                <Grid Width="140">
                   <Grid.ColumnDefinitions>
-                     <ColumnDefinition />
-                     <ColumnDefinition Width="auto" />
+                     <ColumnDefinition/>
+                     <ColumnDefinition Width="auto"/>
                   </Grid.ColumnDefinitions>
                   <TextBlock Grid.Column="0" Text="OK" VerticalAlignment="Center"></TextBlock>
-                  <materialDesign:PackIcon Grid.Column="1" Kind="Check" Width="25" Height="25" />
+                  <materialDesign:PackIcon Grid.Column="1" Kind="Check" Width="25" Height="25"/>
                </Grid>
             </Button>
          </StackPanel>

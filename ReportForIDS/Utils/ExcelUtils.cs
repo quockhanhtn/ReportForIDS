@@ -1,16 +1,13 @@
 ﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace ReportForIDS.Utils
 {
-   public static class ExcelUtils
+   public class ExcelUtils
    {
-      public static void AssiginValue(this ExcelWorksheet worksheet, int row, int col, object value, string valueIfNull = "")
-      {
-         worksheet.Cells[row, col].Value = value ?? valueIfNull;
-      }
-
       public static ExcelPackage CreateExcelPackage(List<string> wookSheetName, OfficeProperties officeProperties = null)
       {
          ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -38,14 +35,20 @@ namespace ReportForIDS.Utils
 
       public static void OpenFile(string path)
       {
-         var excelApp = new Microsoft.Office.Interop.Excel.Application { Visible = true };
-         Microsoft.Office.Interop.Excel.Workbooks workbooks = excelApp.Workbooks;
-         Microsoft.Office.Interop.Excel.Workbook sheet = workbooks.Open(path);
+         Thread thread = new Thread(() =>
+         {
+            var excelApp = new Microsoft.Office.Interop.Excel.Application();
+            excelApp.Visible = true;
+            Microsoft.Office.Interop.Excel.Workbooks workbooks = excelApp.Workbooks;
+            Microsoft.Office.Interop.Excel.Workbook sheet = workbooks.Open(path);
+         });
+         thread.IsBackground = true;
+         thread.Start();
       }
 
       public static void SaveExcelPackage(ExcelPackage excelPackage, string filePath)
       {
-         byte[] bin = excelPackage.GetAsByteArray();
+         Byte[] bin = excelPackage.GetAsByteArray();
          File.WriteAllBytes(filePath, bin);
       }
    }

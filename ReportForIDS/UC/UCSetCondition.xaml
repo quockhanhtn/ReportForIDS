@@ -1,16 +1,16 @@
 ﻿<UserControl x:Class="ReportForIDS.UC.UCSetCondition"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ReportForIDS.UC"
+             
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-
-             x:Name="ucSetCondition"
-             d:DesignHeight="{StaticResource UCDesignHeight}"
-             d:DesignWidth="{StaticResource UCDesignWidth}"
-             Background="{StaticResource UCBackgroundColor}">
+             
+             mc:Ignorable="d" x:Name="ucSetCondition"
+             d:DesignHeight="550" d:DesignWidth="800" Background="#fafafa">
 
    <UserControl.Resources>
       <Style TargetType="materialDesign:Card" BasedOn="{StaticResource MaterialDesignPageCard}"></Style>
@@ -21,38 +21,36 @@
 
    <i:Interaction.Triggers>
       <i:EventTrigger EventName="Loaded">
-         <i:InvokeCommandAction Command="{Binding LoadedCommand}"
-                                CommandParameter="{Binding ElementName=ucGroupOption}">
-         </i:InvokeCommandAction>
+         <i:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=ucDatabaseConnection}"/>
       </i:EventTrigger>
    </i:Interaction.Triggers>
 
    <materialDesign:Card Margin="5" Grid.Row="1">
       <Grid>
          <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto"/>
             <RowDefinition />
             <RowDefinition Height="50" />
          </Grid.RowDefinitions>
 
          <!--Title-->
-         <TextBlock Grid.Row="0" Margin="0 15 0 30" Text="SET CONDITIONS TO FILTER DATA" Style="{StaticResource TitleTextBlock}" />
+         <TextBlock Grid.Row="0" Margin="0 15 0 30" Text="SET CONDITIONS TO FILTER DATA" Style="{StaticResource TitleTextBlock}"/>
 
          <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-               <ColumnDefinition Width="250" />
-               <ColumnDefinition Width="2" />
-               <ColumnDefinition />
+               <ColumnDefinition Width="250"/>
+               <ColumnDefinition Width="2"/>
+               <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <Grid  Grid.Column="0">
                <Grid.RowDefinitions>
-                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto"/>
                   <RowDefinition />
-                  <RowDefinition Height="50" />
+                  <RowDefinition Height="50"/>
                </Grid.RowDefinitions>
 
-               <TextBlock Grid.Row="0" Margin="0 15 0 0" Text="Condition" Style="{StaticResource SubTitleTextBlock}" />
+               <TextBlock Grid.Row="0" Margin="0 15 0 0" Text="Condition" Style="{StaticResource SubTitleTextBlock}"/>
 
                <ScrollViewer VerticalAlignment="Center" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                   <StackPanel>
@@ -66,7 +64,7 @@
                      </StackPanel.Resources>
 
                      <!--Title-->
-                     <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Order" IsReadOnly="True" Text="{Binding InputConditionOrder, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+                     <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Order" IsReadOnly="True" Text="{Binding InputConditionOrder, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
 
                      <!--Field name-->
                      <ComboBox Grid.Column="0" materialDesign:HintAssist.Hint="Field name"
@@ -104,30 +102,30 @@
                <!--Button-->
                <Grid Grid.Row="2">
                   <Grid.ColumnDefinitions>
-                     <ColumnDefinition />
-                     <ColumnDefinition />
+                     <ColumnDefinition/>
+                     <ColumnDefinition/>
                   </Grid.ColumnDefinitions>
 
                   <Button Grid.Column="0" Command="{Binding AddCommand}" Width="auto" ToolTip="Add new condition"
                                 IsEnabled="{Binding BtnAddEnable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                      <Grid Width="80">
                         <Grid.ColumnDefinitions>
-                           <ColumnDefinition Width="auto" />
-                           <ColumnDefinition />
+                           <ColumnDefinition Width="auto"/>
+                           <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Add" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"></TextBlock>
-                        <materialDesign:PackIcon Grid.Column="0" Kind="Add" Width="25" Height="25" />
+                        <materialDesign:PackIcon Grid.Column="0" Kind="Add" Width="25" Height="25"/>
                      </Grid>
                   </Button>
 
                   <Button Grid.Column="1" Command="{Binding SaveCommand}" Width="auto" ToolTip="Delete this condition">
                      <Grid Width="80">
                         <Grid.ColumnDefinitions>
-                           <ColumnDefinition />
-                           <ColumnDefinition Width="auto" />
+                           <ColumnDefinition/>
+                           <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="Save" VerticalAlignment="Center"></TextBlock>
-                        <materialDesign:PackIcon Grid.Column="1" Kind="ContentSave" Width="25" Height="25" />
+                        <materialDesign:PackIcon Grid.Column="1" Kind="ContentSave" Width="25" Height="25"/>
                      </Grid>
                   </Button>
                </Grid>
@@ -138,26 +136,26 @@
             <Grid Grid.Column="2">
                <Grid.RowDefinitions>
                   <RowDefinition Height="auto" />
-                  <RowDefinition />
+                  <RowDefinition/>
                </Grid.RowDefinitions>
 
-               <TextBlock Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Text="List conditions" Style="{StaticResource SubTitleTextBlock}" />
+               <TextBlock Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" Text="List conditions" Style="{StaticResource SubTitleTextBlock}"/>
 
                <!--List conditions-->
-               <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+               <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
                   <ListView ItemsSource="{Binding ListConditions, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   SelectedItem="{Binding ConditionSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
                      <ListView.ContextMenu>
                         <ContextMenu>
-                           <MenuItem Header="Move to top" Command="{Binding MoveTopCommand}" />
-                           <MenuItem Header="Move up" Command="{Binding MoveUpCommand}" />
-                           <MenuItem Header="Move down" Command="{Binding MoveDownCommand}" />
-                           <MenuItem Header="Move to bottom" Command="{Binding MoveBotCommand}" />
-                           <Separator />
-                           <MenuItem Header="Remove" Command="{Binding DeleteCommand}" />
-                           <MenuItem Header="Remove all" Command="{Binding DeleteAllCommand}" />
+                           <MenuItem Header="Move to top" Command="{Binding MoveTopCommand}"/>
+                           <MenuItem Header="Move up" Command="{Binding MoveUpCommand}"/>
+                           <MenuItem Header="Move down" Command="{Binding MoveDownCommand}"/>
+                           <MenuItem Header="Move to bottom" Command="{Binding MoveBotCommand}"/>
+                           <Separator/>
+                           <MenuItem Header="Remove" Command="{Binding DeleteCommand}"/>
+                           <MenuItem Header="Remove all" Command="{Binding DeleteAllCommand}"/>
                         </ContextMenu>
                      </ListView.ContextMenu>
 
@@ -204,13 +202,13 @@
                                   SelectedItem="{Binding ConditionSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                             <ListView.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Move to top" Command="{Binding MoveTopCommand}" />
-                                    <MenuItem Header="Move up" Command="{Binding MoveUpCommand}" />
-                                    <MenuItem Header="Move down" Command="{Binding MoveDownCommand}" />
-                                    <MenuItem Header="Move to bottom" Command="{Binding MoveBotCommand}" />
-                                    <Separator />
-                                    <MenuItem Header="Remove" Command="{Binding DeleteCommand}" />
-                                    <MenuItem Header="Remove all" Command="{Binding DeleteAllCommand}" />
+                                    <MenuItem Header="Move to top" Command="{Binding MoveTopCommand}"/>
+                                    <MenuItem Header="Move up" Command="{Binding MoveUpCommand}"/>
+                                    <MenuItem Header="Move down" Command="{Binding MoveDownCommand}"/>
+                                    <MenuItem Header="Move to bottom" Command="{Binding MoveBotCommand}"/>
+                                    <Separator/>
+                                    <MenuItem Header="Remove" Command="{Binding DeleteCommand}"/>
+                                    <MenuItem Header="Remove all" Command="{Binding DeleteAllCommand}"/>
                                 </ContextMenu>
                             </ListView.ContextMenu>
 
@@ -259,6 +257,7 @@
                             </ListView.View>
                         </ListView>
                     </ScrollViewer>-->
+
             </Grid>
          </Grid>
 
@@ -267,21 +266,21 @@
             <Button Command="{Binding PrevCommand}" Width="175" ToolTip="Back to previous step">
                <Grid Width="140">
                   <Grid.ColumnDefinitions>
-                     <ColumnDefinition Width="auto" />
-                     <ColumnDefinition />
+                     <ColumnDefinition Width="auto"/>
+                     <ColumnDefinition/>
                   </Grid.ColumnDefinitions>
-                  <TextBlock Text="PREV" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"></TextBlock>
-                  <materialDesign:PackIcon Grid.Column="0" Kind="ArrowLeftCircle" Width="25" Height="25" />
+                  <TextBlock Text="Prev" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"></TextBlock>
+                  <materialDesign:PackIcon Grid.Column="0" Kind="ArrowLeftCircle" Width="25" Height="25"/>
                </Grid>
             </Button>
             <Button Command="{Binding NextCommand}" Width="175" ToolTip="Go to next step">
                <Grid Width="140">
                   <Grid.ColumnDefinitions>
-                     <ColumnDefinition />
-                     <ColumnDefinition Width="auto" />
+                     <ColumnDefinition/>
+                     <ColumnDefinition Width="auto"/>
                   </Grid.ColumnDefinitions>
-                  <TextBlock Grid.Column="0" Text="NEXT" VerticalAlignment="Center"></TextBlock>
-                  <materialDesign:PackIcon Grid.Column="1" Kind="ArrowRightCircle" Width="25" Height="25" />
+                  <TextBlock Grid.Column="0" Text="Next" VerticalAlignment="Center"></TextBlock>
+                  <materialDesign:PackIcon Grid.Column="1" Kind="ArrowRightCircle" Width="25" Height="25"/>
                </Grid>
             </Button>
          </StackPanel>

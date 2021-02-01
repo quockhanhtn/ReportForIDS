@@ -1,5 +1,6 @@
 ﻿using ReportForIDS.Utils;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ReportForIDS.Model
 {
@@ -14,9 +15,7 @@ namespace ReportForIDS.Model
          this.Fields = DatabaseUtils.GetListField(tableName);
       }
 
-      public MyTable()
-      {
-      }
+      public MyTable() { }
 
       public static string InitJoinQuery(List<MyTable> tables)
       {
@@ -48,5 +47,36 @@ namespace ReportForIDS.Model
 
          return query;
       }
+
+      //public static string InitInnerJoinQuery(MyTable table1, MyTable table2)
+      //{
+      //   string query = $"{table1.TableName} inner join {table2.TableName} on ";
+
+      //   var commonField = table1.Fields.Intersect(table2.Fields).ToList();
+      //   commonField.ForEach(f => query += $" {table1.TableName}.{f} = {table2.TableName}.{f} and");
+
+      //   return query.Substring(0, query.LastIndexOf("and"));
+      //}
+
+      //public static string InitInnerJoinQuery(List<MyTable> tables)
+      //{
+      //   string query = string.Join(", ", tables.Select(tb => tb.TableName).ToArray()) + " where ";
+
+      //   for (int i = 0; i < tables.Count; i++)
+      //   {
+      //      for (int j = i - 1; j >= 0; j--)
+      //      {
+      //         var commonField = tables[i].Fields.Intersect(tables[j].Fields).ToList();
+      //         commonField.ForEach(f => query += $" {tables[i].TableName}.{f} = {tables[j].TableName}.{f} and ");
+      //      }
+      //      for (int j = i + 1; j < tables.Count; j++)
+      //      {
+      //         var commonField = tables[i].Fields.Intersect(tables[j].Fields).ToList();
+      //         commonField.ForEach(f => query += $" {tables[i].TableName}.{f} = {tables[j].TableName}.{f} and ");
+      //      }
+      //   }
+
+      //   return query.Substring(0, query.LastIndexOf("and"));
+      //}
    }
 }

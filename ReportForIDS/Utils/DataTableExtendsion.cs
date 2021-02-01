@@ -1,12 +1,13 @@
-﻿using OfficeOpenXml;
-using ReportForIDS.Model;
+﻿using ReportForIDS.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
 
 namespace ReportForIDS.Utils
 {
-   public static class DataTableExtension
+   public static class DataTableExtendsion
    {
       static public ObservableCollection<MyField> GetListColumnName(this DataTable dataTable, string tableName = "")
       {
@@ -21,7 +22,7 @@ namespace ReportForIDS.Utils
       static public void SortByColumns(this DataTable dataTable, params string[] columns)
       {
          dataTable.DefaultView.Sort = string.Join(", ", columns);
-         _ = dataTable.DefaultView.ToTable();
+         dataTable = dataTable.DefaultView.ToTable();
       }
 
       public static void SetColumnsOrder(this DataTable dataTable, params string[] columnNames)
@@ -41,7 +42,6 @@ namespace ReportForIDS.Utils
          int primaryColumns = primaryDatatable.Columns.Count;
 
          #region Add columns to primary datatable
-
          for (int j = 1; j < dt.Columns.Count; j++)
          {
             // if duplicate add '_'
@@ -55,8 +55,7 @@ namespace ReportForIDS.Utils
                primaryDatatable.Columns.Add(dt.Columns[j].ColumnName, dt.Columns[j].DataType);
             }
          }
-
-         #endregion Add columns to primary datatable
+         #endregion
 
          int primaryRows = primaryDatatable.Rows.Count;
          int dtRows = dt.Rows.Count;
@@ -64,6 +63,9 @@ namespace ReportForIDS.Utils
 
          while (m < primaryRows && n < dtRows)
          {
+            if (primaryDatatable.Rows[m][0].ToString() == "453175")
+            {
+            }
             int compare = primaryDatatable.Rows[m][0].ToString().Compare(dt.Rows[n][0].ToString());
             if (compare < 0) { m++; }
             else if (compare > 0) { n++; }
@@ -87,7 +89,6 @@ namespace ReportForIDS.Utils
             int primaryColumns = primaryDatatable.Columns.Count;
 
             #region Add column to primary datatable
-
             for (int j = 1; j < dt.Columns.Count; j++)
             {
                // if duplicate add '_'
@@ -101,8 +102,7 @@ namespace ReportForIDS.Utils
                   primaryDatatable.Columns.Add(dt.Columns[j].ColumnName, dt.Columns[j].DataType);
                }
             }
-
-            #endregion Add column to primary datatable
+            #endregion
 
             int primaryRows = primaryDatatable.Rows.Count;
             int dtRows = dt.Rows.Count;

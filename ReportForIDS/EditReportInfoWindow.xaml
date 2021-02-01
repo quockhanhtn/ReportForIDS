@@ -1,0 +1,101 @@
+﻿<Window x:Class="ReportForIDS.EditReportInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ReportForIDS" mc:Ignorable="d"
+        
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:uc="clr-namespace:ReportForIDS.UC"
+        
+        Title="Report for iDS - Edit report info" x:Name="editReportInfoWindow"
+        Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen" 
+        Height="600" Width="600">
+
+   <i:Interaction.Triggers>
+      <i:EventTrigger EventName="Loaded">
+         <i:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{Binding ElementName=listReportWindow}"/>
+      </i:EventTrigger>
+   </i:Interaction.Triggers>
+
+   <Border BorderThickness="2" BorderBrush="#001e51">
+      <Grid>
+         <Grid.Resources>
+            <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+               <Setter Property="Margin" Value="5" />
+               <Setter Property="Width" Value="auto"/>
+            </Style>
+            <Style TargetType="DatePicker" BasedOn="{StaticResource MyDatePicker}">
+            </Style>
+            <Style TargetType="materialDesign:TimePicker" BasedOn="{StaticResource MyTimePicker}">
+               <Setter Property="WithSeconds" Value="True" />
+               <Setter Property="Is24Hours" Value="True" />
+               <Setter Property="Margin" Value="20 4 20 -4.5" />
+            </Style>
+         </Grid.Resources>
+
+         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition Height="50"/>
+         </Grid.RowDefinitions>
+
+         <!--Tilter bar-->
+         <uc:UCTitleBar Grid.Row="0" Grid.ColumnSpan="2" x:Name="titleBar" Tag="Edit report infor" Height="auto" Background="#007acc"></uc:UCTitleBar>
+
+         <!--Input fields-->
+         <ScrollViewer VerticalAlignment="Center" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+               <StackPanel.Resources>
+                  <Style TargetType="TextBox" BasedOn="{StaticResource MyTextBox}">
+                     <Setter Property="Margin" Value="30 10" />
+                  </Style>
+                  <Style TargetType="ComboBox" BasedOn="{StaticResource MyComboBox}">
+                     <Setter Property="Margin" Value="30 10" />
+                  </Style>
+               </StackPanel.Resources>
+
+               <TextBox Grid.Column="2" materialDesign:HintAssist.Hint="Create time" IsReadOnly="True"
+                        Text="{Binding EditReport.CreateTime, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='HH:mm:ss MM/dd/yyyy'}"/>
+               
+               <TextBox Grid.Column="2" materialDesign:HintAssist.Hint="File path" IsReadOnly="True"
+                        Text="{Binding EditReport.FilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+               <TextBox materialDesign:HintAssist.Hint="Report name"
+                        Text="{Binding EditReport.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+               <TextBox Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" Height="300" FontSize="16"
+                        Margin="30 30 30 30"  AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                        materialDesign:HintAssist.Hint="Description"
+                        Text="{Binding EditReport.Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+         </ScrollViewer>
+
+         <!--Button close-->
+         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="10 0">
+            <Button IsCancel="True" Width="175" ToolTip="Go to next step">
+               <Grid Width="140">
+                  <Grid.ColumnDefinitions>
+                     <ColumnDefinition/>
+                     <ColumnDefinition Width="auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Grid.Column="0" Text="Cancel" VerticalAlignment="Center"></TextBlock>
+                  <materialDesign:PackIcon Grid.Column="1" Kind="Close" Width="25" Height="25"/>
+               </Grid>
+            </Button>
+            <Button IsDefault="True" Width="175" ToolTip="Go to next step">
+               <Grid Width="140">
+                  <Grid.ColumnDefinitions>
+                     <ColumnDefinition/>
+                     <ColumnDefinition Width="auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Grid.Column="0" Text="Update" VerticalAlignment="Center"></TextBlock>
+                  <materialDesign:PackIcon Grid.Column="1" Kind="Update" Width="25" Height="25"/>
+               </Grid>
+            </Button>
+         </StackPanel>
+      </Grid>
+   </Border>
+</Window>

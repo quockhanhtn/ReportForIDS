@@ -26,21 +26,26 @@ namespace ReportForIDS.Utils
          return filePath;
       }
 
-      public static string ShowSaveFileDialog(string title, string filter, string initialDirectory = null)
+      public static string ShowSaveFileDialog(string title, string filter)
       {
+         string filePath = "";
          SaveFileDialog dialog = new SaveFileDialog();
 
-         if (!string.IsNullOrEmpty(title)) { dialog.Title = title; }
-
-         if (!string.IsNullOrEmpty(filter)) { dialog.Filter = filter; }
-
-         if (!string.IsNullOrEmpty(initialDirectory)) { dialog.InitialDirectory = initialDirectory; }
+         if (!string.IsNullOrEmpty(title))
+         {
+            dialog.Title = title;
+         }
+         if (!string.IsNullOrEmpty(filter))
+         {
+            dialog.Filter = filter;
+         }
 
          if (dialog.ShowDialog() == true)
          {
-            return dialog.FileName;
+            filePath = dialog.FileName;
          }
-         else { return ""; }
+
+         return filePath;
       }
 
       public static string ShowFolderBrowserDialog(string currentFolder)

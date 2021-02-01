@@ -1,9 +1,11 @@
 ﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Relational;
 using ReportForIDS.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Windows;
 
 namespace ReportForIDS.Utils
 {
@@ -12,12 +14,8 @@ namespace ReportForIDS.Utils
       /// <summary>
       /// Test connection to database
       /// </summary>
-      /// 
       /// <param name="error">Exception.Message</param>
-      /// 
-      /// <returns>
-      /// true if 'Test connection succeeded'
-      /// </returns>
+      /// <returns>true if 'Test connection succeeded'</returns>
       public static bool TestConnection(out string error)
       {
          bool result;
@@ -41,10 +39,8 @@ namespace ReportForIDS.Utils
       /// <summary>
       /// Get list Field from Sql query
       /// </summary>
-      /// 
       /// <param name="sqlQuery"></param>
       /// <param name="tableName"></param>
-      /// 
       /// <returns></returns>
       public static ObservableCollection<MyField> GetListField(string sqlQuery, string tableName)
       {
@@ -58,13 +54,6 @@ namespace ReportForIDS.Utils
          return result;
       }
 
-      /// <summary>
-      /// Get list field from table
-      /// </summary>
-      /// 
-      /// <param name="tableName">name of table in database</param>
-      /// 
-      /// <returns>List&#60;MyField&#62;</returns>
       public static List<MyField> GetListField(string tableName)
       {
          var result = new List<MyField>();
@@ -164,16 +153,29 @@ namespace ReportForIDS.Utils
          DataTable dataTable = new DataTable(); //store result
          try
          {
-            using MySqlConnection db = DatabaseConnection.GetInstance();
-            db.Open();
+            using (MySqlConnection db = DatabaseConnection.GetInstance())
+            {
+               db.Open();
+               MySqlCommand cmd = new MySqlCommand(query, db);
 
-            MySqlCommand cmd = new MySqlCommand(query, db);
-            SetCommandParameters(query, cmd, parameters);
+               if (parameters != null)
+               {
+                  string[] listPara = query.Split(' ');
+                  int i = 0;
+                  foreach (string item in listPara)
+                  {
+                     if (item.Contains('@'))
+                     {
+                        cmd.Parameters.AddWithValue(item, parameters[i]);
+                        i++;
+                     }
+                  }
+               }
 
-            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(cmd);
-            dataAdapter.Fill(dataTable);
-
-            db.Close();
+               MySqlDataAdapter dataAdapter = new MySqlDataAdapter(cmd);
+               dataAdapter.Fill(dataTable);
+               db.Close();
+            }
          }
          catch (System.Exception) { }
          return dataTable;
@@ -185,9 +187,22 @@ namespace ReportForIDS.Utils
          using (MySqlConnection db = DatabaseConnection.GetInstance())
          {
             db.Open();
-
             MySqlCommand cmd = new MySqlCommand(query, db);
-            SetCommandParameters(query, cmd, parameters);
+
+            if (parameters != null)
+            {
+               string[] listPara = query.Split(' ');
+               int i = 0;
+               foreach (string item in listPara)
+               {
+                  if (item.Contains('@'))
+                  {
+                     cmd.Parameters.AddWithValue(item, parameters[i]);
+                     i++;
+                  }
+               }
+            }
+
             data = cmd.ExecuteNonQuery();
 
             db.Close();
@@ -197,32 +212,31 @@ namespace ReportForIDS.Utils
 
       public static object ExecuteScalar(string query, List<object> parameters = null)
       {
-         using MySqlConnection db = DatabaseConnection.GetInstance();
-         db.Open();
-
-         MySqlCommand cmd = new MySqlCommand(query, db);
-         SetCommandParameters(query, cmd, parameters);
-         object data = cmd.ExecuteScalar();
-         db.Close();
-
-         return data;
-      }
-
-      static void SetCommandParameters(string query, MySqlCommand cmd, List<object> parameters)
-      {
-         if (parameters != null)
+         object data = 0;
+         using (MySqlConnection db = DatabaseConnection.GetInstance())
          {
-            string[] listPara = query.Split(' ');
-            int i = 0;
-            foreach (string item in listPara)
+            db.Open();
+            MySqlCommand cmd = new MySqlCommand(query, db);
+
+            if (parameters != null)
             {
-               if (item.Contains('@'))
+               string[] listPara = query.Split(' ');
+               int i = 0;
+               foreach (string item in listPara)
                {
-                  cmd.Parameters.AddWithValue(item, parameters[i]);
-                  i++;
+                  if (item.Contains('@'))
+                  {
+                     cmd.Parameters.AddWithValue(item, parameters[i]);
+                     i++;
+                  }
                }
             }
+
+            data = cmd.ExecuteScalar();
+
+            db.Close();
          }
+         return data;
       }
    }
 }

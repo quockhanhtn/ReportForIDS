@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,13 +16,19 @@ using System.Windows.Shapes;
 namespace ReportForIDS
 {
    /// <summary>
-   /// Interaction logic for EditReportTemplateWindow.xaml
+   /// Interaction logic for TestDataTableWindow.xaml
    /// </summary>
-   public partial class EditReportTemplateWindow : Window
+   public partial class TestDataTableWindow : Window
    {
-      public EditReportTemplateWindow()
+      public TestDataTableWindow()
       {
          InitializeComponent();
       }
+
+      public void SetDataGrid(DataTable dataTable)
+      {
+         MainDataGrid.DataContext = dataTable.DefaultView;
+      }
+
    }
 }

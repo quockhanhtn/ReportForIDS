@@ -5,31 +5,18 @@ using System.Xml.Serialization;
 
 namespace ReportForIDS.Model
 {
-   /// <summary>
-   /// Describe relationship between two table
-   /// </summary>
    public class RelatedTable
    {
-      /// <summary>
-      /// First table name
-      /// </summary>
       public string Table1 { get; set; }
-
-      /// <summary>
-      /// Second table name
-      /// </summary>
       public string Table2 { get; set; }
-
-      /// <summary>
-      /// Query for join 2 tables
-      /// </summary>
       public string Query { get; set; }
 
-      public bool IsContain(string table) => Table1.Equals(table.ToLower()) || Table2.Equals(table.ToLower());
-
-      public RelatedTable()
+      public bool IsContain(string table)
       {
+         return Table1.Equals(table.ToLower()) || Table2.Equals(table.ToLower());
       }
+
+      public RelatedTable() { }
 
       public class XMLData
       {
@@ -38,11 +25,13 @@ namespace ReportForIDS.Model
 
          public static void Serialize(List<RelatedTable> list, string filePath)
          {
-            using FileStream fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
-            var data = new XMLData() { RelatedTable = list };
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(XMLData));
-            xmlSerializer.Serialize(fileStream, data);
-            fileStream.Close();
+            using (FileStream fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+               var data = new XMLData() { RelatedTable = list };
+               XmlSerializer xmlSerializer = new XmlSerializer(typeof(XMLData));
+               xmlSerializer.Serialize(fileStream, data);
+               fileStream.Close();
+            }
          }
 
          public static List<RelatedTable> Deserialize(string filePath)

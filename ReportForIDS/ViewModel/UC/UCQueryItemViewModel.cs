@@ -1,5 +1,11 @@
 ﻿using ReportForIDS.Model;
 using ReportForIDS.UC;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -16,12 +22,12 @@ namespace ReportForIDS.ViewModel
       public ICommand RemoveQueryCommand { get; set; }
       public ICommand SetPrimaryQueryCommand { get; set; }
 
-      public UserControl UcQueryItem { get; set; }
+      public UserControl ucQueryItem { get; set; }
       public Panel ParentPanel { get; set; }
 
       public MyQuery QueryItem
       {
-         get => queryItem;
+         get => queryItem; 
          set
          {
             queryItem = value;
@@ -31,7 +37,7 @@ namespace ReportForIDS.ViewModel
 
       public bool IsPrimaryQuery
       {
-         get => QueryItem.IsPrimary;
+         get => QueryItem.IsPrimary; 
          set
          {
             if (value)
@@ -47,7 +53,7 @@ namespace ReportForIDS.ViewModel
          }
       }
 
-      public int CurrentIndex { get => ParentPanel.Children.IndexOf(UcQueryItem); }
+      public int CurrentIndex { get => ParentPanel.Children.IndexOf(ucQueryItem); }
 
       public UCQueryItemViewModel(Panel parrent, MyQuery myQuery)
       {
@@ -56,7 +62,7 @@ namespace ReportForIDS.ViewModel
 
          LoadedCommand = new RelayCommand<UserControl>((p) => { return p != null; }, (p) =>
          {
-            UcQueryItem = p;
+            ucQueryItem = p;
             IsPrimaryQuery = QueryItem.IsPrimary;
          });
 
@@ -86,7 +92,7 @@ namespace ReportForIDS.ViewModel
             }
          });
 
-         EditQueryCommand = new RelayCommand<object>((p) => true, (p) =>
+         EditQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             var enterQueryWindow = new EnterQueryWindow()
             {
@@ -102,19 +108,20 @@ namespace ReportForIDS.ViewModel
             else { /*nothing */ }
          });
 
-         RemoveQueryCommand = new RelayCommand<object>((p) => true, (p) =>
+         RemoveQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             MoveBotCommand.Execute(null);
-            ParentPanel.Children.Remove(UcQueryItem);
+            ParentPanel.Children.Remove(ucQueryItem);
             MyQuery.LastOrder--;
          });
 
-         SetPrimaryQueryCommand = new RelayCommand<object>((p) => true, (p) =>
+         SetPrimaryQueryCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
+            
          });
       }
 
-      private void SwapOrder(int newIndex)
+      void SwapOrder(int newIndex)
       {
          var curIndex = CurrentIndex;
 
@@ -127,14 +134,14 @@ namespace ReportForIDS.ViewModel
             ParentPanel.Children.RemoveAt(curIndex);
 
             ParentPanel.Children.Insert(curIndex, swapControl);
-            ParentPanel.Children.Insert(newIndex, UcQueryItem);
+            ParentPanel.Children.Insert(newIndex, ucQueryItem);
          }
          else if (newIndex < curIndex)
          {
             ParentPanel.Children.RemoveAt(curIndex);
             ParentPanel.Children.RemoveAt(newIndex);
 
-            ParentPanel.Children.Insert(newIndex, UcQueryItem);
+            ParentPanel.Children.Insert(newIndex, ucQueryItem);
             ParentPanel.Children.Insert(curIndex, swapControl);
          }
          else { return; }
@@ -146,7 +153,6 @@ namespace ReportForIDS.ViewModel
          OnPropertyChanged(nameof(QueryItem));
          swapControlVM.OnPropertyChanged(nameof(QueryItem));
       }
-
       private MyQuery queryItem;
    }
 }

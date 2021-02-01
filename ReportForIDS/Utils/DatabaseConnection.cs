@@ -6,8 +6,7 @@ namespace ReportForIDS.Utils
    {
       private static string server = "", port = "", databaseName = "", uid = "", pwd = "";
       private static MySqlConnection connection = null;
-
-      private static string ConnectionString
+      private static string connectionString
       {
          get => $"Server={Server};Port={Port};Database={DatabaseName};Uid={Uid};Pwd={Pwd};" +
             "CharSet=utf8mb4;Convert Zero Datetime=True;default command timeout=360;Pooling=true;";
@@ -23,7 +22,7 @@ namespace ReportForIDS.Utils
       {
          if (connection != null)
          {
-            connection = new MySqlConnection(ConnectionString);
+            connection = new MySqlConnection(connectionString);
          }
          return connection;
       }
@@ -32,7 +31,7 @@ namespace ReportForIDS.Utils
       {
          try
          {
-            connection = new MySqlConnection(ConnectionString);
+            connection = new MySqlConnection(connectionString);
          }
          catch (System.Exception) { }
       }

@@ -1,8 +1,7 @@
-﻿using MaterialDesignThemes.Wpf;
-using ReportForIDS.Utils;
+﻿using ReportForIDS.Utils;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
@@ -10,16 +9,11 @@ namespace ReportForIDS.ViewModel
    public class MainWindowViewModel : BaseViewModel
    {
       public ICommand LoadedCommand { get; set; }
-      public ICommand PasswordChangedCommand { get; set; }
-      public ICommand ShowPasswordCommand { get; set; }
       public ICommand LoadListDatabaseNameCommand { get; set; }
       public ICommand TestConnectionCommand { get; set; }
       public ICommand ViewRecentReportCommand { get; set; }
       public ICommand StepByStepCommand { get; set; }
       public ICommand BySQLCommand { get; set; }
-
-      public PasswordBox PwbPassword { get; set; }
-      public TextBox TxtPassword { get; set; }
 
       public string Server
       {
@@ -31,7 +25,6 @@ namespace ReportForIDS.ViewModel
             OnPropertyChanged();
          }
       }
-
       public string Port
       {
          get => port;
@@ -42,7 +35,6 @@ namespace ReportForIDS.ViewModel
             OnPropertyChanged();
          }
       }
-
       public string Username
       {
          get => username;
@@ -53,7 +45,6 @@ namespace ReportForIDS.ViewModel
             OnPropertyChanged();
          }
       }
-
       public string Password
       {
          get => password;
@@ -77,85 +68,53 @@ namespace ReportForIDS.ViewModel
       }
 
       public ObservableCollection<string> ListDatabaseNames { get => listDatabaseNames; set { listDatabaseNames = value; OnPropertyChanged(); } }
-
+      
       public MainWindowViewModel()
       {
          LoadedCommand = new RelayCommand<Window>((p) => { return p != null; }, (p) =>
          {
             LoadDatabaseConnectConfig();
             DatabaseUtils.TestConnection(out var connectError);
-
-            TxtPassword = p.FindName("txtPassword") as TextBox;
-            PwbPassword = p.FindName("pwbPassword") as PasswordBox;
-
-            PwbPassword.Password = Password;
          });
 
-         PasswordChangedCommand = new RelayCommand<PasswordBox>((p) => { return p != null; }, (p) => { Password = p.Password; });
-
-         ShowPasswordCommand = new RelayCommand<PackIcon>((p) => { return p != null; }, (p) =>
-         {
-            if (PwbPassword.Visibility == Visibility.Visible)
-            {
-               p.Kind = PackIconKind.VisibilityOff;
-               PwbPassword.Visibility = Visibility.Collapsed;
-               TxtPassword.Visibility = Visibility.Visible;
-            }
-            else
-            {
-               p.Kind = PackIconKind.Visibility;
-               PwbPassword.Visibility = Visibility.Visible;
-               TxtPassword.Visibility = Visibility.Collapsed;
-            }
-            PwbPassword.Password = Password;
-         });
-
-         LoadListDatabaseNameCommand = new RelayCommand<object>((p) => true, (p) =>
+         LoadListDatabaseNameCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             ListDatabaseNames = DatabaseUtils.GetListSchema();
          });
 
-         TestConnectionCommand = new RelayCommand<object>((p) => true, (p) =>
+         TestConnectionCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
-            if (DatabaseUtils.TestConnection(out var connectError)) { CustomMessageBox.Show("Test connection succeeded", Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Information); }
-            else { CustomMessageBox.Show("Cannot connect to database.\n\r" + connectError, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error); }
+            if (DatabaseUtils.TestConnection(out var connectError)) { MessageBox.Show("Test connection succeeded", Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Information); }
+            else { MessageBox.Show("Cannot connect to database.\n\r" + connectError, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error); }
          });
 
-         ViewRecentReportCommand = new RelayCommand<object>((p) => true, (p) =>
+         ViewRecentReportCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
-            //ListReportWindow listReportWindow = new ListReportWindow();
-            //listReportWindow.Show();
-
-            ListTemplateWindow templateWindow = new ListTemplateWindow();
-            templateWindow.ShowDialog();
+            ListReportWindow listReportWindow = new ListReportWindow()
+            {
+               DataContext = new ListReportWindowViewModel()
+            };
+            listReportWindow.Show();
          });
 
          StepByStepCommand = new RelayCommand<object>((p) => { return !string.IsNullOrEmpty(DatabaseName) && DatabaseUtils.TestConnection(out var connectError); }, (p) =>
          {
-            try
+            SaveDatabaseConnectConfig();
+            StepByStepWindow stepByStepWindow = new StepByStepWindow()
             {
-               SaveDatabaseConnectConfig();
-               StepByStepWindow stepByStepWindow = new StepByStepWindow();
-               stepByStepWindow.ShowDialog();
-            }
-            catch (System.Exception e)
-            {
-               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+               DataContext = new StepByStepWindowViewModel(),
+            };
+            stepByStepWindow.ShowDialog();
          });
 
          BySQLCommand = new RelayCommand<object>((p) => { return !string.IsNullOrEmpty(DatabaseName) && DatabaseUtils.TestConnection(out var connectError); }, (p) =>
          {
-            try
+            SaveDatabaseConnectConfig();
+            ReportFromQueryWindow reportFromQueryWindow = new ReportFromQueryWindow()
             {
-               SaveDatabaseConnectConfig();
-               ReportFromQueryWindow reportFromQueryWindow = new ReportFromQueryWindow();
-               reportFromQueryWindow.ShowDialog();
-            }
-            catch (System.Exception e)
-            {
-               CustomMessageBox.Show("Error\r\n\r\n" + e.Message, Cons.TOOL_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+               DataContext = new ReportFromQueryWindowViewModel(),
+            };
+            reportFromQueryWindow.ShowDialog();
          });
       }
 
@@ -169,13 +128,11 @@ namespace ReportForIDS.ViewModel
          Password = iniFile.Read(nameof(Password));
 
          #region Set default value if null or empty
-
          Server = string.IsNullOrEmpty(Server) ? "localhost" : Server;
          Port = string.IsNullOrEmpty(Port) ? "3306" : Port;
          Username = string.IsNullOrEmpty(Username) ? "root" : Username;
          Password = string.IsNullOrEmpty(Password) ? "" : Password;
-
-         #endregion Set default value if null or empty
+         #endregion
       }
 
       private void SaveDatabaseConnectConfig()

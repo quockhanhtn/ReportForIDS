@@ -2,20 +2,21 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Documents;
 
 namespace ReportForIDS.Utils
 {
    public class IniFile
    {
-      private readonly string Section;
-      private readonly string Path;
-      private readonly string EXE = Assembly.GetExecutingAssembly().GetName().Name;
+      string Section;
+      string Path;
+      string EXE = Assembly.GetExecutingAssembly().GetName().Name;
 
       [DllImport("kernel32", CharSet = CharSet.Unicode)]
-      private static extern long WritePrivateProfileString(string Section, string Key, string Value, string FilePath);
+      static extern long WritePrivateProfileString(string Section, string Key, string Value, string FilePath);
 
       [DllImport("kernel32", CharSet = CharSet.Unicode)]
-      private static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
+      static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
 
       public IniFile(string IniPath = null, string IniSection = null)
       {
@@ -30,14 +31,19 @@ namespace ReportForIDS.Utils
          return RetVal.ToString();
       }
 
-      public void Write(string key, string value)
+      public void Write(string Key, string Value)
       {
-         WritePrivateProfileString(Section ?? EXE, key, value, Path);
+         WritePrivateProfileString(Section ?? EXE, Key, Value, Path);
       }
 
-      public void DeleteKey(string key)
+      public void DeleteKey(string Key)
       {
-         Write(key, null);
+         Write(Key, null);
+      }
+
+      public void DeleteSection(string Section = null)
+      {
+         Write(null, null);
       }
 
       public bool KeyExists(string Key)

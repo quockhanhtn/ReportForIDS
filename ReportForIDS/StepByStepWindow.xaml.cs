@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using ReportForIDS.UC;
+using System.Windows;
 
 namespace ReportForIDS
 {
