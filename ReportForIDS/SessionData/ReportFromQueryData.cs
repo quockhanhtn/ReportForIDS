@@ -90,6 +90,18 @@ namespace ReportForIDS.SessionData
             }
 
             ListQueries[primaryIndex].IsPrimary = true;
+
+            #region Update list field to hide
+            foreach (var q in ListQueries)
+            {
+               string compareF = q.CompareField.FieldName.ToUpper();
+               if (ListFieldToHide.Contains(compareF))
+               {
+                  ListFieldToHide[ListFieldToHide.IndexOf(compareF)] = ListQueries[primaryIndex].CompareField.FieldName.ToUpper();
+               }
+            }
+            #endregion
+
             #endregion
 
             if (ListFieldToGroup.IndexOf(ListQueries[0].CompareField) >= 0)

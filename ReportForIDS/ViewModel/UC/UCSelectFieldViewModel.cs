@@ -197,6 +197,8 @@ namespace ReportForIDS.ViewModel
          {
             ListFields.Add(f.Clone());
          }
+
+         if (ListFields.Count == 0) { NextCommand.Execute(null); }
       }
 
       public override void SaveSelectedFeild()
