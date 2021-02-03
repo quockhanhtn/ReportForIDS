@@ -45,6 +45,7 @@ namespace ReportForIDS
       void UpdateView()
       {
          stackPnlPagination.IsEnabled = false;
+         progressBar.Visibility = Visibility.Visible;
 
          DataTable currentPageDt = DTSource.Clone();
          int firstRow = (currentPage - 1) * RowsPerPage;
@@ -56,6 +57,7 @@ namespace ReportForIDS
          MainDataGrid.DataContext = currentPageDt.DefaultView;
          MainDataGrid.ColumnWidth = 150;
 
+         progressBar.Visibility = Visibility.Collapsed;
          stackPnlPagination.IsEnabled = true;
       }
 

@@ -153,9 +153,6 @@
     <Compile Include="Model\MyCondition.cs" />
     <Compile Include="Model\RelatedTable.cs" />
     <Compile Include="Model\ReportTemplate.cs" />
-    <Compile Include="PreviewDataTableWindow.xaml.cs">
-      <DependentUpon>PreviewDataTableWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ReportFromQueryWindow.xaml.cs">
       <DependentUpon>ReportFromQueryWindow.xaml</DependentUpon>
     </Compile>
@@ -240,10 +237,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PreviewDataTableWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

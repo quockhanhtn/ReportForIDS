@@ -14,7 +14,7 @@ namespace ReportForIDS.SessionData
       public static DataTable ExecuteDataTable { get => executeDataTable; set => executeDataTable = value; }
       public static ObservableCollection<MyField> ListAllFields { get => listAllFields; set => listAllFields = value; }
       public static ObservableCollection<MyField> ListFieldToGroup { get => listFieldToGroup; set => listFieldToGroup = value; }
-      public static ObservableCollection<MyField> ListFieldToHide { get => listFieldToHide; set => listFieldToHide = value; }
+      public static List<string> ListFieldToHide { get => listFieldToHide; set => listFieldToHide = value; }
 
       /// <summary>
       /// True -> create multicolumn <br/>
@@ -23,11 +23,6 @@ namespace ReportForIDS.SessionData
       public static bool GroupToMultiColumn { get; set; }
 
       public static Thread ThreadExcecuteData { get; set; }
-
-      /// <summary>
-      /// DataTable execute save header, datarow = 0
-      /// </summary>
-      public static DataTable ExecuteDataTableOnlyHeader { get => headerExecuteDataTable; set => headerExecuteDataTable = value; }
 
       public static void SetListQueries(List<MyQuery> queries)
       {
@@ -40,6 +35,22 @@ namespace ReportForIDS.SessionData
       {
          ListFieldToGroup.Clear();
          ListFieldToGroup.AddRange(fields);
+      }
+
+      public static void SetListFieldToHide(IEnumerable<MyField> fields)
+      {
+         ListFieldToHide.Clear();
+
+         foreach (MyField f in fields)
+         {
+            string fieldName = f.FieldName.ToUpper();
+            while (ListFieldToHide.Contains(fieldName))
+            {
+               fieldName += "_";
+            }
+
+            ListFieldToHide.Add(fieldName);
+         }
       }
 
       public static void JoinDatatableInQuery()
@@ -95,10 +106,9 @@ namespace ReportForIDS.SessionData
 
       private static List<MyQuery> listQueries = new List<MyQuery>();
       private static DataTable executeDataTable = new DataTable();
-      private static DataTable headerExecuteDataTable = new DataTable();
 
       private static ObservableCollection<MyField> listAllFields = new ObservableCollection<MyField>();
       private static ObservableCollection<MyField> listFieldToGroup = new ObservableCollection<MyField>();
-      private static ObservableCollection<MyField> listFieldToHide = new ObservableCollection<MyField>();
+      private static List<string> listFieldToHide = new List<string>();
    }
 }

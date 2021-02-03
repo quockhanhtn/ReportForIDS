@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ReportForIDS.ViewModel
@@ -12,7 +13,8 @@ namespace ReportForIDS.ViewModel
    public class UCSelectFieldViewModel : UCBaseViewModel
    {
       public ICommand SelectedFieldChangedCommand { get; set; }
-      public ICommand SelectAllFieldCommand { get; set; }
+      public ICommand CheckAllCommand { get; set; }
+      public ICommand UncheckAllCommand { get; set; }
 
       public string Title { get; set; }
       public int NoOfSelectedField { get { return listFieldsWithoutFilter.Count(f => f.IsSelected); } }
@@ -29,60 +31,38 @@ namespace ReportForIDS.ViewModel
             {
                ListFields = listFieldsWithoutFilter.Where(f => f.FieldName.ToLower().Contains(value.ToLower())).ToObservableCollection();
             }
+            CollectionViewSource.GetDefaultView(ListFields).Refresh();
             OnPropertyChanged();
          }
       }
 
       public ObservableCollection<MyField> ListFields { get => listFields; set { listFields = value; OnPropertyChanged(); } }
 
-      public MyField SelectedField
-      {
-         get => selectedField;
-         set
-         {
-            selectedField = value;
-            OnPropertyChanged();
-         }
-      }
+      public MyField SelectedField { get => selectedField; set { selectedField = value; OnPropertyChanged(); } }
 
       protected UCSelectFieldViewModel(Action prevAction, Action nextAction)
       {
-         #region SelectAllFieldCommand
+         CheckAllCommand = new RelayCommand<object>((p) => NoOfSelectedField < NoOfAllField, (p) =>
+         {
+            foreach (MyField field in listFieldsWithoutFilter)
+            {
+               field.IsSelected = true;
+            }
+            OnPropertyChanged(nameof(NoOfSelectedField));
+            CollectionViewSource.GetDefaultView(ListFields).Refresh();
+         });
 
-         //SelectAllFieldCommand = new RelayCommand<TextBlock>((p) =>
-         //{
-         //   if (NoOfSelectedField < NoOfAllField)
-         //   {
-         //      p.Text = "Select all";
-         //   }
-         //   else
-         //   {
-         //      p.Text = "Unselect all";
-         //   }
+         UncheckAllCommand = new RelayCommand<object>((p) => NoOfSelectedField > 0, (p) =>
+         {
+            foreach (MyField field in listFieldsWithoutFilter)
+            {
+               field.IsSelected = false;
+            }
+            OnPropertyChanged(nameof(NoOfSelectedField));
+            CollectionViewSource.GetDefaultView(ListFields).Refresh();
+         });
 
-         //   return p != null;
-         //}, (p) =>
-         //{
-         //   if (NoOfSelectedField < NoOfAllField)
-         //   {
-         //      for (int i = 0; i < listFieldsWithoutFilter.Count; i++)
-         //      {
-         //         listFieldsWithoutFilter[i].IsSelected = true;
-         //      }
-         //   }
-         //   else
-         //   {
-         //      for (int i = 0; i < listFieldsWithoutFilter.Count; i++)
-         //      {
-         //         listFieldsWithoutFilter[i].IsSelected = false;
-         //      }
-         //   }
-         //   OnPropertyChanged();
-         //});
-
-         #endregion SelectAllFieldCommand
-
-         SelectedFieldChangedCommand = new RelayCommand<object>((p) => true, (p) => SelectedFieldChanged());
+         SelectedFieldChangedCommand = new RelayCommand<object>((p) => true, (p) => OnPropertyChanged(nameof(NoOfSelectedField)));
 
          PrevCommand = new RelayCommand<object>((p) => true, (p) => prevAction());
 
@@ -104,71 +84,8 @@ namespace ReportForIDS.ViewModel
 
          LoadListField();
 
-         #region Old code
-
-         //switch (Type)
-         //{
-         //   case SelectFieldType.TO_DISPLAY:
-
-         //      break;
-
-         //   case SelectFieldType.TO_GROUP:
-
-         //      break;
-
-         //   case SelectFieldType.TO_GROUP_FROM_QUERY:
-         //      ListFields = ReportFromQueryData.ExecuteDataTableOnlyHeader.GetListColumnName();
-         //      //ListFields = ReportFromQueryData.ListQueries[0].ListFeilds;
-         //      break;
-
-         //   case SelectFieldType.TO_HIDE:
-         //      //ListFields.AddRange(ReportFromQueryData.ListField1);
-         //      //ListFields.AddRange(ReportFromQueryData.ListField2);
-         //      //foreach (var item in ReportFromQueryData.ListFieldToGroup)
-         //      //{
-         //      //   ListFields.Remove(item);
-         //      //}
-         //      break;
-
-         //   default:
-         //      break;
-         //}         //switch (Type)
-         //{
-         //   case SelectFieldType.TO_DISPLAY:
-
-         //      break;
-
-         //   case SelectFieldType.TO_GROUP:
-
-         //      break;
-
-         //   case SelectFieldType.TO_GROUP_FROM_QUERY:
-         //      ListFields = ReportFromQueryData.ExecuteDataTableOnlyHeader.GetListColumnName();
-         //      //ListFields = ReportFromQueryData.ListQueries[0].ListFeilds;
-         //      break;
-
-         //   case SelectFieldType.TO_HIDE:
-         //      //ListFields.AddRange(ReportFromQueryData.ListField1);
-         //      //ListFields.AddRange(ReportFromQueryData.ListField2);
-         //      //foreach (var item in ReportFromQueryData.ListFieldToGroup)
-         //      //{
-         //      //   ListFields.Remove(item);
-         //      //}
-         //      break;
-
-         //   default:
-         //      break;
-         //}
-
-         #endregion Old code
-
          listFieldsWithoutFilter = ListFields;
          OnPropertyChanged(nameof(NoOfAllField));
-      }
-
-      public virtual void SelectedFieldChanged()
-      {
-         OnPropertyChanged(nameof(NoOfSelectedField));
       }
 
       public virtual void LoadListField()
@@ -178,41 +95,6 @@ namespace ReportForIDS.ViewModel
       public virtual void SaveSelectedFeild()
       {
       }
-
-      #region not use
-
-      //public override bool LoadPreviosData()
-      //{
-      //   ReLoad();
-      //   if (Type == SelectFieldType.TO_DISPLAY)
-      //   {
-      //      foreach (var item in StepByStepData.ListFieldDisplay)
-      //      {
-      //         ListFields[ListFields.IndexOf(item)].IsSelected = true;
-      //      }
-      //   }
-      //   else if (Type == SelectFieldType.TO_GROUP)
-      //   {
-      //      foreach (var item in StepByStepData.ListFieldGroup)
-      //      {
-      //         ListFields[ListFields.IndexOf(item)].IsSelected = true;
-      //      }
-      //   }
-      //   return true;
-      //}
-
-      //private void RefreshList()
-      //{
-      //   var newList = new ObservableCollection<MyField>();
-      //   foreach (var f in ListFields)
-      //   {
-      //      newList.Add(f);
-      //   }
-      //   ListFields.Clear();
-      //   ListFields = newList;
-      //}
-
-      #endregion not use
 
       protected ObservableCollection<MyField> listFieldsWithoutFilter = new ObservableCollection<MyField>();
       private ObservableCollection<MyField> listFields = new ObservableCollection<MyField>();
@@ -294,11 +176,10 @@ namespace ReportForIDS.ViewModel
             ListFields.AddRange(q.ListFeilds);
             ListFields.Remove(q.CompareField);
          });
-
-         //ListFields = ReportFromQueryData.ExecuteDataTableOnlyHeader.GetListColumnName();
       }
 
-      public override void SaveSelectedFeild() => ReportFromQueryData.SetListFieldToGroup(ListFields.Where(f => f.IsSelected));
+      public override void SaveSelectedFeild()
+         => ReportFromQueryData.SetListFieldToGroup(ListFields.Where(f => f.IsSelected));
    }
 
    public class UCSelectFieldToHideVM : UCSelectFieldViewModel
@@ -310,12 +191,15 @@ namespace ReportForIDS.ViewModel
 
       public override void LoadListField()
       {
+         ListFields = new ObservableCollection<MyField>() { };
+
+         foreach (MyField f in ReportFromQueryData.ListFieldToGroup)
+         {
+            ListFields.Add(f.Clone());
+         }
       }
 
       public override void SaveSelectedFeild()
-      {
-         ReportFromQueryData.ListFieldToHide.Clear();
-         ReportFromQueryData.ListFieldToHide.AddRange(ListFields.Where(f => f.IsSelected));
-      }
+         => ReportFromQueryData.SetListFieldToHide(ListFields.Where(f => f.IsSelected));
    }
 }

@@ -48,11 +48,7 @@ namespace ReportForIDS.ViewModel
             return false;
          }
 
-         GroupResultDatatable = ResultDatatable.Clone();
-         foreach (DataColumn dataColumn in GroupResultDatatable.Columns)
-         {
-            dataColumn.DataType = typeof(string);
-         }
+         GroupResultDatatable = ResultDatatable.CloneAndConvertToString();
 
          var lastGroup = new List<string>();
          int recordsOnRow = 0, colIndex = 0;
@@ -140,154 +136,8 @@ namespace ReportForIDS.ViewModel
 
          GroupResultDatatable.Rows.Add(newDataRow);      // add last row
          GroupResultDatatable.Rows.RemoveAt(0);          // remove first empty row
+
+         GroupResultDatatable.RemoveColumns(ReportFromQueryData.ListFieldToHide);
       }
-
-      #region Old code
-
-      //public override void SaveReport()
-      //{
-      //   try
-      //   {
-      //      using (var excelPackage = GetExcelPackage())
-      //      {
-      //         ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[0];
-
-      //         var lastGroup = new List<string>();
-      //         int maxRecordOnRow = 0, recordsOnRow = 0;
-      //         int colIndex = 1, rowIndex = 1;
-
-      //         foreach (DataRow item in ResultDatatable.Rows)
-      //         {
-      //            if (IsDifferrentGroup(lastGroup, item))
-      //            {
-      //               if (recordsOnRow > maxRecordOnRow) { maxRecordOnRow = recordsOnRow; }
-      //               recordsOnRow = 1;
-
-      //               rowIndex++;
-      //               colIndex = 1;
-
-      //               lastGroup.Clear();
-      //               for (int i = 0; i < NumFieldToGroup; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, item[i]);
-      //                  lastGroup.Add(item[i].ToString());
-      //               }
-      //               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, item[i]);
-      //               }
-      //            }
-      //            else
-      //            {
-      //               recordsOnRow += 1;
-      //               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, item[i]);
-      //               }
-      //            }
-      //         }
-      //         if (recordsOnRow > maxRecordOnRow) { maxRecordOnRow = recordsOnRow; }
-
-      //         #region Create header
-      //         colIndex = 1;
-      //         rowIndex = 1;
-
-      //         if (NumFieldToGroup > 0)
-      //         {
-      //            for (int i = 0; i < NumFieldToGroup; i++)
-      //            {
-      //               AssignCellValue(worksheet, rowIndex, colIndex++, ResultDatatable.Columns[i].ColumnName);
-      //            }
-      //            for (int k = 1; k <= maxRecordOnRow; k++)
-      //            {
-      //               for (int i = NumFieldToGroup; i < ResultDatatable.Columns.Count - NumFieldToHide; i++)
-      //               {
-      //                  AssignCellValue(worksheet, rowIndex, colIndex++, ResultDatatable.Columns[i].ColumnName + "_" + k.ToString());
-      //               }
-      //            }
-      //         }
-      //         else
-      //         {
-      //            for (int i = 0; i < ResultDatatable.Columns.Count; i++)
-      //            {
-      //               AssignCellValue(worksheet, rowIndex, colIndex++, ResultDatatable.Columns[i].ColumnName);
-      //            }
-      //         }
-      //         #endregion
-
-      //         ExcelUtils.SaveExcelPackage(excelPackage, FilePath);
-      //      }
-
-      //      MyReport.Update.Add(ReportName, FilePath, ReportDesc);
-
-      //      var messageBoxResult = CustomMessageBox.Show("Do you want to open report file ?", Cons.ToolName, MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes);
-      //      if (messageBoxResult == MessageBoxResult.Yes)
-      //      {
-      //         ExcelUtils.OpenFile(FilePath);
-      //      }
-      //   }
-
-      //   catch (Exception e)
-      //   {
-      //      CustomMessageBox.Show("Error :\r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK, MessageBoxImage.Error);
-      //   }
-      //}
-
-      //public override void ExecuteQuery()
-      //{
-      //   string query;
-      //   var listFieldGroup = ReportFromQueryData.ListFieldToGroup;
-      //   var listFieldSort = new List<MyField>();
-      //   listFieldSort.AddRange(listFieldGroup);
-
-      //   var myFieldComparer = new MyFieldEqualityComparer();
-      //   foreach (var item in ReportFromQueryData.ListField1)
-      //   {
-      //      if (!listFieldGroup.Contains(item, myFieldComparer) && !ReportFromQueryData.ListFieldToHide.Contains(item, myFieldComparer))
-      //      {
-      //         listFieldSort.Add(item);
-      //      }
-      //   }
-      //   foreach (var item in ReportFromQueryData.ListField2)
-      //   {
-      //      if (!listFieldGroup.Contains(item, myFieldComparer) && !ReportFromQueryData.ListFieldToHide.Contains(item, myFieldComparer))
-      //      {
-      //         listFieldSort.Add(item);
-      //      }
-      //   }
-      //   listFieldSort.AddRange(ReportFromQueryData.ListFieldToHide);
-
-      //   NumFieldToGroup = listFieldGroup.Count;
-      //   NumFieldToHide = ReportFromQueryData.ListFieldToHide.Count;
-
-      //   if (ReportFromQueryData.SelectTwoQuery)
-      //   {
-      //      query = "select " + string.Join(", ", listFieldSort.Select(x => x.GetFullName()).ToArray());
-      //      query += $" from {ReportFromQueryData.SqlQuery1.AliasSQL("DT1")} LEFT JOIN  {ReportFromQueryData.SqlQuery2.AliasSQL("DT2")}";
-      //      query += $" ON {ReportFromQueryData.Field1ToCompare.GetFullName()} = {ReportFromQueryData.Field2ToCompare.GetFullName()}";
-      //   }
-      //   else
-      //   {
-      //      query = "select " + string.Join(", ", listFieldSort.Select(x => x.GetFullName()).ToArray());
-      //      query += $" from {ReportFromQueryData.SqlQuery1.AliasSQL("DT1")}";
-      //   }
-
-      //   if (ReportFromQueryData.ListFieldToGroup.Count > 0)
-      //   {
-      //      query += " order by " + string.Join(", ", StepByStepData.ListFieldGroup.Select(x => x.GetFullName()).ToArray()) + " asc";
-      //   }
-
-      //   try
-      //   {
-      //      WriteQueryToLog(query);
-      //      ResultDatatable = DatabaseUtils.ExecuteQuery(query.ToUpper());
-      //   }
-      //   catch (Exception e)
-      //   {
-      //      CustomMessageBox.Show("Error \r\n" + e.Message, Cons.ToolName, MessageBoxButton.OK);
-      //   }
-      //}
-
-      #endregion Old code
    }
 }

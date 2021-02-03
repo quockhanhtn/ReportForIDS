@@ -8,14 +8,12 @@ namespace ReportForIDS.Model
       public string FieldName { get; set; }
       public string TableName { get; set; }
       public bool IsSelected { get; set; }
-      public bool CanSelected { get; set; }
 
       public MyField(string fieldName, string tableName)
       {
          this.FieldName = fieldName;
          this.TableName = tableName;
          this.IsSelected = false;
-         this.CanSelected = true;
       }
 
       public MyField()

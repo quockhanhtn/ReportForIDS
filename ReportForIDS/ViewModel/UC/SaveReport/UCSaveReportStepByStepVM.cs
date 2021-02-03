@@ -59,11 +59,7 @@ namespace ReportForIDS.ViewModel
             return false;
          }
 
-         GroupResultDatatable = ResultDatatable.Clone();
-         foreach (DataColumn dataColumn in GroupResultDatatable.Columns)
-         {
-            dataColumn.DataType = typeof(string);
-         }
+         GroupResultDatatable = ResultDatatable.CloneAndConvertToString();
 
          var lastGroup = new List<string>();
          int recordsOnRow = 0, colIndex = 0;

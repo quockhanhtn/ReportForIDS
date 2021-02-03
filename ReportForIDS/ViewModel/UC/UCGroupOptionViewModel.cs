@@ -14,34 +14,20 @@ namespace ReportForIDS.ViewModel
          set
          {
             isCreateMultiColumn = value;
-            if (isCreateMultiColumn)
-            {
-               IsSepareteByComma = false;
-               ExampleImageSrc = MULTI_COLUMN_IMAGE_SRC;
-            }
-            OnPropertyChanged();
+            ExampleImageSrc = value ? MULTI_COLUMN_IMAGE_SRC : SEPERATE_COMMA_IMAGE_SRC;
+            OnPropertyChanged(nameof(IsCreateMultiColumn));
+            OnPropertyChanged(nameof(IsSepareteByComma));
          }
       }
 
-      public bool IsSepareteByComma
-      {
-         get => isSepareteByComma;
-         set
-         {
-            isSepareteByComma = value;
-            if (isSepareteByComma)
-            {
-               IsCreateMultiColumn = false;
-               ExampleImageSrc = SEPERATE_COMMA_IMAGE_SRC;
-            }
-            OnPropertyChanged();
-         }
-      }
+      public bool IsSepareteByComma { get => !IsCreateMultiColumn; set { IsCreateMultiColumn = !value; } }
 
       public string ExampleImageSrc { get => exampleImageSrc; set { exampleImageSrc = value; OnPropertyChanged(nameof(ExampleImageSrc)); } }
 
       public UCGroupOptionViewModel(Action prevAction, Action nextAction, bool isReportFormQuery)
       {
+         IsSepareteByComma = true;
+
          PrevCommand = new RelayCommand<object>((p) => true, (p) => prevAction());
          NextCommand = new RelayCommand<object>((p) => true, (p) =>
          {
@@ -57,13 +43,9 @@ namespace ReportForIDS.ViewModel
          });
       }
 
-      public override void ReLoad()
-      {
-         IsSepareteByComma = true;
-      }
+      public override void ReLoad() {  }
 
       private bool isCreateMultiColumn = true;
-      private bool isSepareteByComma = false;
       private string exampleImageSrc;
    }
 }

@@ -48,16 +48,22 @@
          <!--Row(s) returned-->
          <TextBlock Grid.Row="1" Margin="10 0" HorizontalAlignment="Left">
             <Run x:Name="txtTotalRow" Text="5000" FontWeight="SemiBold"></Run>
-            <Run Text="row(s) returned, "></Run>
+            <Run Text="row(s) returned"></Run>
          </TextBlock>
          
          <!--DataGrid-->
-         <uc:UCScrollViewer Grid.Row="2" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <DataGrid x:Name="MainDataGrid" ItemsSource="{Binding}" IsHitTestVisible="True" CanUserSortColumns="True" CanUserResizeColumns="True"
+         <!--<uc:UCScrollViewer Grid.Row="2" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <DataGrid x:Name="MainDataGrid" VirtualizingStackPanel.IsVirtualizing="true" 
+                      ItemsSource="{Binding}" IsHitTestVisible="True" CanUserSortColumns="True" CanUserResizeColumns="True"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True">
             </DataGrid>
-         </uc:UCScrollViewer>
-         
+         </uc:UCScrollViewer>-->
+
+         <DataGrid Grid.Row="2" x:Name="MainDataGrid" VirtualizingStackPanel.IsVirtualizing="true" 
+                      ItemsSource="{Binding}" IsHitTestVisible="True" CanUserSortColumns="True" CanUserResizeColumns="True"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True">
+         </DataGrid>
+
          <!--Pagination and close button-->
          <Grid Grid.Row="3" Margin="10 0">
             <Grid.ColumnDefinitions>
@@ -115,6 +121,11 @@
                        Style="{StaticResource MaterialDesignIconButton}" 
                        Content="{materialDesign:PackIcon Kind=ArrowRightBoldCircle}">
                </Button>
+
+               <!--ProgressBar-->
+               <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                            x:Name="progressBar" Visibility="Collapsed" Value="40" IsIndeterminate="True">
+               </ProgressBar>
             </StackPanel>
 
             <!--Button Close-->

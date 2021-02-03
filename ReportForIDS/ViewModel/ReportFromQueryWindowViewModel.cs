@@ -20,7 +20,7 @@ namespace ReportForIDS.ViewModel
          var insertQueryDtContxt = new UCInsertSqlQueryViewModel(PrevStep, NextStep);
          ListUC.Add(new UCInsertSqlQuery() { DataContext = insertQueryDtContxt });
          ListUC.Add(new UCSelectField() { DataContext = new UCSelectFieldToGroupFromQueryVM(PrevStep, NextStep) });
-         //ListUC.Add(new UCSelectField() { DataContext = new UCSelectFieldViewModel(SelectFieldType.TO_HIDE, PrevStep, NextStep) });
+         ListUC.Add(new UCSelectField() { DataContext = new UCSelectFieldToHideVM(PrevStep, NextStep) });
          ListUC.Add(new UCGroupOption() { DataContext = new UCGroupOptionViewModel(PrevStep, NextStep, true) });
          ListUC.Add(new UCSaveReport() { DataContext = new UCSaveReportFromQueryVM(PrevStep) });
 

@@ -99,7 +99,7 @@ namespace ReportForIDS.Model
 
       public DataTable GetGroupDataTable()
       {
-         DataTable dt = RawDataTable.Copy();
+         DataTable dt = RawDataTable.CopyAndConvertToString();
 
          string primaryFeild = this.CompareField.FieldName;
          for (int i = dt.Rows.Count - 1; i > 0; i--)
@@ -144,7 +144,7 @@ namespace ReportForIDS.Model
          query += " from " + SQLQuery.AliasSQL(AliasTableName);
          query += " order by " + CompareField.GetFullName() + " asc";
 
-         DataTable dataTable = DatabaseUtils.ExecuteQuery(query.ToUpper());
+         DataTable dataTable = DatabaseUtils.ExecuteQuery(query.ToUpper()).CopyAndConvertToString();
 
          //foreach(DataRow dataRow in dataTable.Rows)
          //{

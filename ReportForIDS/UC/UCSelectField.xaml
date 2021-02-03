@@ -34,8 +34,8 @@
          <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto"/>
             <RowDefinition />
-            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="50" />
          </Grid.RowDefinitions>
@@ -48,17 +48,21 @@
                   Margin="30 5 30 15" Style="{StaticResource MyTextBox}" materialDesign:HintAssist.Hint="Search by Field name" />
 
          <!--Select all/ un select all-->
-         <Grid Grid.Row="2">
-            <!--<TextBlock Text="Select all" Style="{StaticResource LinkTextBlock}"
-                       x:Name="txtSelectAll" Margin="30 5 15 5" HorizontalAlignment="Left" />
-            <i:Interaction.Triggers>
-               <i:EventTrigger EventName="MouseDown">
-                  <i:InvokeCommandAction Command="{Binding SelectAllFieldCommand}" CommandParameter="{Binding ElementName=txtSelectAll}" />
-               </i:EventTrigger>
-            </i:Interaction.Triggers>-->
-         </Grid>
+         <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Command="{Binding CheckAllCommand}" Margin="30 0 5 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    ToolTip="Select all field">
+               CHECK ALL
+            </Button>
 
-         <uc:UCScrollViewer Grid.Row="2" Margin="30 10">
+            <Button Command="{Binding UncheckAllCommand}" 
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    ToolTip="Clear selected field">
+               UNCHECK ALL
+            </Button>
+         </StackPanel>
+
+         <uc:UCScrollViewer Grid.Row="3" Margin="30 10">
             <!-- and here's another -->
             <ItemsControl ItemsSource="{Binding ListFields, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                           Grid.IsSharedSizeScope="True">
