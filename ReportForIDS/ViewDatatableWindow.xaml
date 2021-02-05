@@ -60,8 +60,8 @@
          </uc:UCScrollViewer>-->
 
          <DataGrid Grid.Row="2" x:Name="MainDataGrid" VirtualizingStackPanel.IsVirtualizing="true" 
-                      ItemsSource="{Binding}" IsHitTestVisible="True" CanUserSortColumns="True" CanUserResizeColumns="True"
-                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True">
+                   ItemsSource="{Binding}" IsHitTestVisible="True" CanUserSortColumns="True" CanUserResizeColumns="True"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True">
          </DataGrid>
 
          <!--Pagination and close button-->

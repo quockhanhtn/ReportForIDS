@@ -54,6 +54,11 @@ namespace ReportForIDS
             currentPageDt.ImportRow(DTSource.Rows[i]);
          }
 
+         foreach (DataColumn column in currentPageDt.Columns)
+         {
+            column.ColumnName = column.ColumnName.Replace("_", " ");
+         }
+
          MainDataGrid.DataContext = currentPageDt.DefaultView;
          MainDataGrid.ColumnWidth = 150;
 
