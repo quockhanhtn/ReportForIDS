@@ -4,12 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReportForIDS" mc:Ignorable="d"
-        
+
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:uc="clr-namespace:ReportForIDS.UC"
-        
+
         Title="Report for iDS - Recent report" x:Name="viewDatatableWindow"
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
         Height="600" Width="900" MinHeight="500" MinWidth="500" Icon="{StaticResource AppIcon}">
@@ -50,16 +50,16 @@
             <Run x:Name="txtTotalRow" Text="5000" FontWeight="SemiBold"></Run>
             <Run Text="row(s) returned"></Run>
          </TextBlock>
-         
+
          <!--DataGrid-->
          <!--<uc:UCScrollViewer Grid.Row="2" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <DataGrid x:Name="MainDataGrid" VirtualizingStackPanel.IsVirtualizing="true" 
+            <DataGrid x:Name="MainDataGrid" VirtualizingStackPanel.IsVirtualizing="true"
                       ItemsSource="{Binding}" IsHitTestVisible="True" CanUserSortColumns="True" CanUserResizeColumns="True"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True">
             </DataGrid>
          </uc:UCScrollViewer>-->
 
-         <DataGrid Grid.Row="2" x:Name="MainDataGrid" VirtualizingStackPanel.IsVirtualizing="true" 
+         <DataGrid Grid.Row="2" x:Name="MainDataGrid" VirtualizingStackPanel.IsVirtualizing="true"
                    ItemsSource="{Binding}" IsHitTestVisible="True" CanUserSortColumns="True" CanUserResizeColumns="True"
                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsReadOnly="True">
          </DataGrid>
@@ -67,18 +67,18 @@
          <!--Pagination and close button-->
          <Grid Grid.Row="3" Margin="10 0">
             <Grid.ColumnDefinitions>
-               <ColumnDefinition/>
-               <ColumnDefinition Width="auto"/>
+               <ColumnDefinition />
+               <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
             <!-- Pagination -->
             <StackPanel Orientation="Horizontal" x:Name="stackPnlPagination">
-               <TextBlock Text="Rows/ page" VerticalAlignment="Center"/>
+               <TextBlock Text="Rows/ page" VerticalAlignment="Center" />
 
                <!--Rows per page-->
-               <ComboBox Margin="10 -10 0 0" Style="{StaticResource MyComboBox}" 
+               <ComboBox Margin="10 -10 0 0" Style="{StaticResource MyComboBox}"
                          Padding="0" Width="50"
-                         SelectedIndex="1" x:Name="cmbRowPerPage" 
+                         SelectedIndex="1" x:Name="cmbRowPerPage"
                          HorizontalAlignment="Center" VerticalAlignment="Center"
                          SelectionChanged="CmbRowPerPage_SelectionChanged">
                   <ComboBox.ItemsSource>
@@ -95,7 +95,7 @@
                <!--Prev page-->
                <Button x:Name="btnPrevPage" Click="BtnPrevPage_Click"
                        Margin="20 0 0 0" Height="30" Width="30" ToolTip="Previous page"
-                       Style="{StaticResource MaterialDesignIconButton}" 
+                       Style="{StaticResource MaterialDesignIconButton}"
                        Content="{materialDesign:PackIcon Kind=ArrowLeftBoldCircle}">
                </Button>
 
@@ -103,8 +103,8 @@
                <TextBox x:Name="txtCurrentPage" Style="{StaticResource MyTextBox}"
                         Width="50" FontSize="13.5"
                         Margin="10 -18 0 0"
-                        VerticalAlignment="Center" HorizontalAlignment="Center" 
-                        TextAlignment="Center" 
+                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                        TextAlignment="Center"
                         KeyDown="TxtCurrentPage_KeyDown">
                </TextBox>
 
@@ -116,9 +116,9 @@
                </TextBlock>
 
                <!--Next page-->
-               <Button x:Name="btnNextPage" Click="BtnNextPage_Click" 
+               <Button x:Name="btnNextPage" Click="BtnNextPage_Click"
                        Margin="10 0 10 0" Width="30" Height="30" ToolTip="Next page"
-                       Style="{StaticResource MaterialDesignIconButton}" 
+                       Style="{StaticResource MaterialDesignIconButton}"
                        Content="{materialDesign:PackIcon Kind=ArrowRightBoldCircle}">
                </Button>
 

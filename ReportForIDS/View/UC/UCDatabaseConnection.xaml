@@ -7,7 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
-             
+
              x:Name="ucDatabaseConnection"
              d:DesignHeight="{StaticResource UCDesignHeight}"
              d:DesignWidth="{StaticResource UCDesignWidth}"

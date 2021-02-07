@@ -1,7 +1,4 @@
-﻿using OfficeOpenXml;
-using ReportForIDS.Model;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Data;
 
 namespace ReportForIDS.Utils
@@ -26,7 +23,7 @@ namespace ReportForIDS.Utils
          }
       }
 
-      static public void AddDatatable(this DataTable primaryDatatable, DataTable dt)
+      public static void AddDatatable(this DataTable primaryDatatable, DataTable dt)
       {
          int primaryColumns = primaryDatatable.Columns.Count;
 

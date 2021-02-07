@@ -1,16 +1,16 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:viewmodel="clr-namespace:ReportForIDS.ViewModel">
+                    xmlns:viewmodel="clr-namespace:ReportForIDS.ViewModel"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-   <BitmapImage UriSource="/Resources/icon.ico" x:Key="AppIcon"/>
+   <BitmapImage UriSource="/Resources/icon.ico" x:Key="AppIcon" />
 
    <sys:Double x:Key="UCDesignHeight">550</sys:Double>
    <sys:Double x:Key="UCDesignWidth">800</sys:Double>
-   <SolidColorBrush x:Key="UCBackgroundColor" Color="#fafafa"/>
+   <SolidColorBrush x:Key="UCBackgroundColor" Color="#fafafa" />
 
-   <viewmodel:MainWindowViewModel x:Key="MainWindowVM"/>
-   <viewmodel:StepByStepWindowViewModel x:Key="StepByStepWindowVM"/>
-   <viewmodel:ReportFromQueryWindowViewModel x:Key="ReportFromQueryWindowVM"/>
-   <viewmodel:ListTemplateWindowViewModel x:Key="ListTemplateWindowVM"/>
+   <viewmodel:MainWindowViewModel x:Key="MainWindowVM" />
+   <viewmodel:StepByStepWindowViewModel x:Key="StepByStepWindowVM" />
+   <viewmodel:ReportFromQueryWindowViewModel x:Key="ReportFromQueryWindowVM" />
+   <viewmodel:ListTemplateWindowViewModel x:Key="ListTemplateWindowVM" />
 </ResourceDictionary>

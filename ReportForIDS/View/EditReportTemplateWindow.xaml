@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReportForIDS" mc:Ignorable="d"
-        
+
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:uc="clr-namespace:ReportForIDS.UC"
-        
+
         Icon="{StaticResource AppIcon}"
         Title="Report for iDS - Edit report template" x:Name="editReportTemplateWindow"
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
@@ -65,20 +65,19 @@
 
                <Grid>
                   <Grid.ColumnDefinitions>
-                     <ColumnDefinition/>
-                     <ColumnDefinition Width="auto"/>
+                     <ColumnDefinition />
+                     <ColumnDefinition Width="auto" />
                   </Grid.ColumnDefinitions>
 
                   <TextBox materialDesign:HintAssist.Hint="File path" IsReadOnly="True" Margin="30 10 5 10"
                            Text="{Binding InputFilePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                   </TextBox>
-                  
+
                   <Button Grid.Column="1" ToolTip="Move file to another location" Height="40" Margin="5 12 30 0"
                           Command="{Binding MoveFileCommand}">
                      <TextBlock Text="CHOSE" VerticalAlignment="Center"></TextBlock>
                   </Button>
                </Grid>
-
 
                <TextBox materialDesign:HintAssist.Hint="Report name"
                         Text="{Binding InputName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">

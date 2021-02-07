@@ -1,8 +1,7 @@
 ﻿<Application x:Class="ReportForIDS.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ReportForIDS"
-             StartupUri="MainWindow.xaml">
+             StartupUri="View/MainWindow.xaml">
    <Application.Resources>
       <ResourceDictionary>
          <ResourceDictionary.MergedDictionaries>
@@ -10,7 +9,7 @@
             <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
             <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-            <ResourceDictionary Source="/Resources/ResourceXAML/ControlStyle.xaml"/>
+            <ResourceDictionary Source="/Resources/ResourceXAML/ControlStyle.xaml" />
             <ResourceDictionary Source="/Resources/ResourceXAML/MainResource.xaml" />
 
             <!--primary color-->
@@ -24,11 +23,11 @@
                             Do not rename, keep in sequence; light to dark.-->
 
                <!--<SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}" />
-                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}" />
-                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary900}" />
-                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary900Foreground}" />
-                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary900}" />
-                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary900Foreground}" />-->
+               <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}" />
+               <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary900}" />
+               <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary900Foreground}" />
+               <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary900}" />
+               <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary900Foreground}" />-->
 
                <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#007acc" />
                <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="#001e51" />

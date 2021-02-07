@@ -156,7 +156,7 @@
                            <TextBlock Text=" SQL Query" FontWeight="SemiBold" />
                         </StackPanel>
                      </ListViewItem>
-                     
+
                      <!--Select Field To Group-->
                      <ListViewItem x:Name="SelectFieldToGroup" Height="60" ToolTip="Select field to group">
                         <StackPanel Orientation="Horizontal">
@@ -165,7 +165,7 @@
                            <TextBlock Text=" Field to group" FontWeight="SemiBold" />
                         </StackPanel>
                      </ListViewItem>
-                     
+
                      <!---Select Field To Hide-->
                      <ListViewItem x:Name="SelectFieldToHide" Height="60" ToolTip="Select field to hide">
                         <StackPanel Orientation="Horizontal">

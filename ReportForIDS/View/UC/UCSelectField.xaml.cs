@@ -21,7 +21,7 @@ namespace ReportForIDS.UC
       private void ToggleButton_Click(object sender, RoutedEventArgs e)
       {
          var dt = (this.DataContext as UCSelectFieldViewModel);
-         if (dt!= null)
+         if (dt != null)
          {
             dt.SelectedFieldChangedCommand.Execute(null);
          }

@@ -58,6 +58,7 @@ namespace ReportForIDS.SessionData
          ThreadExcecuteData = new Thread(() =>
          {
             #region Update Primary Query
+
             ListQueries.ForEach(x => { while (!x.ExecDone) { } });
 
             ListQueries.ForEach(q => q.IsPrimary = false);
@@ -92,6 +93,7 @@ namespace ReportForIDS.SessionData
             ListQueries[primaryIndex].IsPrimary = true;
 
             #region Update list field to hide
+
             foreach (var q in ListQueries)
             {
                string compareF = q.CompareField.FieldName.ToUpper();
@@ -100,9 +102,10 @@ namespace ReportForIDS.SessionData
                   ListFieldToHide[ListFieldToHide.IndexOf(compareF)] = ListQueries[primaryIndex].CompareField.FieldName.ToUpper();
                }
             }
-            #endregion
 
-            #endregion
+            #endregion Update list field to hide
+
+            #endregion Update Primary Query
 
             if (ListFieldToGroup.IndexOf(ListQueries[0].CompareField) >= 0)
             {

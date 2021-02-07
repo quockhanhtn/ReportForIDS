@@ -9,10 +9,10 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:uc="clr-namespace:ReportForIDS.UC" 
-        
+        xmlns:uc="clr-namespace:ReportForIDS.UC"
+
         DataContext="{StaticResource ListTemplateWindowVM}"
-        
+
         Icon="{StaticResource AppIcon}"
         Title="Report for iDS - Recent report" x:Name="listTemplateWindow"
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
@@ -59,10 +59,10 @@
 
          <!--User filter checkbox-->
          <CheckBox Grid.Row="2" Margin="30 25 15 5" Content="Filter list" x:Name="chkFilter" Style="{StaticResource MaterialDesignCheckBox}" FontSize="16"
-                   IsChecked="{Binding IsEnableFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  />
+                   IsChecked="{Binding IsEnableFilter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
          <!--Filter select-->
-         <Grid Height="50" Grid.Row="3" Margin="24 0" 
+         <Grid Height="50" Grid.Row="3" Margin="24 0"
                Visibility="{Binding ElementName=chkFilter, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                <ColumnDefinition />
@@ -115,7 +115,7 @@
 
                <DataGrid.ContextMenu>
                   <ContextMenu>
-                     <MenuItem Header="Create report from this" Command="{Binding CreateFromThisCommand}"/>
+                     <MenuItem Header="Create report from this" Command="{Binding CreateFromThisCommand}" />
                      <Separator />
                      <MenuItem Header="Open" Command="{Binding OpenCommand}" />
                      <MenuItem Header="Open directory" Command="{Binding OpenDirectoryCommand}" />

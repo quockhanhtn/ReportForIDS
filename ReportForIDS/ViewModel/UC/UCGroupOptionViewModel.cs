@@ -43,7 +43,9 @@ namespace ReportForIDS.ViewModel
          });
       }
 
-      public override void ReLoad() {  }
+      public override void ReLoad()
+      {
+      }
 
       private bool isCreateMultiColumn = true;
       private string exampleImageSrc;

@@ -34,7 +34,7 @@
          <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
             <RowDefinition />
             <RowDefinition Height="auto" />
             <RowDefinition Height="50" />
@@ -55,7 +55,7 @@
                CHECK ALL
             </Button>
 
-            <Button Command="{Binding UncheckAllCommand}" 
+            <Button Command="{Binding UncheckAllCommand}"
                     Style="{StaticResource MaterialDesignOutlinedButton}"
                     ToolTip="Clear selected field">
                UNCHECK ALL

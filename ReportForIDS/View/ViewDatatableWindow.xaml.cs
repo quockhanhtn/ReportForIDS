@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,6 +12,7 @@ namespace ReportForIDS
    public partial class ViewDatatableWindow : Window
    {
       public DataTable DTSource { get; set; }
+
       public int CurrentPage
       {
          get => currentPage;
@@ -34,6 +33,7 @@ namespace ReportForIDS
             this.txtCurrentPage.Text = currentPage.ToString();
          }
       }
+
       public int NoOfPage { get; set; }
       public int RowsPerPage { get; set; }
 
@@ -42,7 +42,7 @@ namespace ReportForIDS
          InitializeComponent();
       }
 
-      void UpdateView()
+      private void UpdateView()
       {
          stackPnlPagination.IsEnabled = false;
          progressBar.Visibility = Visibility.Visible;

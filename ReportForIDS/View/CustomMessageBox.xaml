@@ -35,7 +35,7 @@
                </Grid.ColumnDefinitions>
 
                <Grid Grid.Column="0">
-                  <materialDesign:PackIcon x:Name="icoBox" Kind="Abc" Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 20 0 0"/>
+                  <materialDesign:PackIcon x:Name="icoBox" Kind="Abc" Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 20 0 0" />
                </Grid>
 
                <Grid Grid.Column="1">

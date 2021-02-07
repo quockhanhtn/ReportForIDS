@@ -132,19 +132,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Cons.cs" />
-    <Compile Include="CustomMessageBox.xaml.cs">
+    <Compile Include="View\CustomMessageBox.xaml.cs">
       <DependentUpon>CustomMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditReportTemplateWindow.xaml.cs">
+    <Compile Include="View\EditReportTemplateWindow.xaml.cs">
       <DependentUpon>EditReportTemplateWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EnterQueryWindow.xaml.cs">
+    <Compile Include="View\EnterQueryWindow.xaml.cs">
       <DependentUpon>EnterQueryWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ListTemplateWindow.xaml.cs">
+    <Compile Include="View\ListTemplateWindow.xaml.cs">
       <DependentUpon>ListTemplateWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\MyFeild.cs" />
@@ -153,37 +153,37 @@
     <Compile Include="Model\MyCondition.cs" />
     <Compile Include="Model\RelatedTable.cs" />
     <Compile Include="Model\ReportTemplate.cs" />
-    <Compile Include="ReportFromQueryWindow.xaml.cs">
+    <Compile Include="View\ReportFromQueryWindow.xaml.cs">
       <DependentUpon>ReportFromQueryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SessionData\ReportFromQueryData.cs" />
     <Compile Include="SessionData\StepByStepData.cs" />
-    <Compile Include="UC\UCDatabaseConnection.xaml.cs">
+    <Compile Include="View\UC\UCDatabaseConnection.xaml.cs">
       <DependentUpon>UCDatabaseConnection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC\UCGroupOption.xaml.cs">
+    <Compile Include="View\UC\UCGroupOption.xaml.cs">
       <DependentUpon>UCGroupOption.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC\UCInsertSqlQuery.xaml.cs">
+    <Compile Include="View\UC\UCInsertSqlQuery.xaml.cs">
       <DependentUpon>UCInsertSqlQuery.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC\UCQueryItem.xaml.cs">
+    <Compile Include="View\UC\UCQueryItem.xaml.cs">
       <DependentUpon>UCQueryItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC\UCSaveReport.xaml.cs">
+    <Compile Include="View\UC\UCSaveReport.xaml.cs">
       <DependentUpon>UCSaveReport.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC\UCScrollViewer.cs" />
-    <Compile Include="UC\UCSelectField.xaml.cs">
+    <Compile Include="View\UC\UCScrollViewer.cs" />
+    <Compile Include="View\UC\UCSelectField.xaml.cs">
       <DependentUpon>UCSelectField.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC\UCSelectTable.xaml.cs">
+    <Compile Include="View\UC\UCSelectTable.xaml.cs">
       <DependentUpon>UCSelectTable.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC\UCSetCondition.xaml.cs">
+    <Compile Include="View\UC\UCSetCondition.xaml.cs">
       <DependentUpon>UCSetCondition.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC\UCTitleBar.xaml.cs">
+    <Compile Include="View\UC\UCTitleBar.xaml.cs">
       <DependentUpon>UCTitleBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\DatabaseConnection.cs" />
@@ -196,7 +196,7 @@
     <Compile Include="Utils\FrameworkElementExtension.cs" />
     <Compile Include="Utils\IniFile.cs" />
     <Compile Include="Utils\StringExtension.cs" />
-    <Compile Include="ViewDatatableWindow.xaml.cs">
+    <Compile Include="View\ViewDatatableWindow.xaml.cs">
       <DependentUpon>ViewDatatableWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\Base\BaseViewModel.cs" />
@@ -217,30 +217,30 @@
     <Compile Include="ViewModel\UC\UCSelectTableViewModel.cs" />
     <Compile Include="ViewModel\UC\UCSetConditionViewModel.cs" />
     <Compile Include="ViewModel\Base\UCBaseViewModel.cs" />
-    <Compile Include="WaitWindow.xaml.cs">
+    <Compile Include="View\WaitWindow.xaml.cs">
       <DependentUpon>WaitWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="CustomMessageBox.xaml">
+    <Page Include="View\CustomMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EditReportTemplateWindow.xaml">
+    <Page Include="View\EditReportTemplateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EnterQueryWindow.xaml">
+    <Page Include="View\EnterQueryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ListTemplateWindow.xaml">
+    <Page Include="View\ListTemplateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="View\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StepByStepWindow.xaml">
+    <Page Include="View\StepByStepWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -248,11 +248,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StepByStepWindow.xaml.cs">
+    <Compile Include="View\StepByStepWindow.xaml.cs">
       <DependentUpon>StepByStepWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ReportFromQueryWindow.xaml">
+    <Page Include="View\ReportFromQueryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -264,47 +264,47 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\UCDatabaseConnection.xaml">
+    <Page Include="View\UC\UCDatabaseConnection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\UCGroupOption.xaml">
+    <Page Include="View\UC\UCGroupOption.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\UCInsertSqlQuery.xaml">
+    <Page Include="View\UC\UCInsertSqlQuery.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\UCQueryItem.xaml">
+    <Page Include="View\UC\UCQueryItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\UCSaveReport.xaml">
+    <Page Include="View\UC\UCSaveReport.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\UCSelectField.xaml">
+    <Page Include="View\UC\UCSelectField.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\UCSelectTable.xaml">
+    <Page Include="View\UC\UCSelectTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\UCSetCondition.xaml">
+    <Page Include="View\UC\UCSetCondition.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC\UCTitleBar.xaml">
+    <Page Include="View\UC\UCTitleBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ViewDatatableWindow.xaml">
+    <Page Include="View\ViewDatatableWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WaitWindow.xaml">
+    <Page Include="View\WaitWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

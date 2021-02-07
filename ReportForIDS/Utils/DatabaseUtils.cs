@@ -12,9 +12,9 @@ namespace ReportForIDS.Utils
       /// <summary>
       /// Test connection to database
       /// </summary>
-      /// 
+      ///
       /// <param name="error">Exception.Message</param>
-      /// 
+      ///
       /// <returns>
       /// true if 'Test connection succeeded'
       /// </returns>
@@ -41,10 +41,10 @@ namespace ReportForIDS.Utils
       /// <summary>
       /// Get list Field from Sql query
       /// </summary>
-      /// 
+      ///
       /// <param name="sqlQuery"></param>
       /// <param name="tableName"></param>
-      /// 
+      ///
       /// <returns></returns>
       public static ObservableCollection<MyField> GetListField(string sqlQuery, string tableName)
       {
@@ -61,9 +61,9 @@ namespace ReportForIDS.Utils
       /// <summary>
       /// Get list field from table
       /// </summary>
-      /// 
+      ///
       /// <param name="tableName">name of table in database</param>
-      /// 
+      ///
       /// <returns>List&#60;MyField&#62;</returns>
       public static List<MyField> GetListField(string tableName)
       {
@@ -208,7 +208,7 @@ namespace ReportForIDS.Utils
          return data;
       }
 
-      static void SetCommandParameters(string query, MySqlCommand cmd, List<object> parameters)
+      private static void SetCommandParameters(string query, MySqlCommand cmd, List<object> parameters)
       {
          if (parameters != null)
          {

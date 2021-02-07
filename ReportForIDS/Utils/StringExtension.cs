@@ -20,13 +20,13 @@ namespace ReportForIDS.Utils
          return defaultValue;
       }
 
-      public static bool EqualsNotCaseSensitive(this string str1, string str2) =>  str1.ToLower().Equals(str2.ToLower());
+      public static bool EqualsNotCaseSensitive(this string str1, string str2) => str1.ToLower().Equals(str2.ToLower());
 
       public static string EscapeSQL(this string sqlQuery)
       {
          if (string.IsNullOrEmpty(sqlQuery)) { return ""; }
          //sqlQuery = sqlQuery.Replace("''", "'").Replace("'", "''").Replace(@"\", @"\\").Trim();
-         
+
          // replace last char if = ','
          while (sqlQuery[sqlQuery.Length - 1] == ',')
          {
