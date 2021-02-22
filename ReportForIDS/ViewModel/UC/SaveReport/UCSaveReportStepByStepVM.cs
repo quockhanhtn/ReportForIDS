@@ -43,7 +43,7 @@ namespace ReportForIDS.ViewModel
          }
       }
 
-      public override void GroupResultDataTable()
+      public override void CreateGroupResultDataTable()
       {
          static bool IsDifferrentGroup(List<string> lastGroup, DataRow dataRow)
          {

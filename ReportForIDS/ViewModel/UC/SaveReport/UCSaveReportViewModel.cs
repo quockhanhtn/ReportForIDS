@@ -315,14 +315,14 @@ namespace ReportForIDS.ViewModel
             DataThread = new Thread(() =>
             {
                ExecuteQuery();
-               GroupResultDataTable();
+               CreateGroupResultDataTable();
             })
             { IsBackground = true };
             DataThread.Start();
          }, () => PrevCommand.Execute(null));
       }
 
-      public virtual void GroupResultDataTable()
+      public virtual void CreateGroupResultDataTable()
       {
       }
 

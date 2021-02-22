@@ -27,12 +27,12 @@ namespace ReportForIDS.ViewModel
          listColumnOrder.AddUniqueRange(ReportFromQueryData.ListAllFields);
 
          ResultDatatable.SetColumnsOrder(listColumnOrder.Select(f => f.FieldName).ToArray());
-         ResultDatatable.SortByColumns(ReportFromQueryData.ListFieldToGroup.Select(f => f.FieldName + " ASC").ToArray());
+         ResultDatatable.SortByColumns(ReportFromQueryData.ListFieldToGroup.Select(f => f.FieldName).ToArray());
 
          NumFieldToGroup = ReportFromQueryData.ListFieldToGroup.Count;
       }
 
-      public override void GroupResultDataTable()
+      public override void CreateGroupResultDataTable()
       {
          static bool IsDifferrentGroup(List<string> lastGroup, DataRowView dataRow)
          {

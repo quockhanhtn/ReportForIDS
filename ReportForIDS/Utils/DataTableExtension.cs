@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace ReportForIDS.Utils
 {
@@ -7,7 +8,17 @@ namespace ReportForIDS.Utils
    {
       public static void SortByColumns(this DataTable dataTable, params string[] columns)
       {
-         dataTable.DefaultView.Sort = string.Join(", ", columns);
+         List<string> listColumn = columns.ToList();
+
+         for (int i = 0; i < dataTable.Columns.Count; i++)
+         {
+            if (listColumn.IndexOf(dataTable.Columns[i].ColumnName) < 0)
+            {
+               listColumn.Add(dataTable.Columns[i].ColumnName);
+            }
+         }
+
+         dataTable.DefaultView.Sort = string.Join(", ", listColumn.Select(x => x + " ASC"));
          _ = dataTable.DefaultView.ToTable();
       }
 
